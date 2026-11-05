@@ -1,0 +1,296 @@
+<title>Tiff November Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a posting board. "Do next" strip on top, ready-file shelf, then the month as day rows with one chip per time slot. */
+:root{
+  --bg:#faf6f4; --surface:#ffffff; --fg:#2a2224; --muted:#7d6f72; --line:#eadfdc;
+  --accent:#b8577a;
+  --ready:#2f8a5b; --ready-bg:#e3f3ea;
+  --finish:#b2730f; --finish-bg:#fbf0dc;
+  --make:#8a7d80; --make-bg:#f1ebea;
+  --done-bg:#efe9e8;
+  --display:"Fraunces",Georgia,serif; --body:"Figtree",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1517; --surface:#241d20; --fg:#f3eaec; --muted:#a8999d; --line:#3a2f33; --accent:#e58fb0;
+  --ready:#6fd39c; --ready-bg:#1d3328; --finish:#f0b75a; --finish-bg:#3a2c14; --make:#a8999d; --make-bg:#2e2629; --done-bg:#2a2326; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1517; --surface:#241d20; --fg:#f3eaec; --muted:#a8999d; --line:#3a2f33; --accent:#e58fb0;
+  --ready:#6fd39c; --ready-bg:#1d3328; --finish:#f0b75a; --finish-bg:#3a2c14; --make:#a8999d; --make-bg:#2e2629; --done-bg:#2a2326; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:36px}
+h1{font-family:var(--display);font-weight:650;font-size:clamp(28px,5vw,40px);margin:0;letter-spacing:-.01em}
+h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);margin:4px 0 0;max-width:68ch}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.counts{display:flex;flex-wrap:wrap;gap:24px;margin-top:18px}
+.counts div{font-variant-numeric:tabular-nums}
+.counts b{font-family:var(--display);font-size:28px;font-weight:650;display:block;line-height:1.1}
+.next{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:12px}
+.task{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.task:first-of-type{border-top:0}
+.task .t{font-family:var(--mono);font-size:13px;color:var(--accent);min-width:58px;padding-top:2px}
+.task p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.task .f{font-family:var(--mono);font-size:12px;color:var(--fg);word-break:break-all}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.file{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;min-width:0}
+.file .f{font-family:var(--mono);font-size:12px;word-break:break-all}
+.file p{margin:0;font-size:13px;color:var(--muted)}
+.pill{justify-self:start;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px}
+.p-ready{background:var(--ready-bg);color:var(--ready)}
+.p-finish{background:var(--finish-bg);color:var(--finish)}
+.p-make{background:var(--make-bg);color:var(--make)}
+.week{display:grid;gap:8px}
+.week h3{font-family:var(--display);font-weight:500;font-size:19px;margin:12px 0 0}
+.week .sub{font-size:14px;margin:0 0 6px}
+.day{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.day.today{background:linear-gradient(90deg,var(--ready-bg),transparent 70%);border-radius:10px;padding-left:10px}
+.day.past .date{opacity:.55}
+.date b{font-family:var(--display);font-size:22px;font-weight:650;display:block;line-height:1}
+.date span{font-size:12px;color:var(--muted)}
+.date i{font-style:normal;font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;min-width:0}
+.chip{border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.35;border-left:3px solid var(--make);background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:3px;min-width:0;cursor:pointer;text-align:left;color:var(--fg);font-family:inherit}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip.ready{border-left-color:var(--ready)} .chip.finish{border-left-color:var(--finish)}
+.chip.opt{opacity:.55;border-style:dashed;border-left-style:solid}
+.chip.posted{background:var(--done-bg);opacity:.6}
+.chip.posted .what{text-decoration:line-through}
+.chip .top{display:flex;justify-content:space-between;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip .what{overflow-wrap:anywhere}
+.chip .link{color:var(--accent);font-weight:600}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="lbl">Tiff · TikTok + Instagram</div>
+    <h1>November posting board</h1>
+    <p class="sub" id="todayLine"></p>
+    <div class="counts" id="counts"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--ready)"></i>Ready: the file is done, just post it</span>
+      <span><i class="dot" style="background:var(--finish)"></i>Almost: images or video made, needs text, sound or a link</span>
+      <span><i class="dot" style="background:var(--make)"></i>To make</span>
+      <span>Faded and dashed = optional that week</span>
+    </div>
+  </header>
+
+  <section class="next">
+    <div><h2>Do next</h2><p class="sub">Day 1 hasn't gone out yet, so the plan below shifts it to today instead of skipping it.</p></div>
+    <div id="next"></div>
+  </section>
+
+  <section>
+    <h2>Finished files in the folder</h2>
+    <p class="sub">Everything in <span class="f" style="font-family:var(--mono);font-size:13px">campaigns/Tiff</span> that is done or close, and where it fits.</p>
+    <div class="shelf" id="shelf" style="margin-top:14px"></div>
+  </section>
+
+  <section>
+    <h2>The month</h2>
+    <p class="sub">Tap a post to mark it posted. That's saved in this browser only.</p>
+    <div class="filters" id="filters" style="margin:12px 0 4px">
+      <button data-f="all" aria-pressed="true">All posts</button>
+      <button data-f="req" aria-pressed="false">Required only</button>
+      <button data-f="ready" aria-pressed="false">Ready or almost</button>
+    </div>
+    <div id="month"></div>
+  </section>
+</div>
+
+<script>
+var SLOTS=[
+  {k:"grwm",t:"8:00a",n:"GRWM",a:"her",desc:"Get ready with me. Hair, jewelry, trinkets, gym bag. Soft-sells whatever is on her vanity."},
+  {k:"haul",t:"12:00p",n:"Try-On",a:"both",desc:"Try-on haul / fit check. Quick outfit changes on beat. The follower engine: women save it, men rewatch it."},
+  {k:"shop",t:"4:00p",n:"Shop Drop",a:"her",desc:"The money slot: one product, real b-roll of it, Tiff styling or using it, linked."},
+  {k:"boys",t:"7:00p",n:"For the Boys",a:"him",desc:"Rate-the-fit, POV, girl translator, gift guides. Turns male attention into follows and gift buys."},
+  {k:"vibe",t:"10:00p",n:"Night Vibe",a:"both",desc:"Trending sound, no mouthing. Mirror, car, gym, cozy. Easy remixes."},
+  {k:"slide",t:"2:00p",n:"Slideshow",a:"her",desc:"Quote/vibe photo slideshow. Slide 1: Tiff photo with the quote on it. Slides 2–4: moody, low-light Codex b-roll with no person in it. 0 credits, built for saves and shares."}
+];
+var DAYS=[
+{d:1,th:"Meet Tiff",hero:"2-piece workout set",s:["GRWM intro: hoops, slick pony, white ribbed tank. “hi, I'm tiff, welcome… this page is all fashion, I'll put you on.” Text: “hi, I'm tiff 🤍”","[Size Check] Mirror try-on, phone covering half her face, then lowers it to show face. Text: “5'6 wearing a S”","$+[Every Color] 2-piece workout set: 5 colors, one cut per beat. Caption: “slowly collecting all the colors ⭐️”","[Rate Me] “rate the fit 1–10, be honest” (same set, slow turn)","[Glow Close-up] Soft-glam selfie close-up, hair flip on the drop"]},
+{d:2,th:"Pilates princess",hero:"Double-lined yoga set",s:["Pilates GRWM: claw clip, grip socks, shaker","[Size Check] Side + back angle in the set. Text: “double lined so it's not see-through”","$+Double-lined yoga set: fabric stretch b-roll (hands), then Tiff walking into the studio","[POV] “pov: you're my pilates partner”","[Glow Close-up] Post-workout glow, car selfie cam"]},
+{d:3,th:"Pre-workout",hero:"Energy gummies / pre-workout",s:["Morning: pre-workout pour into the shaker, shake, out the door","[Doorway Drop] Same doorway backdrop, gym fit, one pose → turn","$+[Gym Pour] Scoop, pour, shake, ice b-roll → Tiff sips in the car. Caption: flavor + “ingredients on the label” only","[Rate Me] “gym fit or going-out fit? pick one”","Car vibe, gym bag on the passenger seat"]},
+{d:4,th:"Going out",hero:"Bodycon going-out dress",s:["Going-out GRWM: gold jewelry, lip combo","[Size Check] Back-view reveal walking away from the mirror, then turn to face","$+[Price Drop] Bodycon dress: “looks like a $150 dress, it's $28 on here” (confirmed price only), fabric close-up b-roll","[Rate Me] “would you take me to dinner in this?”","[Glow Close-up] Going-out audio, earrings close-up"]},
+{d:5,th:"Fall coded",hero:"Suede ankle boots",s:["Cozy GRWM: fuzzy cardigan, claw clip, coffee","[Size Check] Fall try-on: cardigan / sweater dress / knit set","$+[POV B-roll] Car-floor POV of the boots, serif overlay “fall coded 🍂” → cut to Tiff's face in the rearview","[POV] “pov: we're going to the pumpkin patch”","Rain on the window, cozy vibe"]},
+{d:6,th:"Payday",hero:"Gold jewelry advent calendar",s:["Payday GRWM: stacking gold jewelry","Payday haul: “what I grabbed this week” (hands b-roll + Tiff wearing each)","$+Jewelry advent calendar: unboxing b-roll, opening 3 doors, then on Tiff","$“A gift she opens every day for 12 days” (for him)","[Glow Close-up] Hoops + hair flip"]},
+{d:7,th:"Weekend",hero:"Week 1 recap",s:["Weekend errands GRWM","Fit check: every fit from week 1 in 10 seconds","$Week 1 recap carousel: every fit, all linked","[Rate Me] “which week-1 fit is your favorite? 1–7”","“Saturday night in or out?” poll"]},
+
+{d:8,th:"Lazy Sunday",hero:"Fleece zip-up + sweatpants",s:["“Getting ready to do nothing” in the fleece set","[Size Check] Sweatpant try-on: barrel / flare / jogger","$+[Every Color] Fleece zip-up: 4 colors laid out → Tiff in each","[POV] “pov: lazy sunday on the couch with me”","Cozy blanket, lofi"]},
+{d:9,th:"Leg day",hero:"Seamless scrunch leggings",s:["Leg day GRWM: pony, sports bra, shaker","[Doorway Drop] Leggings, side angle, one turn","$+Seamless leggings: stretch-test b-roll, then gym mirror (styling only, no shaping claims)","[Rate Me] “rate my gym fit”","Gym mirror vibe"]},
+{d:10,th:"Gym bag",hero:"Gym duffel + trinkets",s:["What's in my gym bag: shaker, scrunchies, mini perfume, AirPods case","Bag try-on: duffel vs. tote vs. mini backpack","$+Gym duffel: packing b-roll (hands only), then Tiff carrying it in","$“Things to put in her gym bag” gift list","Car vibe, gym playlist"]},
+{d:11,th:"Shaker life",hero:"Cute shaker / tumbler",s:["Morning: creatine stick in the tumbler, shake","[Size Check] Matching set + tumbler in hand","$+[Gym Pour] Tumbler pour b-roll, ice, bow/charm close-up","$“Buy her this instead of flowers”","Night drive, iced drink in the cupholder"]},
+{d:12,th:"Tight & cozy",hero:"Ribbed bodycon dress",s:["Date GRWM in the ribbed dress","[Size Check] Bodycon dress with sneakers / boots / heels","$+[Price Drop] Ribbed bodycon: fabric b-roll + 3 shoe swaps, price on screen","[Rate Me] “first date outfit, rate it”","[Glow Close-up] Going-out audio"]},
+{d:13,th:"Date night",hero:"Faux leather mini skirt",s:["Friday date GRWM","Faux leather try-on: mini, pants, jacket","$+Faux leather mini: shine close-up b-roll, then with tights + boots","[POV] “pov: you picked me up for our date”","Going-out vibe"]},
+{d:14,th:"Gym recap",hero:"Gym week carousel",s:["Brunch GRWM","Video reply to comments: “you asked for more gym fits”","$Gym-girl week carousel, all linked","[Rate Me] “which gym set wins?”","Gym mirror vibe"]},
+
+{d:15,th:"Wishlist",hero:"Gifts for her under $25",s:["GRWM while I read my wishlist","Wishlist try-on: everything on my list","$+Wishlist under $50: product b-roll grid, then Tiff with each","$Gift guide for him to buy HER: under $25","Christmas lights vibe"]},
+{d:16,th:"Cute trinkets",hero:"Bag charms + keychains",s:["GRWM: decorating my bag with charms","[Doorway Drop] Same doorway, bag + charm held up","$+Bag charm set: unboxing b-roll, clipping them on","$Stocking stuffers for her under $15","Fairy-light room vibe"]},
+{d:17,th:"PJ season",hero:"Satin PJ set",s:["Night-to-morning in the satin PJ set","[Every Color] PJ set in 4 colors","$+Satin PJ set: fabric b-roll, colors laid out","$Gifts girls actually use vs. gifts guys usually buy","[POV] “pov: we're watching a christmas movie”"]},
+{d:18,th:"Winter coded",hero:"Faux fur trim coat",s:["Cold-morning GRWM: layering","[Size Check] Coat / puffer / sherpa over a fitted dress","$+[POV B-roll] Snowy car-floor POV, serif overlay “winter coded ❄️” → Tiff's face in the coat hood","$“Don't give her your jacket. Buy her this one.”","Snowy night car vibe"]},
+{d:19,th:"Fuzzy boots",hero:"Fuzzy mini boots / slippers",s:["GRWM in fuzzy mini boots","Try-on: mini boots with leggings / sweats / skirt","$+Fuzzy mini boots: squish b-roll, every color","[Rate Me] “ugg season or not?”","Cozy Saturday vibe"]},
+{d:20,th:"Hair day",hero:"Clip-in extensions",s:["GRWM: adding clip-ins (ponytail → full hair down; no ‘results’ claims)","Hair-flip transition: claw clip → hair down","$+Clip-ins: product b-roll (wefts, clips), then on Tiff","[Glow Close-up] “long hair or short hair?”","Going-out vibe"]},
+{d:21,th:"Guide recap",hero:"Gift guide recaps",s:["Holiday market GRWM","Video reply to comments","$Her picks: full gift guide carousel","$The guys' cheat sheet: full gift guide carousel","Cozy Saturday night"]},
+
+{d:22,th:"BF prep",hero:"Black Friday cart",s:["GRWM + what's in my Black Friday cart","Try-on: everything in my cart","$[Price Drop] “Add to cart now”: what's going on sale (confirmed prices only)","$“Fellas: Black Friday is your gift cheat code”","Christmas lights vibe"]},
+{d:23,th:"Matching sets",hero:"Knit 2-piece set",s:["Matching set GRWM","[Every Color] Knit set together vs. split","$+Knit set: flat-lay b-roll → Tiff","[Rate Me] “rate the set”","Night in, matching set"]},
+{d:24,th:"Layering basics",hero:"Square-neck bodysuit",s:["The bodysuit under every outfit","[Doorway Drop] Bodysuit: 4 outfits in 15 seconds","$Square-neck bodysuit: 4 outfits (styling only, no fit claims)","[POV] “pov: helping me pick a top”","Mirror fit check"]},
+{d:25,th:"Travel day",hero:"Airport set",s:["Airport GRWM: flare leggings + fleece","Airport fit check","$Airport outfit, fully linked","[POV] “pov: you're my airport buddy”","Car vibe: driving home for the holidays"]},
+{d:26,th:"Thanksgiving",hero:"Sweater dress",s:["Thanksgiving GRWM","Try-on: family dinner vs. bar after","$+Sweater dress + boots: knit b-roll, then the outfit","[POV] “pov: you're meeting my family”","Food-coma cozy vibe"]},
+{d:27,th:"BLACK FRIDAY",hero:"Top 5 of the month",key:1,s:["$Black Friday GRWM, all linked","$Try-on: the month's top 5 at Black Friday prices","$+[Price Drop] Black Friday Pt. 1: b-roll montage of the top 5","$Gifts for her at Black Friday prices","$Black Friday Pt. 2: late-night drop"]},
+{d:28,th:"Small Biz Saturday",hero:"Everything linked",s:["Saturday GRWM","Video reply: “what did you get?”","$Every Black Friday pick in one carousel","$“Gifts she'll actually wear”","Cozy Saturday night"]},
+
+{d:29,th:"Cyber weekend",hero:"Cyber deals",s:["Sunday reset GRWM","Try-on: what I'm grabbing Cyber Monday","$Cyber Monday preview: what's dropping","$“Still haven't bought her anything?”","Christmas lights vibe"]},
+{d:30,th:"CYBER MONDAY",hero:"Last chance",key:1,s:["$Cyber Monday GRWM, all linked","$Last-chance try-on haul","$+[Price Drop] Top 5 Cyber Monday picks, b-roll montage","$Last call for gifts for her","Month recap: “thank you for 30 days” vibe"]}
+];
+var SLIDES=[
+ "+[Vibe Slideshow] “Spending your 20s getting rid of trauma and generational curses >” · coffee + flowers / pilates studio / city view (made ✓)",
+ "+[Vibe Slideshow] “Be a good person in real life. None of this social media shit matters.” · fruit stand / ocean view (made ✓)",
+ "+[Vibe Slideshow] “Romanticize the 6am alarm. Future you is watching.” · empty gym at dawn / shaker on the counter / sunrise drive",
+ "+[Vibe Slideshow] “Dress like you already have the life you want” · heels by the door / gold jewelry dish / city at night",
+ "+[Vibe Slideshow] “Fall reset: new book, new candle, same goals” · candle + open book / rainy window / latte",
+ "+[Vibe Slideshow] “Saving for the life I want, not the one they expect” · notebook + pen / jewelry dish / sunset window",
+ "+[Vibe Slideshow] “A quiet week of keeping promises to myself >” · made bed in morning light / journal / coffee on the sill",
+ "+[Vibe Slideshow] “Lazy Sundays are part of the plan” · blanket on the couch / tea / rain on the window",
+ "+[Vibe Slideshow] “Discipline is just self-respect on a schedule” · empty gym / dumbbells on the floor / water bottle",
+ "+[Vibe Slideshow] “Things that changed my 20s: pilates, water, leaving the group chat” · reformer / water bottle / phone face down",
+ "+[Vibe Slideshow] “Hydrated, unbothered, in bed by 10” · glass of water on the nightstand / lamp / folded sheets",
+ "+[Vibe Slideshow] “You don't need a reason to dress up on a Tuesday” · lipstick on the vanity / mirror / candlelit table for one",
+ "+[Vibe Slideshow] “Date yourself first. The bar is set.” · solo dinner table / glass of wine / city lights",
+ "+[Vibe Slideshow] “Two weeks in. Proud of the girl who kept showing up.” · gym bag by the door / sunrise / journal",
+ "+[Vibe Slideshow] “The best gifts are the ones she mentioned once in October” · wrapped gifts / handwritten list / string lights",
+ "+[Vibe Slideshow] “Little treats are a personality trait” · pastry box / iced coffee / ribbon on a gift",
+ "+[Vibe Slideshow] “Soft life era: satin sheets and no plans” · unmade bed / candle / rainy night window",
+ "+[Vibe Slideshow] “Winter arc starts now” · snowy street at night / coat on a chair / hot chocolate",
+ "+[Vibe Slideshow] “Protect your peace, even from people you love” · quiet bedroom / closed door with fairy lights / tea",
+ "+[Vibe Slideshow] “Main character energy, minimal effort” · claw clip on the vanity / coffee to go / city crosswalk",
+ "+[Vibe Slideshow] “Grateful for the people who clap the loudest” · holiday market lights / two mugs / friends' dinner table",
+ "+[Vibe Slideshow] “Not buying everything. Buying the right things.” · shopping bags by the door / receipt-free flat-lay / candle",
+ "+[Vibe Slideshow] “Matching sets, matching energy” · folded knit set / coffee / morning window",
+ "+[Vibe Slideshow] “Your 20s are for building, not proving” · laptop + coffee / city morning / notebook",
+ "+[Vibe Slideshow] “Going home a different person than I left” · airport window / suitcase / car at night",
+ "+[Vibe Slideshow] “Thankful for the version of me that didn't give up” · candlelit table / pie / family window at dusk",
+ "$+[Vibe Slideshow] “Gifts that say ‘I listen’” · real listing photos of the top 5 gifts (no Codex product shots)",
+ "+[Vibe Slideshow] “Support small. Shop slow.” · little shop window / paper bags / coffee",
+ "+[Vibe Slideshow] “Ending the year softer than I started it” · candles / sunset / journal",
+ "$+[Vibe Slideshow] “30 days. Thank you for being here 🤍” · month recap: best Tiff stills + real listing photos of the top picks"
+];
+var WEEKS=[
+  {from:1,to:7,name:"Meet Tiff",sub:"Try-on hauls and fit checks from day one. Test which looks pull follows fastest: tight & going-out, gym, or cozy."},
+  {from:8,to:14,name:"Gym Girl Era",sub:"Gym sets, leggings, pre-workout and shaker b-roll. The gym content is the strongest male-follow driver, so post it daily."},
+  {from:15,to:21,name:"Gift Guide Era",sub:"Her wishlist for her, cheat sheets for him. Trinkets and cute stuff become the main sell."},
+  {from:22,to:28,name:"Black Friday Week",sub:"Thanksgiving Nov 26, Black Friday Nov 27. Every slot points at the cart."},
+  {from:29,to:30,name:"Cyber Weekend",sub:"Last-chance posts and a recap of the month's winners."}
+];
+var RAMP={grwm:8,haul:1,shop:1,boys:1,vibe:15,slide:1};
+var ORDER=[0,1,5,2,3,4];
+(function(){
+"use strict";
+var TODAY=2; // Nov 2, 2026
+var DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]; // Nov 1 2026 is a Sunday
+// what exists on disk, keyed day-slot
+var READY={
+ "1-grwm":{st:"ready",file:"videos/01_ready_to_post/tiff_d01_grwm_intro_v2.mp4",todo:"Add text “hi, I'm tiff 🤍”, AI label on."},
+ "1-haul":{st:"ready",file:"videos/01_ready_to_post/tiff_intro_5ft6-S_360_16s.mp4",todo:"Add text “5'6 wearing a S”, AI label on."},
+ "1-shop":{st:"ready",file:"videos/01_ready_to_post/tiff_d01_shop_every-color_27s.mp4",todo:"Add a trending sound, the YEOREO product link and the AI label."},
+ "1-slide":{st:"finish",file:"day_healing20s/frames/",todo:"Slides picked. Put the quote on slide 1, add a soft trending sound."},
+ "2-slide":{st:"finish",file:"day_balcony_goodperson/frames/",todo:"Slides picked. Put the quote in the sky on slide 1, add a trending sound."},
+ "3-shop":{st:"finish",file:"day_bloom_gym/frames/pick_*.jpg",todo:"Bloom greens fits this slot. Start frames are picked; the 3 clips still need generating (about 45 credits)."}
+};
+var SHELF=[
+ {st:"ready",file:"tiff_d01_grwm_intro_v2.mp4",use:"Nov 1 · 8:00a GRWM intro"},
+ {st:"ready",file:"tiff_intro_5ft6-S_360_16s.mp4",use:"Nov 1 · 12:00p Size Check"},
+ {st:"ready",file:"tiff_d01_shop_every-color_27s.mp4",use:"Nov 1 · 4:00p Shop Drop (needs the product link)"},
+ {st:"finish",file:"day_healing20s/",use:"Slideshow: “Spending your 20s…”. Needs the quote on slide 1 and a sound."},
+ {st:"finish",file:"day_balcony_goodperson/",use:"Slideshow: “Be a good person…”. Needs the quote on slide 1 and a sound."},
+ {st:"finish",file:"day_bloom_gym/",use:"Shop Drop for Nov 3 (pre-workout day). Frames done, videos not generated yet."},
+ {st:"ready",file:"tiff_car_ponytail_comfy-cami_lipsync_with-song_7s.mp4",use:"Spare Night Vibe. Car clip, already has a song."},
+ {st:"ready",file:"tiff_misttrail_dance_purple-anorak_10s.mp4",use:"Spare Night Vibe. Add a trending sound."},
+ {st:"ready",file:"future.mp4 · Woman_lip-syncing_in_car….mp4",use:"Spares in 01_ready_to_post. Check them before using."},
+ {st:"finish",file:"videos/02_tiff_clips/ (10 clips)",use:"Raw 8–24s clips: rooftop OOTD, closet mirror, car vibing, WFH, beach drink. Good Night Vibe or POV posts once you add sound and text."}
+];
+var KEYS=["grwm","haul","shop","boys","vibe"];
+var posted={}; try{posted=JSON.parse(localStorage.getItem("tiffPosted")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("tiffPosted",JSON.stringify(posted))}catch(e){}}
+var filter="all";
+
+function items(day){
+  var out=[];
+  ORDER.forEach(function(i){
+    var sl=SLOTS[i], raw=sl.k==="slide"?SLIDES[day.d-1]:day.s[i];
+    if(raw==null) return;
+    var link=raw.indexOf("$")===0; var txt=raw.replace(/^[$+]+/,"");
+    var r=READY[day.d+"-"+sl.k];
+    out.push({id:day.d+"-"+sl.k,slot:sl,txt:txt,link:link,req:day.d>=RAMP[sl.k],st:r?r.st:"make",r:r});
+  });
+  return out;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
+
+function renderCounts(){
+  var all=[];DAYS.forEach(function(d){all=all.concat(items(d))});
+  var req=all.filter(function(x){return x.req});
+  var rdy=all.filter(function(x){return x.st==="ready"}).length, fin=all.filter(function(x){return x.st==="finish"}).length;
+  var done=all.filter(function(x){return posted[x.id]}).length;
+  document.getElementById("counts").innerHTML=
+   "<div><b>"+req.length+"</b><span class='lbl'>required posts</span></div>"+
+   "<div><b>"+rdy+"</b><span class='lbl'>ready</span></div>"+
+   "<div><b>"+fin+"</b><span class='lbl'>almost</span></div>"+
+   "<div><b>"+done+"</b><span class='lbl'>posted</span></div>";
+}
+function renderNext(){
+  var plan=[
+   {t:"Today",h:"Post the 3 ready Day 1 videos",p:"GRWM intro at 8a, Size Check at 12p, Every Color shop at 4p. Day 1 is the “hi I'm Tiff” intro, so it should go first. Add the text, sound, link and AI label in TikTok/CapCut."},
+   {t:"Today",h:"Finish the “Spending your 20s” slideshow",p:"Slides are picked. Add the quote and a sound, then post at 2p."},
+   {t:"Nov 3",h:"Post the “Be a good person” slideshow",p:"Second slideshow that's nearly done. Then Day 2's pilates posts can roll a day late, or skip to Nov 3's plan."},
+   {t:"Nov 3",h:"Generate the Bloom gym clips",p:"3 × 10s, about 45 credits. It's the pre-workout Shop Drop, so it fits Nov 3."},
+   {t:"This week",h:"Make the For the Boys posts",p:"Required every day from Nov 1 and none are made yet. They're cheap: one try-on clip plus “rate the fit 1–10” text."}
+  ];
+  document.getElementById("next").innerHTML=plan.map(function(x){return "<div class='task'><div class='t'>"+x.t+"</div><div><b>"+esc(x.h)+"</b><p>"+esc(x.p)+"</p></div></div>"}).join("");
+}
+function renderShelf(){
+  var lab={ready:"Ready",finish:"Almost",make:"To make"};
+  document.getElementById("shelf").innerHTML=SHELF.map(function(x){
+    return "<div class='file'><span class='pill p-"+x.st+"'>"+lab[x.st]+"</span><span class='f'>"+esc(x.file)+"</span><p>"+esc(x.use)+"</p></div>"}).join("");
+}
+function renderMonth(){
+  var h="";
+  WEEKS.forEach(function(w){
+    h+="<div class='week'><h3>"+esc(w.name)+" · Nov "+w.from+"–"+w.to+"</h3><p class='sub'>"+esc(w.sub)+"</p>";
+    DAYS.filter(function(d){return d.d>=w.from&&d.d<=w.to}).forEach(function(d){
+      var its=items(d).filter(function(x){
+        if(filter==="req") return x.req; if(filter==="ready") return x.st!=="make"; return true});
+      if(!its.length) return;
+      var cls="day"+(d.d===TODAY?" today":"")+(d.d<TODAY?" past":"");
+      h+="<div class='"+cls+"'><div class='date'><b>"+d.d+"</b><span>"+DOW[(d.d-1)%7]+"</span>"+(d.key?"<br><i>Big day</i>":"")+"<br><span>"+esc(d.th)+"</span></div><div class='slots'>";
+      its.forEach(function(x){
+        var c="chip "+x.st+(x.req?"":" opt")+(posted[x.id]?" posted":"");
+        h+="<button class='"+c+"' data-id='"+x.id+"' title='"+esc(x.r?x.r.todo:x.slot.desc)+"'><span class='top'><span>"+x.slot.t+" "+esc(x.slot.n)+"</span>"+(x.link?"<span class='link'>link</span>":"")+"</span><span class='what'>"+esc(x.txt.replace(/^\[[^\]]+\]\s*/,""))+"</span>"+(x.r?"<span class='lbl' style='color:var(--"+x.st+")'>"+esc(x.r.todo)+"</span>":"")+"</button>";
+      });
+      h+="</div></div>";
+    });
+    h+="</div>";
+  });
+  document.getElementById("month").innerHTML=h;
+}
+document.getElementById("month").addEventListener("click",function(e){
+  var b=e.target.closest(".chip"); if(!b) return;
+  var id=b.dataset.id; if(posted[id]) delete posted[id]; else posted[id]=1;
+  save(); renderMonth(); renderCounts();
+});
+document.getElementById("filters").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b) return; filter=b.dataset.f;
+  [].forEach.call(this.children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
+  renderMonth();
+});
+document.getElementById("todayLine").textContent="Today is Monday, Nov 2. Day 1 hasn't been posted yet. 3 Day 1 videos are ready and 2 slideshows are almost done. The rest of the month still needs to be made.";
+renderCounts();renderNext();renderShelf();renderMonth();
+})();
+</script>

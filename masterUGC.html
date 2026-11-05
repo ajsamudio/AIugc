@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Master UGC Pipeline</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F7F1EC;--surface:#FFFFFF;--surface-2:#EFE6DF;--ink:#2A1E1A;--muted:#76665F;--line:#E4D8CF;
+  --accent:#B03F65;--codex:#2E7A4D;--codex-bg:#DFF0E5;--nb:#8A5A00;--nb-bg:#FBEFD6;--omni:#2F5478;--omni-bg:#DFE8F2;--local:#76665F;--local-bg:#EFE6DF;
+  --display:"Instrument Serif",Georgia,serif;--body:"DM Sans",system-ui,sans-serif;--mono:"DM Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171211;--surface:#211A18;--surface-2:#2C2320;--ink:#F2E8E2;--muted:#AE9E96;--line:#3A2F2B;
+  --accent:#EE7FA2;--codex:#74D29A;--codex-bg:#173324;--nb:#E8B04B;--nb-bg:#3A2C12;--omni:#93B8DE;--omni-bg:#1C2B3B;--local:#AE9E96;--local-bg:#2C2320;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171211;--surface:#211A18;--surface-2:#2C2320;--ink:#F2E8E2;--muted:#AE9E96;--line:#3A2F2B;
+  --accent:#EE7FA2;--codex:#74D29A;--codex-bg:#173324;--nb:#E8B04B;--nb-bg:#3A2C12;--omni:#93B8DE;--omni-bg:#1C2B3B;--local:#AE9E96;--local-bg:#2C2320;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body)}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 64px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:400 clamp(42px,8vw,74px)/.95 var(--display);margin:14px 0 10px}
+h1 em{color:var(--accent)}
+h2{font:400 34px/1.05 var(--display);margin:44px 0 12px}
+.lede{max-width:70ch;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}
+.stat{background:var(--surface);padding:14px 16px}
+.stat .k{font:500 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 26px/1.2 var(--body);font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* pipeline */
+.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:8px;position:relative}
+.node{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;position:relative}
+.node:not(:last-child)::after{content:"→";position:absolute;right:-11px;top:42px;color:var(--muted);font-size:16px;z-index:1}
+.node .n{font:500 11px var(--mono);color:var(--muted)}
+.node h3{margin:0;font-size:15px}
+.node .tool{font:600 12px var(--body);padding:3px 7px;border-radius:4px;align-self:flex-start}
+.node .cost{font:500 12px var(--mono);margin-top:auto}
+.node img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:6px;background:var(--surface-2)}
+.node img.wide{aspect-ratio:16/9}
+.t-codex{background:var(--codex-bg);color:var(--codex)} .t-nb{background:var(--nb-bg);color:var(--nb)} .t-omni{background:var(--omni-bg);color:var(--omni)} .t-local{background:var(--local-bg);color:var(--local)}
+@media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.node::after{display:none}}
+/* detail cards */
+.steps{display:grid;gap:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+summary{cursor:pointer;padding:14px 0;font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+summary .tag{font:500 11px var(--mono);padding:3px 7px;border-radius:4px}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .body{padding:12px 0 16px}
+details ul{margin:6px 0;padding-left:20px}
+pre{background:var(--surface-2);border-radius:8px;padding:12px;overflow-x:auto;font:13px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word;margin:8px 0}
+code{font-family:var(--mono);font-size:13px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tbd{color:var(--muted);font-style:italic}
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cmp .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.cmp .card h3{margin:4px 0;font:400 24px/1.1 var(--display)}
+.cmp .card p{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:760px){.cmp{grid-template-columns:1fr}}
+.rule{border-left:3px solid var(--accent);background:var(--surface);padding:10px 14px;border-radius:6px;margin:8px 0}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">AI UGC · master pipeline · v1 · 2026-10-26</div>
+  <h1>Master <em>UGC</em> pipeline</h1>
+  <p class="lede">Codex locks the face, Nano Banana makes it look real, Omni makes it talk. Proven on Tiff Day 1: two ~20s talking vlogs and a carousel, every clip accepted on the first try. The text version agents read is <code>masterUGC.md</code>.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Per ~20s video</div><div class="v">30 cr</div><div class="s">2 × 10s Omni clips</div></div>
+    <div class="stat"><div class="k">Images</div><div class="v">0 cr</div><div class="s">Nano Banana Pro · Codex plan</div></div>
+    <div class="stat"><div class="k">Script accuracy</div><div class="v">4 / 4</div><div class="s">word for word, Day 1</div></div>
+    <div class="stat"><div class="k">Daily Flow top-up</div><div class="v">+50 cr</div><div class="s">Google AI Pro</div></div>
+  </div>
+
+  <h2>The pipeline</h2>
+  <div class="flow">
+    <div class="node"><span class="n">01</span><h3>Character sheet</h3><span class="tool t-local">Have it</span><img class="wide" src="campaigns/Tiff/sheet/tiff_sheet_a.jpg" alt="Original Tiff sheet"><span class="cost">never regenerate</span></div>
+    <div class="node"><span class="n">02</span><h3>Outfit sheets</h3><span class="tool t-codex">Codex CLI</span><img class="wide" src="campaigns/Tiff/sheet/Tiff_outfit_02_ivory_cami_denim_skirt.png" alt="Codex outfit sheet"><span class="cost">plan usage · ~1–2 min</span></div>
+    <div class="node"><span class="n">03</span><h3>Start frame</h3><span class="tool t-nb">Nano Banana Pro</span><img src="campaigns/Tiff/day01/frames/d01_shopA_start.jpg" alt="Nano Banana frame"><span class="cost">0 cr · x2</span></div>
+    <div class="node"><span class="n">04</span><h3>Video clips</h3><span class="tool t-omni">Omni 1.1 Flash</span><img src="campaigns/Tiff/day01/frames/d01_hook_pink_1.jpg" alt="Start frame used for video"><span class="cost">15 cr / 10s · 720p</span></div>
+    <div class="node"><span class="n">05</span><h3>QA + stitch</h3><span class="tool t-local">ffmpeg · Whisper</span><img class="wide" src="campaigns/Tiff/day01/clips/1A_grid.jpg" alt="QA frame grid"><span class="cost">free · local</span></div>
+    <div class="node"><span class="n">06</span><h3>Finish + post</h3><span class="tool t-local">CapCut / TikTok</span><video src="campaigns/Tiff/videos/01_ready_to_post/tiff_d01_shop_every-color_27s.mp4" controls muted playsinline style="width:100%;aspect-ratio:9/16;border-radius:6px;background:#000"></video><span class="cost">hook · sound · AI label</span></div>
+  </div>
+
+  <h2>Why this split</h2>
+  <div class="cmp">
+    <div class="card"><span class="tool t-codex" style="font:600 12px var(--body);padding:3px 7px;border-radius:4px">Codex · GPT Image</span><h3>Locks the face</h3><p>Closest match to the original Tiff in every outfit. Cleaner, more polished look. 941×1672.</p></div>
+    <div class="card"><span class="tool t-nb" style="font:600 12px var(--body);padding:3px 7px;border-radius:4px">Nano Banana Pro</span><h3>Looks like a real phone</h3><p>Messy rooms, mirror smudges, grain. Holds the face well <b>only when given the original sheets</b>. 768×1376 at 1K.</p></div>
+    <div class="card"><span class="tool t-omni" style="font:600 12px var(--body);padding:3px 7px;border-radius:4px">Omni 1.1 Flash</span><h3>Makes it talk</h3><p>Said every scripted line word for word and timed the actions as written. Generates the voice from a text description, so check by ear that it stays the same.</p></div>
+  </div>
+
+  <h2>Step by step</h2>
+  <div class="steps">
+    <details open><summary>02 · Outfit sheets <span class="tag t-codex">Codex CLI</span></summary><div class="body">
+      <ul><li>Refs: the persona's original sheets in <code>refs/</code>.</li><li>Same 4-panel layout: front, ¾, back, face close-up. Every garment named.</li><li>Run several outfits in parallel; reroll anything whose face drifts (free).</li></ul>
+<pre>bash campaigns/tiff/gen_image.sh outfits/outfit1.png outfits/o1.txt refs/tiff_sheet_white.jpg refs/tiff_sheet_red.jpg</pre>
+    </div></details>
+    <details><summary>03 · Start frame <span class="tag t-nb">Nano Banana Pro · Flow</span></summary><div class="body">
+      <ul><li>Flow → Image → Nano Banana Pro, 9:16, x2 → 0 credits.</li><li><b>References: both original sheets + the outfit sheet.</b> They clear after every submit, so re-add them each time.</li><li>Selfie still: mid-chest up, off-center, real clutter, "phone NOT visible". Mirror OOTD: "exactly one phone, face visible".</li><li>Keep the more amateur of the 2.</li></ul>
+    </div></details>
+    <details><summary>04 · Video <span class="tag t-omni">Omni · Frames · 15 cr</span></summary><div class="body">
+      <ul><li>Video → <b>Frames</b> → Start = frame · 9:16 · 720p · 10s. Confirm "15 credits".</li><li><b>Same start frame for every clip of one video</b>, so the jump cut looks like a real vlog cut.</li><li>≤ 25 words per 10s · one delivery word · one action at a named second · fixed voice line.</li></ul>
+<pre>authentic UGC vlog clip, handheld front-camera selfie, vertical. continue exactly from the start frame: same woman, same [place], same outfit… she is already holding the phone at arm's length and talks straight to camera. delivery: [word]. she says exactly: "[script]". around second [N] she [action]. her voice: [fixed voice line]. one continuous shot. no text, no captions, no music. slight handheld drift, built-in phone mic sound.</pre>
+    </div></details>
+    <details><summary>05 · QA + stitch <span class="tag t-local">local · free</span></summary><div class="body">
+<pre>ffmpeg -i 1A.mp4 -vf "fps=1,scale=240:-1,tile=5x2" -frames:v 1 1A_grid.jpg
+python transcribe.py 1A.mp4
+ffmpeg -i 1A.mp4 -af silencedetect=n=-35dB:d=0.4 -f null -
+bash stitch.sh final/post.mp4 clips/1A.mp4:9.0 clips/1B.mp4:full</pre>
+      <ul><li>Reject: face drift · extra fingers / second phone · on-screen text · script mismatch · cut-off last word.</li><li>Stitch trims dead air and normalizes to −14 LUFS (raw Omni ≈ −29 dB).</li></ul>
+    </div></details>
+  </div>
+
+  <h2>Pricing</h2>
+  <div class="scroll"><table class="tbl">
+    <tr><th>Item</th><th>Tool</th><th>Cost</th></tr>
+    <tr><td>Video · 720p · 10s</td><td>Omni 1.1 Flash</td><td class="num"><b>15 cr</b></td></tr>
+    <tr><td>Video · 720p · 8s</td><td>Omni 1.1 Flash</td><td class="num">12 cr</td></tr>
+    <tr><td>Video · 360p · 8s (test render)</td><td>Omni 1.1 Flash</td><td class="num">6 cr</td></tr>
+    <tr><td>Images, any count</td><td>Nano Banana Pro / 2.1 / Lite</td><td class="num">0 cr</td></tr>
+    <tr><td>Outfit sheet / frame</td><td>Codex (GPT Image)</td><td class="num">plan usage (~20k tokens)</td></tr>
+    <tr><td><b>One ~20s finished video</b></td><td>2 × Omni 10s</td><td class="num"><b>30 cr</b></td></tr>
+    <tr><td>Day 1 total</td><td>2 videos + carousel</td><td class="num">60 cr</td></tr>
+  </table></div>
+
+  <h2>Higgsfield models to test</h2>
+  <p class="lede">Higgsfield account checked 2026-10-26: free plan, 0 credits. Fill in prices to compare cost per 20s video against Omni's 30 credits.</p>
+  <div class="scroll" style="margin-top:12px"><table class="tbl">
+    <tr><th>Model</th><th>Start frame</th><th>Voice ref</th><th>Length</th><th>Why</th><th>Price / 10s 720p</th></tr>
+    <tr><td><b>Seedance 2.0</b></td><td>✅</td><td>✅</td><td class="num">4–15s</td><td>Identity + audio reference to lock one voice</td><td class="tbd">tbd</td></tr>
+    <tr><td>Seedance 2.0 Mini</td><td>✅</td><td>✅</td><td class="num">4–15s</td><td>Budget version</td><td class="tbd">tbd</td></tr>
+    <tr><td><b>Seedance 2.5</b></td><td>✅</td><td>✅</td><td class="num">4–30s</td><td>One 20s take, no stitch</td><td class="tbd">tbd</td></tr>
+    <tr><td>Seedance 1.5 Pro</td><td>✅</td><td>—</td><td class="num">4/8/12s</td><td>Cheaper baseline</td><td class="tbd">tbd</td></tr>
+    <tr><td>Wan 2.6</td><td>refs</td><td>✅</td><td class="num">5/10/15s</td><td>Open-weight, stylized</td><td class="tbd">tbd</td></tr>
+    <tr><td>Kling 3.0</td><td>✅</td><td>—</td><td class="num">3–15s</td><td>Strong motion</td><td class="tbd">tbd</td></tr>
+    <tr><td>Grok Video 1.5</td><td>✅</td><td>✅</td><td class="num">2–15s</td><td>Audio reference</td><td class="tbd">tbd</td></tr>
+    <tr><td>MiniMax H3 Max</td><td>✅</td><td>✅</td><td class="num">5–15s</td><td>Fast, audio reference</td><td class="tbd">tbd</td></tr>
+  </table></div>
+
+  <h2>Rules</h2>
+  <div class="rule">AI-generated label on every post · no first-person product claims · no AI before/after · only confirmed prices · "For the Boys" stays playful, not suggestive.</div>
+  <div class="rule">Check "Generating will use N credits" before every submit; settings carry over between modes.</div>
+
+  <div class="foot">masterUGC.html · the full step-by-step agents follow is in masterUGC.md · CLAUDE.md and AGENTS.md point Claude Code and Codex at it.</div>
+</div>
+</body>
+</html>

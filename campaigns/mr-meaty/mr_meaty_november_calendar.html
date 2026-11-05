@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mr. Meaty November</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F8F2E4; --surface:#FFFFFF; --surface-2:#F0E6CF; --ink:#2B1A12; --muted:#7A6652; --line:#E6D9BD;
+  --accent:#B5301F; --accent-ink:#FFFFFF;
+  --reach:#B5301F; --reach-bg:#F9E0DA; --lore:#6B3F8F; --lore-bg:#ECE1F5; --remix:#2F6B3A; --remix-bg:#DDEFDF;
+  --done:#2E7A4D; --warn:#8A5A00; --warn-bg:#FBEFD6;
+  --display:"Bowlby One", Impact, sans-serif;
+  --body:"DM Sans", system-ui, sans-serif;
+  --mono:"DM Mono", ui-monospace, Consolas, monospace;
+  --w0:var(--reach);--w0-bg:var(--reach-bg);--w1:var(--lore);--w1-bg:var(--lore-bg);--w2:var(--remix);--w2-bg:var(--remix-bg);--w3:var(--warn);--w3-bg:var(--warn-bg);--w4:var(--accent);--w4-bg:var(--surface-2);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16120D; --surface:#211B14; --surface-2:#2C241A; --ink:#F4EADB; --muted:#B3A08A; --line:#3B3123;
+    --accent:#F2735D; --accent-ink:#2A0C06;
+    --reach:#F2735D; --reach-bg:#3E1C16; --lore:#C7A2EA; --lore-bg:#2D2039; --remix:#7FD08E; --remix-bg:#18321D;
+    --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16120D; --surface:#211B14; --surface-2:#2C241A; --ink:#F4EADB; --muted:#B3A08A; --line:#3B3123;
+  --accent:#F2735D; --accent-ink:#2A0C06;
+  --reach:#F2735D; --reach-bg:#3E1C16; --lore:#C7A2EA; --lore-bg:#2D2039; --remix:#7FD08E; --remix-bg:#18321D;
+  --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 64px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:400 clamp(40px,7.5vw,72px)/.95 var(--display);margin:14px 0 12px;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{max-width:68ch;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}
+.stat{background:var(--surface);padding:14px 16px;min-width:0}
+.stat .k{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 26px/1.15 var(--body);font-variant-numeric:tabular-nums;margin-top:4px}
+.stat .v small{font-size:15px;color:var(--muted);font-weight:500}
+.stat .s{font-size:13px;color:var(--muted)}
+.bar{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tabs{display:flex;gap:4px;margin-top:28px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 4px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tag{display:inline-block;font:500 11px/1 var(--mono);letter-spacing:.04em;padding:4px 7px;border-radius:4px;white-space:nowrap}
+.a-reach{background:var(--reach-bg);color:var(--reach)}
+.a-lore{background:var(--lore-bg);color:var(--lore)}
+.a-remix{background:var(--remix-bg);color:var(--remix)}
+.t-shop{background:transparent;color:var(--accent);border:1px solid currentColor;padding:3px 6px}
+.t-key{background:var(--warn-bg);color:var(--warn)}
+.week{margin-top:32px}
+.week h2{font:400 26px/1.1 var(--display);margin:0 0 4px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.week h2 span{font:500 12px var(--mono);color:var(--muted);letter-spacing:.04em}
+.week .wsub{color:var(--muted);font-size:14px;margin:0 0 6px;max-width:72ch}
+.day{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.date{display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;border-radius:8px;background:var(--surface);border:1px solid var(--line);align-self:start}
+.date .m{font:500 10px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.date .d{font:400 30px/1.1 var(--display)}
+.date .w{font:500 11px var(--mono);color:var(--muted)}
+.day.key .date{border-color:var(--accent)}
+.day.key .date .w{color:var(--accent)}
+.dh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.dh h3{margin:0;font-size:19px;font-weight:700}
+.dh .hero{font-size:13px;color:var(--muted)}
+.dh .hero b{color:var(--ink);font-weight:600}
+.slots{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:2px}
+.slot{display:grid;grid-template-columns:24px 64px 108px minmax(0,1fr);gap:10px;align-items:start;padding:6px 8px;border-radius:6px}
+.slot:nth-child(odd){background:var(--surface)}
+.slot input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--done);cursor:pointer}
+.slot .tm{font:500 12px/1.6 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.slot .pl{font:600 12px/1.6 var(--body)}
+.slot .tx{font-size:14px}
+.slot .tx .tag{margin-left:4px;vertical-align:1px}
+.slot.done .tx{text-decoration:line-through;color:var(--muted)}
+.slot.stretch .tm::after{content:" opt";color:var(--warn)}
+@media (max-width:640px){
+  .day{grid-template-columns:56px minmax(0,1fr);gap:10px}
+  .date .d{font-size:24px}
+  .slot{grid-template-columns:22px minmax(0,1fr);gap:4px 8px}
+  .slot .tm,.slot .pl{grid-column:2;display:inline}
+  .slot .tm{grid-row:1}
+  .slot .pl{grid-row:2}
+  .slot .tx{grid-column:2}
+}
+.panel h2{font:400 28px/1.1 var(--display);margin:34px 0 8px}
+.panel h3{font-size:16px;margin:20px 0 6px}
+.panel p,.panel li{max-width:72ch}
+.panel ul,.panel ol{padding-left:20px;margin:6px 0}
+.panel li{margin:4px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{margin:6px 0 4px;font:400 22px/1.15 var(--display)}
+.card p{margin:0 0 8px;color:var(--muted);font-size:14px}
+.card ul{margin:0;padding-left:18px;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font:500 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:10px}
+.callout{border-left:3px solid var(--warn);background:var(--warn-bg);padding:12px 14px;border-radius:6px;margin:12px 0;max-width:78ch}
+.callout b{color:var(--warn)}
+/* month grid */
+.viewsw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.viewsw button{background:var(--surface);border:0;padding:6px 14px;font:600 13px var(--body);color:var(--muted);cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:14px 0 8px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto;grid-auto-rows:minmax(132px,auto);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);gap:1px}
+.month .hd{background:var(--surface-2);text-align:center;font:600 11px/1 var(--mono);letter-spacing:.08em;color:var(--muted);padding:9px 0}
+.cell{background:var(--surface);padding:8px;display:flex;flex-direction:column;gap:5px;min-width:0;text-align:left;border:0;font:inherit;color:inherit}
+button.cell{cursor:pointer}
+button.cell:hover{background:var(--surface-2)}
+.cell .dn{font:600 13px/1 var(--mono);display:flex;justify-content:space-between;align-items:center;min-height:22px}
+.cell .dn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px}
+.cell .dn .flag{font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.06em}
+.cell.other{background:var(--bg)}
+.cell.other .dn b{color:var(--muted);opacity:.6}
+.cell .pill{display:block;border-radius:4px;padding:4px 7px;font:600 12px/1.25 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill.w0{background:var(--w0-bg);color:var(--w0)} .pill.w1{background:var(--w1-bg);color:var(--w1)} .pill.w2{background:var(--w2-bg);color:var(--w2)} .pill.w3{background:var(--w3-bg);color:var(--w3)} .pill.w4{background:var(--w4-bg);color:var(--w4)}
+.legend .pill{display:inline-block;border-radius:4px;padding:3px 7px;font:600 12px/1.2 var(--body)}
+.cell .ttl2{font-size:12px;line-height:1.3;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.cell .mini{display:flex;gap:3px;margin-top:auto;padding-top:6px}
+.cell .mini i{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.cell .mini i.on{background:var(--done)}
+.cell .stl{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cell.done .stl{color:var(--done)}
+.cell.part .stl{color:var(--warn)}
+.cell.today{box-shadow:inset 0 0 0 2px var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.cell.today .dn b{background:var(--accent);color:var(--accent-ink)}
+.cell.today .dn::after{content:"TODAY";font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.08em}
+@media (max-width:760px){.cell .ttl2{display:none}.cell .pill{font-size:10.5px;padding:2px 4px}.month{grid-auto-rows:minmax(84px,auto)}.cell{padding:5px}.cell .stl{font-size:9px}}
+.ov{position:fixed;inset:0;background:rgba(10,10,14,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.dlg{background:var(--bg);border:1px solid var(--line);border-radius:12px;max-width:780px;width:100%;max-height:calc(100dvh - 32px);overflow:auto;padding:8px 20px 16px;position:relative}
+.dlg .x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:24px;line-height:1;color:var(--muted);cursor:pointer;padding:4px 8px}
+.dlg .day{border-top:0}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">AI character account · Nov 1 – 30, 2026</div>
+  <h1>Mr. Meaty <em>November</em></h1>
+  <p class="lede">Two felt puppets in burger-shop uniforms who keep turning up in the real world: silent, deadpan, and impossible to explain. Each one gets a single signature move, like Jean Phil's shadowboxing. A month-long workplace soap opera holds the account together, and green-screen templates let other people spread them.</p>
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="cal" aria-selected="true">Calendar</button>
+    <button class="tab" role="tab" data-tab="plan" aria-selected="false">Characters &amp; strategy</button>
+    <button class="tab" role="tab" data-tab="ops" aria-selected="false">Production, money &amp; rules</button>
+  </div>
+
+  <section id="cal">
+    <div class="tools"><div class="viewsw" id="viewsw"></div></div>
+    <div class="tools" id="filters"></div>
+    <div id="weeks"></div>
+  </section>
+
+  <section id="plan" class="panel" hidden>
+    <h2>Why Jean Phil blew up</h2>
+    <p>Jean Philanthrope is an AI-made Frenchman: houndstooth suit, blonde poodle hair, handlebar mustache, shadowboxing silently in public. He went viral in September 2026. Strip away the hype and the recipe is simple:</p>
+    <ol>
+      <li><b>A silhouette you know in half a second.</b> The hair, the mustache and the suit read even as a thumbnail.</li>
+      <li><b>One repeatable action.</b> He shadowboxes. Every clip is the same bit somewhere new.</li>
+      <li><b>No dialogue.</b> Silence works in every language, so it travels.</li>
+      <li><b>Real-world, phone-camera footage.</b> “Is he real?” arguments drove the comments.</li>
+      <li><b>Remixable.</b> Green-screen edits of his clips spread the meme further than his own posts.</li>
+    </ol>
+    <p>Other recent AI hits fill in the rest. Italian brainrot showed that absurd names and catchphrases stick. Fruit Love Island showed that people will follow an ongoing AI storyline day after day and argue about it in the comments.</p>
+
+    <h2>The two of them</h2>
+    <div class="callout"><b>Pick new names before you post.</b> “Mr. Meaty” is a real 2006 Nickelodeon/CBC puppet show about two fast-food workers, and these sheets are close to its characters. Using that name and look could get videos taken down for IP and makes the account read as a knockoff. Below I use placeholders, <b>Brisket</b> and <b>Slim</b> at <b>Burger Bunker</b>; swap in whatever you like. Changing the visor and polo colors would help too.</div>
+    <div class="cards">
+      <div class="card">
+        <span class="tag a-reach">SHORT · STOCKY · GINGER</span>
+        <h3>Brisket</h3>
+        <p>Round, red hair, bug eyes, pig nose. Very still, then does something sudden.</p>
+        <ul>
+          <li><b>Signature move: The Shuffle.</b> A stiff 3-second dance in a public place, then he walks off as if nothing happened.</li>
+          <li><b>Signature look:</b> the long, unblinking stare straight into the camera.</li>
+          <li>Running gag: his name tag says “BRIAN” and he won't explain why.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-lore">TALL · THIN · BLONDE</span>
+        <h3>Slim</h3>
+        <p>Lanky, droopy hair over one eye, big lips. Calm and polite about everything.</p>
+        <ul>
+          <li><b>Signature move: The Delivery.</b> Walks somewhere absurd holding one burger on a tray, hands it over, leaves.</li>
+          <li>Running gag: No-Shave November. Starts with 3 hairs on Nov 11 and ends with a full handlebar on Nov 30 (a nod to Jean Phil's mustache, not a copy of him).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-remix">SUPPORTING CAST</span>
+        <h3>The Raccoon</h3>
+        <p>The first customer, then an employee, then the Employee of the Month frontrunner. The audience will probably love him most. Give him a name once comments start naming him.</p>
+        <ul>
+          <li>Rule of thumb: he never does anything evil, only things that are just a little too competent.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Who watches</h2>
+    <ul>
+      <li><b>Gen Z and Gen Alpha (13–24)</b>, the brainrot and AI-meme crowd. Biggest reach, most sharing, little buying power.</li>
+      <li><b>Millennials (28–40)</b> with puppet-show and fast-food-job nostalgia. They share it to group chats and they're the ones who'd buy merch.</li>
+      <li><b>Anyone who's worked fast food or retail.</b> The Shift Cam slot is aimed at them.</li>
+      <li>Both genders. Make it look like it's for nobody in particular; that's part of the joke.</li>
+    </ul>
+
+    <h2>The five daily slots</h2>
+    <div class="scroll"><table class="tbl" id="slotTable"></table></div>
+
+    <h2>The November storyline: Employee of the Month</h2>
+    <p>One short episode a day at 7pm. Comment votes decide the winner: 🍔 for Brisket, 🍟 for Slim, 🦝 for the raccoon. Announce the winner on Nov 30 from the <i>actual</i> comment count. That vote is what brings people back every day.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Week</th><th>Arc</th><th>What happens</th></tr>
+      <tr><td>Nov 1–7</td><td><b>Grand Re-Opening</b></td><td>Nobody comes. Then a raccoon comes. The Employee of the Month frame appears with “???”.</td></tr>
+      <tr><td>Nov 8–14</td><td><b>The Race</b></td><td>Voting opens. Petty sabotage, both terrible at revenge. The raccoon gets hired.</td></tr>
+      <tr><td>Nov 15–21</td><td><b>The Health Inspector</b></td><td>They hide the raccoon in a visor, score a C-, and celebrate like it's an A.</td></tr>
+      <tr><td>Nov 22–28</td><td><b>Turkey Burger &amp; Black Friday</b></td><td>The turkey goes missing, Thanksgiving in the empty shop, a “doorbuster” rush of one customer.</td></tr>
+      <tr><td>Nov 29–30</td><td><b>Finale</b></td><td>The envelope. The winner. Slim's mustache is complete.</td></tr>
+    </table></div>
+
+    <h2>Ramp</h2>
+    <p>Same as Tiff: <b>3 a day</b> Nov 1–7 (Found Footage, The Bit, Lore), <b>4</b> from Nov 8 (+ Shift Cam), <b>5</b> from Nov 15 (+ Remix). Slots marked <b style="color:var(--warn)">opt</b> are skippable during the ramp.</p>
+
+    <h2>What “winning” looks like here</h2>
+    <ul>
+      <li><b>Comments that argue “is this real?”</b> mean Found Footage is working. Make more in that type of location.</li>
+      <li><b>Other accounts using your green-screen templates</b> is the Jean Phil effect. Search the account name weekly and duet or repost the best ones.</li>
+      <li><b>Returning viewers on Lore</b> (episodes 2–5 holding views close to episode 1) mean the storyline is working. If they drop off, make each episode work on its own.</li>
+      <li>If one Delivery or Shuffle location takes off, do 3 more like it in the next week.</li>
+    </ul>
+  </section>
+
+  <section id="ops" class="panel" hidden>
+    <h2>Making it</h2>
+    <ul>
+      <li><b>They're silent, so no lip-sync.</b> That's the cheapest, cleanest kind of Omni clip, and it matches what you already do (vibe-only, no mouthing). Every video uses one signature sound effect, like a fryer “ding”, plus trending audio.</li>
+      <li><b>Found Footage should look like a stranger filmed it:</b> handheld, slightly zoomed, real places, a bit shaky. Prompt for “vertical phone video filmed by a bystander” and keep the puppets felt-textured and physical.</li>
+      <li><b>Shift Cam is the cheapest slot:</b> a fixed high-angle CCTV shot with a timestamp overlay you add in CapCut. One kitchen setup reused all month.</li>
+      <li><b>Green-screen templates are made once and reused forever:</b> Brisket's Shuffle, Slim walking with the tray, and Brisket's stare, each on solid green. Six or seven of these carry the Remix slot for the month.</li>
+      <li><b>Budget:</b> about 2 new clips a day (Found Footage + The Bit), with Lore and Shift Cam reusing sets. That's roughly 300–400 credits a week, like Tiff.</li>
+      <li><b>Batch by location:</b> generate 4–5 Deliveries or Shuffles in one sitting, then schedule them across the week.</li>
+    </ul>
+
+    <h2>How this account makes money</h2>
+    <p>Character accounts earn from reach first and the shop second. Build the audience in November and sell to it in December.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Source</th><th>When</th><th>Notes</th></tr>
+      <tr><td><b>TikTok Creator Rewards</b></td><td>Once eligible</td><td>Pays for videos over 1 minute. Requires 18+ and a follower/view minimum (check Creator Center). Lore recaps and blooper compilations can run past 1 minute.</td></tr>
+      <tr><td><b>TikTok Shop (novelty)</b></td><td>Weekly, Saturdays</td><td>Smash-burger press, mini waffle maker, burger plushies, fry-shaped squishies, novelty visors. Show the real product images from the listing; the puppets are only the host.</td></tr>
+      <tr><td><b>Own merch</b></td><td>December+, once you have a following</td><td>The visor is the obvious item, then “BRIAN” name tags and raccoon plushies. Only once names are final and original.</td></tr>
+      <tr><td><b>Local / restaurant brand deals</b></td><td>Later</td><td>Burger joints love a character account. Disclose every paid post as an ad.</td></tr>
+    </table></div>
+
+    <h2>Rules</h2>
+    <ul>
+      <li>Label every post as <b>AI-generated</b>. The “is this real?” debate is fun, but the label keeps the account safe, and people will argue anyway.</li>
+      <li><b>Don't use Jean Phil himself</b>, his look, or his name. Borrow the recipe, not the character. He already has copycats, and being one of them is a dead end.</li>
+      <li><b>Stay away from meme coins.</b> Jean Phil's virality got tangled up with a crypto coin. Never launch, hint at or promote one; it kills trust and invites scams.</li>
+      <li>Real-world settings should be <b>generic places</b>, not real identifiable people or real restaurant brands. Show no logos.</li>
+      <li>A big share of the audience is under 18. Keep everything PG, and don't aim shop links at kids.</li>
+    </ul>
+    <p style="font-size:13px;color:var(--muted)">Sources on Jean Phil: <a href="https://knowyourmeme.com/memes/jean-philanthrope-jean-phil">Know Your Meme</a> · <a href="https://sg.news.yahoo.com/jean-philanthrope-ai-mysterious-frenchman-170114829.html">Yahoo News</a> · <a href="https://www.bitrue.com/blog/who-is-jean-philanthrope-behind-jeanphil-coin">Bitrue (coin link)</a>. On Fruit Love Island and Italian brainrot: <a href="https://en.wikipedia.org/wiki/Fruit_Love_Island">Wikipedia</a> · <a href="https://en.wikipedia.org/wiki/Italian_brainrot">Wikipedia</a>.</p>
+  </section>
+
+  <div class="foot">Mr. Meaty · AI character account · Checkboxes save in this browser only. Names are placeholders; rename before posting.</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SLOTS=[
+  {k:"found",t:"9:00a",n:"Found Footage",a:"reach",desc:"Phone footage of them out in the real world, unexplained. Built for “is this real?” comments."},
+  {k:"cam",t:"12:00p",n:"Shift Cam",a:"reach",desc:"Security or drive-thru camera inside the shop. Fast-food workers relate. Cheapest to make."},
+  {k:"bit",t:"3:00p",n:"The Bit",a:"reach",desc:"The signature moves: Slim's Delivery and Brisket's Shuffle, numbered so people collect them."},
+  {k:"lore",t:"7:00p",n:"Lore",a:"lore",desc:"Today's Employee of the Month episode. Keeps people coming back."},
+  {k:"remix",t:"10:00p",n:"Remix",a:"remix",desc:"Green-screen templates, duet bait, trend hijacks, vote tallies, comment replies."}
+];
+// first day each slot is required; earlier days show it as optional
+var RAMP={found:1,cam:8,bit:1,lore:1,remix:15};
+
+var WEEKS=[
+  {from:1,to:7,name:"Grand Re-Opening",sub:"Introduce them, start both signature moves, and drop the first green-screen template on day one."},
+  {from:8,to:14,name:"The Race",sub:"Employee of the Month voting opens. Every Lore post ends with the vote ask."},
+  {from:15,to:21,name:"The Health Inspector",sub:"The biggest storyline week. Give Lore posts cliffhanger endings."},
+  {from:22,to:28,name:"Turkey Burger & Black Friday",sub:"Holiday chaos. Thanksgiving Nov 26, a Black Friday “doorbuster” for one customer Nov 27."},
+  {from:29,to:30,name:"Finale",sub:"The envelope and the winner. Pin the finale and the green-screen pack."}
+];
+
+// s: [found, cam, bit, lore, remix]; "$" prefix = shop-linked
+var DAYS=[
+{d:1,th:"Grand Re-Opening",hero:"Ep. 1",s:["Slim walks down a busy sidewalk carrying one burger on a tray. Never explains. Caption: “?”","3:12am: Brisket mops the same tile for 40 seconds","Delivery #1: Slim hands a burger to a pigeon","Ep. 1: They unlock the doors for the grand re-opening. Nobody comes. They wait.","Green-screen template: Brisket's Shuffle. Caption: “use this”"]},
+{d:2,th:"Meet Brisket",hero:"Ep. 2",s:["Brisket stands completely still in a park while joggers go past","Drive-thru cam: a car pulls up and Brisket's face slowly rises into frame","Shuffle #1: 3 seconds at a bus stop, then he gets on the bus","Ep. 2: Name tags. Slim's says SLIM. Brisket's says BRIAN. He won't talk about it.","Brisket in this week's top trending sound"]},
+{d:3,th:"Meet Slim",hero:"Ep. 3",s:["Slim on an escalator going the wrong way, perfectly calm","Slim tries to climb out through the drive-thru window","Delivery #2: to a guy at the gym, mid-set","Ep. 3: The first customer is a raccoon.","Duet bait: 10 seconds of Brisket staring. “Stitch with what he's looking at”"]},
+{d:4,th:"Commute",hero:"Ep. 4",s:["Both ride a subway car eating fries, ignoring everyone","The fryer beeps. Both heads turn in perfect sync.","Shuffle #2: in a grocery aisle","Ep. 4: No-Shave November is announced. Slim takes it very seriously.","Template: Slim walking with the tray. “put him anywhere”"]},
+{d:5,th:"The raccoon returns",hero:"Ep. 5",s:["Brisket in a coffee shop line, in his visor, ordering nothing","Brisket finds one fry under the fryer. It is ancient.","Delivery #3: to a man fishing on a lake","Ep. 5: The raccoon comes back. With friends.","“Rate this Shuffle 1–10” comment bait"]},
+{d:6,th:"Friday",hero:"Ep. 6",s:["Slim jogs through a park holding a burger up like the Olympic torch","Drive-thru: “Can I get—” Slim silently holds up one burger","Shuffle #3: Friday night, outside a club line","Ep. 6: A note on the fridge: “Employee of the Month: ???”","Template: drive-thru window POV"]},
+{d:7,th:"Week 1 wrap",hero:"Ep. 7",s:["Both on a bench feeding ducks with fries. Caption: “they were seen again”","Week 1 blooper compilation (over 1 minute)","Delivery #4: walks into a wedding's first dance","Ep. 7: Week 1 recap in 15 seconds","$Brisket's shop pick: smash-burger press (real product images)"]},
+
+{d:8,th:"The race begins",hero:"Ep. 8",s:["Brisket shadowboxes badly in a park at sunrise, then does the Shuffle","Slim polishes the Employee of the Month frame. Lovingly.","Delivery #5: to a guy on a rooftop","Ep. 8: Voting opens. Comment 🍔 Brisket, 🍟 Slim","Vote tally video: “Brisket is losing”"]},
+{d:9,th:"Sabotage",hero:"Ep. 9",s:["Slim outside a car wash holding a cardboard sign that just says BURGER","Brisket flips a patty. It sticks to the ceiling.","Shuffle #4: in an elevator, doors close mid-dance","Ep. 9: Brisket hides Slim's visor","Template: elevator doors closing on Brisket"]},
+{d:10,th:"Revenge",hero:"Ep. 10",s:["Brisket in a DMV-style line holding ticket number 999","Drive-thru: someone orders 400 nuggets. Slim's eye twitches.","Delivery #6: to a guy mid-haircut at a barbershop","Ep. 10: Slim gets revenge by putting more ketchup in Brisket's ketchup. They're bad at this.","Template: “POV: you order at 1:59 and we close at 2”"]},
+{d:11,th:"Mustache watch",hero:"Ep. 11",s:["Slim at a crosswalk lets everyone go first. Never crosses.","4am: both asleep standing up","Shuffle #5: in an empty parking lot in the rain","Ep. 11: Mustache check, day 11: three hairs","Vote tally update"]},
+{d:12,th:"Machine's broken",hero:"Ep. 12",s:["Both in mall massage chairs, vibrating, expressionless","The ice cream machine is “broken”. It has always been broken.","Delivery #7: trades a burger for lemonade at a kid's lemonade stand","Ep. 12: The raccoon applies for a job","Stitch template: the “BROKEN” sign"]},
+{d:13,th:"Friday the 13th",hero:"Ep. 13",s:["Brisket outside a movie theater holding a bucket of fries","Drive-thru at midnight: a car with no driver","Shuffle #6: a black cat crosses his path mid-Shuffle","Ep. 13: The raccoon gets hired. Morale drops.","Trend hijack"]},
+{d:14,th:"Halfway",hero:"Ep. 14",s:["Slim at pickup basketball in his visor. Never shoots.","Week 2 blooper compilation","Delivery #8: to a guy in a hot tub","Ep. 14: Halfway tally. The raccoon is winning.","$Slim's shop pick: burger plushie (real product images)"]},
+
+{d:15,th:"Rumors",hero:"Ep. 15",s:["Brisket holds a door open for an entire crowd, for far too long","A man with a clipboard parks outside and just sits there","Delivery #9: to a construction crew on their lunch break","Ep. 15: Rumor has it the health inspector is coming this week","Template: Brisket's gasp face"]},
+{d:16,th:"Deep clean",hero:"Ep. 16",s:["Slim jogs through a park carrying a mop","They clean everything. The raccoon is hiding in the fryer cabinet.","Shuffle #7: riding an airport baggage carousel","Ep. 16: They disguise the raccoon as an employee. It gets a visor.","Sticker template: raccoon in a visor"]},
+{d:17,th:"He's here",hero:"Ep. 17",s:["Both try to blend into a crowd at a farmers market","The inspector at the drive-thru orders “just water”","Delivery #10: to a fire station","Ep. 17: The inspector walks in. Nobody moves.","“What happens next?” poll"]},
+{d:18,th:"The sneeze",hero:"Ep. 18",s:["Slim asleep on a city bus, visor over his eyes","The inspector opens the fridge. It's only pickles.","Shuffle #8: at a bowling alley","Ep. 18: The inspection goes fine until the raccoon sneezes.","Trend hijack"]},
+{d:19,th:"The score",hero:"Ep. 19",s:["Brisket on a gym treadmill at 0.5 mph, eating fries","The inspector tries a fry. A very long pause.","Delivery #11: through the window of a car stuck in traffic","Ep. 19: The score is C-. They celebrate like it's an A.","Template: celebration loop"]},
+{d:20,th:"Big crowd",hero:"Ep. 20",s:["Both in the bleachers at a high school football game","Week 3 blooper compilation","Shuffle #9: on the stadium jumbotron","Ep. 20: Mustache check, day 20: it's real now","Video replies to comments"]},
+{d:21,th:"The raccoon rises",hero:"Ep. 21",s:["Slim at a laundromat, watching a dryer spin","After close: the raccoon alone, running the grill","Delivery #12: to a night-shift nurse","Ep. 21: The raccoon is named Employee of the Week","$Shop pick: mini waffle maker (real product images)"]},
+
+{d:22,th:"Turkey Burger",hero:"Ep. 22",s:["Slim carries a frozen turkey down the street like a baby","A turkey goes into the fryer. It just bubbles gently. Nothing happens.","Delivery #13: to a pilgrim reenactment","Ep. 22: The Turkey Burger is announced","Template: Slim holding the turkey"]},
+{d:23,th:"Test kitchen",hero:"Ep. 23",s:["Brisket guards the last can of cranberry sauce in a grocery store","Drive-thru: someone orders the Turkey Burger. There is no Turkey Burger.","Shuffle #10: in a pumpkin patch","Ep. 23: The Turkey Burger is just a turkey on a bun","“Would you eat it?” poll"]},
+{d:24,th:"Missing turkey",hero:"Ep. 24",s:["Both in an airport security line holding a tray of burgers","Security cam: the raccoon wheels the turkey out","Delivery #14: to a pilot at the gate","Ep. 24: The turkey is gone. Investigation begins.","Trend hijack"]},
+{d:25,th:"Travel day",hero:"Ep. 25",s:["Slim driving home for Thanksgiving, burger on the dashboard","New fridge sign: “BLACK FRIDAY DOORBUSTER: 2 BURGERS FOR THE PRICE OF 2”","Shuffle #11: at a gas station pump","Ep. 25: They find the turkey. The raccoon has set the table.","Template: Thanksgiving table POV"]},
+{d:26,th:"Thanksgiving",hero:"Ep. 26",key:1,s:["Brisket at a family Thanksgiving table. Nobody questions it.","Thanksgiving dinner in the empty shop: Brisket, Slim and the raccoon","Delivery #15: to a lonely security guard on Thanksgiving","Ep. 26: What they're thankful for. Silent; they just point at each other.","Video replies: “what are you thankful for?”"]},
+{d:27,th:"Black Friday",hero:"Ep. 27",key:1,s:["5am Black Friday line outside the shop. It's one guy.","The doors open for the doorbuster. One guy walks in, slowly.","Shuffle #12: in a packed mall","Ep. 27: The Black Friday rush (of one customer)","$Black Friday novelty picks: press, plushie, waffle maker"]},
+{d:28,th:"Last votes",hero:"Ep. 28",s:["Slim in a food court staring at the other burger place","Week 4 blooper compilation","Delivery #16: to a Black Friday shopper stuck in a parking lot","Ep. 28: Voting closes tomorrow. Final push.","$Final vote tally + this week's shop picks"]},
+
+{d:29,th:"The envelope",hero:"Ep. 29",s:["Both outside the shop at dusk, staring at the sign","A sealed envelope sits on the counter. Nobody touches it.","Delivery #17: delivers the envelope… to the raccoon","Ep. 29: The envelope arrives","Green-screen pack: every template from the month"]},
+{d:30,th:"FINALE",hero:"Ep. 30",key:1,s:["Slim walks down the same sidewalk as Nov 1, now with a full handlebar mustache","Security cam: the frame goes up on the wall (winner hidden)","Shuffle #13: the victory Shuffle, all three of them","Ep. 30 FINALE: Employee of the Month is… (whoever actually won the comment vote)","“Season 2 in December?” teaser + thank-you"]}
+];
+
+var ST={};
+try{ST=JSON.parse(localStorage.getItem("meaty-nov")||"{}")||{};}catch(e){ST={};}
+function save(){try{localStorage.setItem("meaty-nov",JSON.stringify(ST));}catch(e){}}
+var LSKEY="meaty-nov";
+var HERO_LABEL="Lore";
+var KEY_LABEL="BIG DAY";
+var view="month";
+try{view=localStorage.getItem(LSKEY+"-view")||"month";}catch(e){}
+
+var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]; // Nov 1 2026 = Sunday
+var filt="all";
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function aTag(a){return '<span class="tag a-'+a+'">'+a.toUpperCase()+'</span>';}
+
+function weekIdx(d){for(var i=0;i<WEEKS.length;i++)if(d>=WEEKS[i].from&&d<=WEEKS[i].to)return i;return 0;}
+function posted(x){var n=0;for(var i=0;i<5;i++)if(ST[x.d+"-"+i])n++;return n;}
+
+function stats(){
+  var total=DAYS.length*5,done=0,shop=0;
+  DAYS.forEach(function(x){x.s.forEach(function(s,i){if(ST[x.d+"-"+i])done++;if(s[0]==="$")shop++;});});
+  var pct=Math.round(done/total*100);
+  document.getElementById("stats").innerHTML=
+   '<div class="stat"><div class="k">Posts planned</div><div class="v">'+total+'</div><div class="s">5 a day × 30 days</div></div>'+
+   '<div class="stat"><div class="k">Posted</div><div class="v">'+done+' <small>/ '+total+'</small></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+
+   '<div class="stat"><div class="k">Lore episodes</div><div class="v">30</div><div class="s">Employee of the Month</div></div>'+
+   '<div class="stat"><div class="k">Shop-linked</div><div class="v">'+shop+'</div><div class="s">reach first, shop second</div></div>';
+}
+
+function viewsw(){
+  var el=document.getElementById("viewsw");
+  el.innerHTML='<button data-v="month" aria-pressed="'+(view==="month")+'">Month</button><button data-v="list" aria-pressed="'+(view==="list")+'">List</button>';
+  el.onclick=function(e){var b=e.target.closest("button");if(!b)return;view=b.dataset.v;try{localStorage.setItem(LSKEY+"-view",view);}catch(err){}viewsw();render();};
+}
+function filters(){
+  var opts=[["all","All slots"]].concat(SLOTS.map(function(s){return [s.k,s.n];})).concat([["$","Shop-linked only"]]);
+  var el=document.getElementById("filters");
+  el.innerHTML=opts.map(function(o){return '<button class="chip" data-f="'+o[0]+'" aria-pressed="'+(filt===o[0])+'">'+o[1]+'</button>';}).join("");
+  el.onclick=function(e){var b=e.target.closest(".chip");if(!b)return;filt=b.dataset.f;filters();render();};
+}
+function show(i,s){
+  if(filt==="all")return true;
+  if(filt==="$")return s[0]==="$";
+  return SLOTS[i].k===filt;
+}
+
+function dayHTML(x,all){
+  var rows="";
+  x.s.forEach(function(s,i){
+    if(!all&&!show(i,s))return;
+    var sl=SLOTS[i],shop=s[0]==="$",txt=shop?s.slice(1):s,id=x.d+"-"+i,on=!!ST[id];
+    var stretch=x.d<RAMP[sl.k];
+    rows+='<li class="slot'+(on?' done':'')+(stretch?' stretch':'')+'"><input type="checkbox" data-id="'+id+'"'+(on?' checked':'')+' aria-label="Posted: '+sl.n+' Nov '+x.d+'">'+
+      '<span class="tm">'+sl.t+'</span><span class="pl" style="color:var(--'+sl.a+')">'+sl.n+'</span>'+
+      '<span class="tx">'+esc(txt)+(shop?'<span class="tag t-shop">LINK</span>':'')+'</span></li>';
+  });
+  if(!rows)return "";
+  return '<div class="day'+(x.key?' key':'')+'"><div class="date"><span class="m">NOV</span><span class="d">'+x.d+'</span><span class="w">'+WD[(x.d-1)%7]+'</span></div>'+
+    '<div><div class="dh"><h3>'+esc(x.th)+'</h3>'+(x.key?'<span class="tag t-key">'+KEY_LABEL+'</span>':'')+'<span class="hero">'+HERO_LABEL+': <b>'+esc(x.hero)+'</b></span></div>'+
+    '<ul class="slots">'+rows+'</ul></div></div>';
+}
+
+function monthHTML(){
+  var now=new Date(),isNov=now.getFullYear()===2026&&now.getMonth()===10,td=now.getDate();
+  var h='<div class="legend">'+WEEKS.map(function(w,i){return '<span><span class="pill w'+i+'">'+esc(w.name)+'</span>Nov '+w.from+'–'+w.to+'</span>';}).join("")+'</div>';
+  h+='<div class="month">'+WD.map(function(d){return '<div class="hd">'+d.toUpperCase()+'</div>';}).join("");
+  DAYS.forEach(function(x){
+    var n=posted(x),bars="";
+    for(var i=0;i<5;i++)bars+='<i'+(ST[x.d+"-"+i]?' class="on"':'')+'></i>';
+    var stl=n===5?"Posted":n?n+"/5 posted":"Not started";
+    var cls="cell"+(n===5?" done":n?" part":"")+(isNov&&td===x.d?" today":"");
+    h+='<button class="'+cls+'" data-d="'+x.d+'" aria-label="Nov '+x.d+': '+esc(x.th)+', '+stl+'">'+
+      '<span class="dn"><b>'+(x.d===1?"Nov 1":x.d)+'</b>'+(x.key?'<span class="flag" title="'+KEY_LABEL+'">★</span>':'')+'</span>'+
+      '<span class="pill w'+weekIdx(x.d)+'">'+esc(x.th)+'</span>'+
+      '<span class="ttl2">'+esc(x.s[3].replace(/^Ep. [0-9]+( FINALE)?: /,""))+'</span>'+
+      '<span class="mini">'+bars+'</span><span class="stl">'+stl+'</span></button>';
+  });
+  var pad=(7-DAYS.length%7)%7; // Nov 1 is a Sunday, so only the last row needs December fill
+  for(var j=1;j<=pad;j++)h+='<div class="cell other"><span class="dn"><b>'+(j===1?"Dec 1":j)+'</b></span></div>';
+  return h+'</div>';
+}
+
+function render(){
+  var el=document.getElementById("weeks");
+  document.getElementById("filters").hidden=(view==="month");
+  if(view==="month"){el.innerHTML=monthHTML();return;}
+  var h="";
+  WEEKS.forEach(function(w){
+    var days=DAYS.filter(function(x){return x.d>=w.from&&x.d<=w.to;}).map(function(x){return dayHTML(x,false);}).join("");
+    if(!days)return;
+    h+='<div class="week"><h2>'+w.name+'<span>NOV '+w.from+'–'+w.to+'</span></h2><p class="wsub">'+w.sub+'</p>'+days+'</div>';
+  });
+  el.innerHTML=h;
+}
+
+function openDay(d){
+  var x=DAYS.filter(function(y){return y.d===d;})[0];if(!x)return;
+  var ov=document.createElement("div");ov.className="ov";
+  ov.innerHTML='<div class="dlg" role="dialog" aria-modal="true" aria-label="Nov '+d+'"><button class="x" aria-label="Close">×</button>'+dayHTML(x,true)+'</div>';
+  function close(){ov.remove();document.removeEventListener("keydown",key);render();var b=document.querySelector('.cell[data-d="'+d+'"]');if(b)b.focus();}
+  function key(e){if(e.key==="Escape")close();}
+  ov.addEventListener("click",function(e){if(e.target===ov||e.target.closest(".x"))close();});
+  document.addEventListener("keydown",key);
+  document.body.appendChild(ov);ov.querySelector(".x").focus();
+}
+
+document.getElementById("weeks").addEventListener("click",function(e){var c=e.target.closest("button.cell");if(c)openDay(+c.dataset.d);});
+document.addEventListener("change",function(e){
+  var c=e.target;if(!c.dataset||!c.dataset.id)return;
+  if(c.checked)ST[c.dataset.id]=1;else delete ST[c.dataset.id];
+  save();c.closest(".slot").classList.toggle("done",c.checked);stats();
+});
+
+document.getElementById("slotTable").innerHTML='<tr><th>Time</th><th>Slot</th><th>Job</th><th>What it is</th></tr>'+
+  SLOTS.map(function(s){return '<tr><td class="num">'+s.t+'</td><td><b>'+s.n+'</b></td><td>'+aTag(s.a)+'</td><td>'+s.desc+'</td></tr>';}).join("");
+
+var tabs=document.querySelectorAll(".tab");
+tabs.forEach(function(t){t.onclick=function(){
+  tabs.forEach(function(o){o.setAttribute("aria-selected",o===t);document.getElementById(o.dataset.tab).hidden=(o!==t);});
+};});
+
+stats();viewsw();filters();render();
+})();
+</script>
+</body>
+</html>

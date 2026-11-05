@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wise Guy November</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F0E6; --surface:#FFFDF8; --surface-2:#E9E2D2; --ink:#1E2430; --muted:#6A6558; --line:#DDD4C1;
+  --accent:#9A6A12; --accent-ink:#FFFFFF;
+  --reach:#9A4A1E; --reach-bg:#F6E3D6; --trust:#244E7A; --trust-bg:#DDE7F2; --talk:#2F6B3A; --talk-bg:#DDEFDF;
+  --w0:#244E7A; --w0-bg:#DDE7F2; --w1:#2F6B3A; --w1-bg:#DDEFDF; --w2:#9A3A55; --w2-bg:#F5DFE6; --w3:#9A4A1E; --w3-bg:#F6E3D6; --w4:#5B4A8C; --w4-bg:#E6E1F4;
+  --done:#2E7A4D; --warn:#8A5A00; --warn-bg:#FBEFD6;
+  --display:"Fraunces", Georgia, serif;
+  --body:"DM Sans", system-ui, sans-serif;
+  --mono:"DM Mono", ui-monospace, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12151B; --surface:#1A1E26; --surface-2:#252A34; --ink:#ECE6D8; --muted:#A39C8C; --line:#323846;
+    --accent:#E2B45A; --accent-ink:#231A06;
+    --reach:#F0A27A; --reach-bg:#3A2418; --trust:#8DB6E2; --trust-bg:#1B2B3D; --talk:#7FD08E; --talk-bg:#18321D;
+    --w0:#8DB6E2; --w0-bg:#1B2B3D; --w1:#7FD08E; --w1-bg:#18321D; --w2:#EE99B3; --w2-bg:#3A1C27; --w3:#F0A27A; --w3-bg:#3A2418; --w4:#B9A8F0; --w4-bg:#2A2443;
+    --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12151B; --surface:#1A1E26; --surface-2:#252A34; --ink:#ECE6D8; --muted:#A39C8C; --line:#323846;
+  --accent:#E2B45A; --accent-ink:#231A06;
+  --reach:#F0A27A; --reach-bg:#3A2418; --trust:#8DB6E2; --trust-bg:#1B2B3D; --talk:#7FD08E; --talk-bg:#18321D;
+  --w0:#8DB6E2; --w0-bg:#1B2B3D; --w1:#7FD08E; --w1-bg:#18321D; --w2:#EE99B3; --w2-bg:#3A1C27; --w3:#F0A27A; --w3-bg:#3A2418; --w4:#B9A8F0; --w4-bg:#2A2443;
+  --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+button{font:inherit;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 64px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(42px,7.5vw,74px)/.98 var(--display);margin:14px 0 12px;text-wrap:balance;letter-spacing:-.02em}
+h1 em{color:var(--accent)}
+.lede{max-width:68ch;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}
+.stat{background:var(--surface);padding:14px 16px;min-width:0}
+.stat .k{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 26px/1.15 var(--body);font-variant-numeric:tabular-nums;margin-top:4px}
+.stat .v small{font-size:15px;color:var(--muted);font-weight:500}
+.stat .s{font-size:13px;color:var(--muted)}
+.bar{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tabs{display:flex;gap:4px;margin-top:28px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 4px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tag{display:inline-block;font:500 11px/1 var(--mono);letter-spacing:.04em;padding:4px 7px;border-radius:4px;white-space:nowrap}
+.a-reach{background:var(--reach-bg);color:var(--reach)}
+.a-trust{background:var(--trust-bg);color:var(--trust)}
+.a-talk{background:var(--talk-bg);color:var(--talk)}
+.t-shop{background:transparent;color:var(--accent);border:1px solid currentColor;padding:3px 6px}
+.t-key{background:var(--warn-bg);color:var(--warn)}
+.week{margin-top:32px}
+.week h2{font:700 28px/1.1 var(--display);margin:0 0 4px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.week h2 span{font:500 12px var(--mono);color:var(--muted);letter-spacing:.04em}
+.week .wsub{color:var(--muted);font-size:14px;margin:0 0 6px;max-width:72ch}
+.day{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.date{display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;border-radius:8px;background:var(--surface);border:1px solid var(--line);align-self:start}
+.date .m{font:500 10px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.date .d{font:700 32px/1.05 var(--display)}
+.date .w{font:500 11px var(--mono);color:var(--muted)}
+.day.key .date{border-color:var(--accent)}
+.day.key .date .w{color:var(--accent)}
+.dh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.dh h3{margin:0;font-size:19px;font-weight:700}
+.dh .hero{font-size:13px;color:var(--muted)}
+.dh .hero b{color:var(--ink);font-weight:600}
+.slots{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:2px}
+.slot{display:grid;grid-template-columns:24px 64px 108px minmax(0,1fr);gap:10px;align-items:start;padding:6px 8px;border-radius:6px}
+.slot:nth-child(odd){background:var(--surface)}
+.slot input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--done);cursor:pointer}
+.slot .tm{font:500 12px/1.6 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.slot .pl{font:600 12px/1.6 var(--body)}
+.slot .tx{font-size:14px}
+.slot .tx .tag{margin-left:4px;vertical-align:1px}
+.slot.done .tx{text-decoration:line-through;color:var(--muted)}
+.slot.stretch .tm::after{content:" opt";color:var(--warn)}
+@media (max-width:640px){
+  .day{grid-template-columns:56px minmax(0,1fr);gap:10px}
+  .date .d{font-size:26px}
+  .slot{grid-template-columns:22px minmax(0,1fr);gap:4px 8px}
+  .slot .tm,.slot .pl{grid-column:2;display:inline}
+  .slot .tm{grid-row:1}
+  .slot .pl{grid-row:2}
+  .slot .tx{grid-column:2}
+}
+/* month grid */
+.viewsw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.viewsw button{background:var(--surface);border:0;padding:6px 14px;font:600 13px var(--body);color:var(--muted);cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:14px 0 8px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto;grid-auto-rows:minmax(132px,auto);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);gap:1px}
+.month .hd{background:var(--surface-2);text-align:center;font:600 11px/1 var(--mono);letter-spacing:.08em;color:var(--muted);padding:9px 0}
+.cell{background:var(--surface);padding:8px;display:flex;flex-direction:column;gap:5px;min-width:0;text-align:left;border:0;font:inherit;color:inherit}
+button.cell{cursor:pointer}
+button.cell:hover{background:var(--surface-2)}
+.cell .dn{font:600 13px/1 var(--mono);display:flex;justify-content:space-between;align-items:center;min-height:22px}
+.cell .dn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px}
+.cell .dn .flag{font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.06em}
+.cell.other{background:var(--bg)}
+.cell.other .dn b{color:var(--muted);opacity:.6}
+.cell .pill{display:block;border-radius:4px;padding:4px 7px;font:600 12px/1.25 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill.w0{background:var(--w0-bg);color:var(--w0)} .pill.w1{background:var(--w1-bg);color:var(--w1)} .pill.w2{background:var(--w2-bg);color:var(--w2)} .pill.w3{background:var(--w3-bg);color:var(--w3)} .pill.w4{background:var(--w4-bg);color:var(--w4)}
+.legend .pill{display:inline-block;border-radius:4px;padding:3px 7px;font:600 12px/1.2 var(--body)}
+.cell .ttl2{font-size:12px;line-height:1.3;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.cell .mini{display:flex;gap:3px;margin-top:auto;padding-top:6px}
+.cell .mini i{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.cell .mini i.on{background:var(--done)}
+.cell .stl{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cell.done .stl{color:var(--done)}
+.cell.part .stl{color:var(--warn)}
+.cell.today{box-shadow:inset 0 0 0 2px var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.cell.today .dn b{background:var(--accent);color:var(--accent-ink)}
+.cell.today .dn::after{content:"TODAY";font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.08em}
+@media (max-width:760px){.cell .ttl2{display:none}.cell .pill{font-size:10.5px;padding:2px 4px}.month{grid-auto-rows:minmax(84px,auto)}.cell{padding:5px}.cell .stl{font-size:9px}}
+.ov{position:fixed;inset:0;background:rgba(10,10,14,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.dlg{background:var(--bg);border:1px solid var(--line);border-radius:12px;max-width:780px;width:100%;max-height:calc(100dvh - 32px);overflow:auto;padding:8px 20px 16px;position:relative}
+.dlg .x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:24px;line-height:1;color:var(--muted);cursor:pointer;padding:4px 8px}
+.dlg .day{border-top:0}
+.panel h2{font:700 30px/1.1 var(--display);margin:34px 0 8px}
+.panel h3{font-size:16px;margin:20px 0 6px}
+.panel p,.panel li{max-width:72ch}
+.panel ul,.panel ol{padding-left:20px;margin:6px 0}
+.panel li{margin:4px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{margin:6px 0 4px;font:700 22px/1.15 var(--display)}
+.card p{margin:0 0 8px;color:var(--muted);font-size:14px}
+.card ul{margin:0;padding-left:18px;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font:500 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:10px}
+.callout{border-left:3px solid var(--warn);background:var(--warn-bg);padding:12px 14px;border-radius:6px;margin:12px 0;max-width:78ch}
+.callout b{color:var(--warn)}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">AI character account · Nov 1 – 30, 2026</div>
+  <h1>Wise Guy <em>November</em></h1>
+  <p class="lede">Ray, a 70-something retired carpenter on a porch with a cup of coffee, saying what took him 50 years to learn. The hook that sets him apart: <b>every quote is real and every story happened.</b> The source goes on screen, and he calls out famous quotes the person never said.</p>
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="cal" aria-selected="true">Calendar</button>
+    <button class="tab" role="tab" data-tab="plan" aria-selected="false">Character &amp; strategy</button>
+    <button class="tab" role="tab" data-tab="shop" aria-selected="false">What to sell</button>
+    <button class="tab" role="tab" data-tab="ops" aria-selected="false">Production &amp; rules</button>
+  </div>
+
+  <section id="cal">
+    <div class="tools"><div class="viewsw" id="viewsw"></div></div>
+    <div class="tools" id="filters"></div>
+    <div id="weeks"></div>
+  </section>
+
+  <section id="plan" class="panel" hidden>
+    <h2>Who he is</h2>
+    <div class="callout"><b>No character sheet yet.</b> First job: generate Ray's reference sheet the same way you made Tiff's (front, three-quarter, back, close-up), then a library of B-roll clips (see Production).</div>
+    <div class="cards">
+      <div class="card">
+        <span class="tag a-trust">PLACEHOLDER NAME</span>
+        <h3>Ray, 70s</h3>
+        <p>Retired carpenter and high-school shop teacher. Gray beard, reading glasses on a cord, flannel over a white tee, worn work boots. Old pickup, porch, workshop, coffee in a chipped mug.</p>
+        <ul>
+          <li>Sidekick: <b>Biscuit</b>, his old golden retriever. Free cuteness, and people will ask about him.</li>
+          <li>Voice: slow, warm, a little gravel. One voice, used for every video.</li>
+          <li>He never claims real-world credentials he doesn't have, such as military service, medical or financial expertise.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-reach">THE PROMISE</span>
+        <h3>“Every quote is real.”</h3>
+        <p>Wisdom TikTok is full of made-up and misattributed quotes over sad piano. Ray is the one who checks.</p>
+        <ul>
+          <li>Every Real Quote video names who said it, where, and when, on screen.</li>
+          <li><b>“That's Not Who Said It”</b> videos debunk famous misquotes (Einstein, Churchill, Gandhi). People argue in the comments, which drives reach.</li>
+          <li>Stories are real history: no invented “a man once told me” tales.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-talk">THE COMMUNITY</span>
+        <h3>“Ask Ray”</h3>
+        <p>People ask him life questions in the comments, and he answers with a video reply. This is the format that builds a loyal following.</p>
+        <ul>
+          <li>Until real questions come in, use common ones (listed in the calendar).</li>
+          <li>Pin a comment on every video: “What should I ask Ray next?”</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Who watches</h2>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Group</th><th>What they want</th><th>What they buy</th></tr>
+      <tr><td><b>Men 18–30</b> (largest)</td><td>Discipline, money, stoicism, “what nobody told me”, relationships</td><td>Books (Meditations, The Psychology of Money), journals, tools</td></tr>
+      <tr><td><b>Women 25–45</b></td><td>Love, family, gratitude, the emotional stories. They share to partners and dads.</td><td>Gifts for dad or grandpa, journals</td></tr>
+      <tr><td><b>45+</b></td><td>Agreement (“he's right”), nostalgia, scam warnings. They share the most.</td><td>Books, cast iron, flannel, gifts for grandkids</td></tr>
+    </table></div>
+    <p>November fits him perfectly: the clocks go back (Nov 1), Veterans Day (Nov 11), Thanksgiving gratitude (Nov 26), and Black Friday. Telling people to “want less” while linking one good book reads as honest, not hypocritical.</p>
+
+    <h2>The five daily slots</h2>
+    <div class="scroll"><table class="tbl" id="slotTable"></table></div>
+    <p style="color:var(--muted);font-size:13px">The Story slot is deliberately 60+ seconds. That's what qualifies for TikTok's Creator Rewards payouts once the account is eligible.</p>
+
+    <h2>Weekly themes</h2>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Week</th><th>Theme</th><th>Why now</th></tr>
+      <tr><td>Nov 1–7</td><td><b>Time</b></td><td>Daylight saving ends Nov 1: “you just got an hour back.”</td></tr>
+      <tr><td>Nov 8–14</td><td><b>Work &amp; Money</b></td><td>Before holiday spending. Includes Veterans Day (Nov 11), told through real stories, never as Ray's own service.</td></tr>
+      <tr><td>Nov 15–21</td><td><b>Love, Friends &amp; Family</b></td><td>Before people go home for the holidays. The most-shared week.</td></tr>
+      <tr><td>Nov 22–28</td><td><b>Gratitude &amp; Enough</b></td><td>Thanksgiving, then Black Friday. Gift guides for dad and grandpa.</td></tr>
+      <tr><td>Nov 29–30</td><td><b>Last Month of the Year</b></td><td>Reflection, plus a teaser for a December series.</td></tr>
+    </table></div>
+
+    <h2>Ramp</h2>
+    <p><b>3 a day</b> Nov 1–7 (Morning Rule, Real Quote, Story), <b>4</b> from Nov 8 (+ Wish I Knew), <b>5</b> from Nov 15 (+ Ask Ray, once there are real comments to answer). Slots marked <b style="color:var(--warn)">opt</b> are skippable during the ramp.</p>
+
+    <h2>What “winning” looks like</h2>
+    <ul>
+      <li><b>Saves</b> on Wish I Knew lists. This is the best signal for wisdom content; more than 3% of views is great.</li>
+      <li><b>Comment fights</b> on That's Not Who Said It. Make it a twice-weekly series if they happen.</li>
+      <li><b>Watch time past 60 s</b> on Stories. If people drop off at 20 s, move the punchline earlier and tease it in the first line.</li>
+      <li><b>Questions in the comments.</b> Once you get more than you can answer, Ask Ray can become its own daily slot.</li>
+    </ul>
+  </section>
+
+  <section id="shop" class="panel" hidden>
+    <h2>What to sell from Ray</h2>
+    <p>Ray's products should feel like his own shelf: the books he quotes, things that last, gifts for dad. <b>Book links work best on the same day he quotes that book.</b> Book commissions are lower (often around 5–10%), but trust is high and the price is an easy yes. Check the actual rate on each listing.</p>
+    <div class="scroll"><table class="tbl" id="prodTable"></table></div>
+    <div class="callout"><b>Skip:</b> knives and weapons (TikTok Shop restricts them), supplements or anything health-related, and financial products. Ray gives life advice, not money or medical advice.</div>
+  </section>
+
+  <section id="ops" class="panel" hidden>
+    <h2>Making it: the cheapest of the three accounts</h2>
+    <ul>
+      <li><b>Narration over B-roll instead of lip-sync.</b> Ray is filmed doing quiet things (porch, workshop, walking, fishing) while his voiceover plays. No talking-head lip-sync, so he never looks uncanny and you don't burn credits on retries.</li>
+      <li><b>Build a B-roll library once:</b> about 20 clips in the first week. Porch at sunrise with coffee, sanding wood, driving the pickup, walking a dirt road with Biscuit, fishing off a dock, by the fireplace at night, reading with glasses on, writing in a notebook, close-up of his hands. That's roughly 400 credits at ~20 per 10 s.</li>
+      <li><b>After that, each post is mostly new audio and text.</b> Reuse clips in different orders. Add 3–5 new clips a week so it doesn't feel repetitive. Expect about 60–100 credits a week, far less than Tiff or Mr. Meaty.</li>
+      <li>Text style: big serif quote on screen, source in small type below (“Seneca, <i>On the Shortness of Life</i>, c. 49 AD”).</li>
+      <li>Sound: soft acoustic guitar or a crackling fireplace. Avoid the overused sad-piano wisdom sounds.</li>
+    </ul>
+
+    <h2>The quote-checking routine</h2>
+    <ol>
+      <li>Find the quote in the original text (Project Gutenberg has free public-domain classics), or a speech transcript or letter.</li>
+      <li>Check <b>Quote Investigator</b> for misattributions. The most famous quotes are the ones most likely to be fake.</li>
+      <li>If the original can't be found, use “widely attributed to”, or move it to That's Not Who Said It.</li>
+      <li>Translations differ (Seneca, Marcus Aurelius, Lao Tzu). Name the translation you used.</li>
+    </ol>
+    <p style="color:var(--muted);font-size:13px">I picked quotes and stories in the calendar that are well documented, but check each one with this routine before posting. Some are marked with notes.</p>
+
+    <h2>Rules</h2>
+    <ul>
+      <li>Label every post <b>AI-generated</b>, and put “AI character · every quote sourced” in the bio. Being honest about the character is what makes “every quote is real” believable.</li>
+      <li>Ray never pretends real events happened to him. He tells real people's stories, not fake memories of his own.</li>
+      <li>No stolen valor: on Veterans Day he honors real veterans' documented stories, and never claims to be one.</li>
+      <li>No medical, legal or investment advice. Money content stays at the level of habits (“pay yourself first”), never picking stocks.</li>
+      <li>Ask Ray replies to serious things (grief, crisis, abuse) get a kind line and a pointer to real help, not life coaching.</li>
+    </ul>
+  </section>
+
+  <div class="foot">Wise Guy · AI character account · Checkboxes save in this browser only. Ray and Biscuit are placeholder names.</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SLOTS=[
+  {k:"rule",t:"7:00a",n:"Morning Rule",a:"reach",desc:"One rule, one line, sunrise on the porch. 7–10 seconds, loops."},
+  {k:"quote",t:"11:00a",n:"Real Quote",a:"trust",desc:"A real quote with who, where and when on screen, plus what it means. Twice a week: That's Not Who Said It."},
+  {k:"wish",t:"3:00p",n:"Wish I Knew",a:"reach",desc:"A list: “things I wish I knew at 25.” The save magnet."},
+  {k:"story",t:"7:00p",n:"Story",a:"trust",desc:"A real story from history, told by Ray in 60+ seconds. Builds watch time and counts toward Creator Rewards."},
+  {k:"ask",t:"10:00p",n:"Ask Ray",a:"talk",desc:"Video replies to comment questions, or a night question for the comments."}
+];
+// first day each slot is required; earlier days show it as optional
+var RAMP={rule:1,quote:1,wish:8,story:1,ask:15};
+var HERO_LABEL="Story";
+var KEY_LABEL="BIG DAY";
+var LSKEY="wiseguy-nov";
+
+var WEEKS=[
+  {from:1,to:7,name:"Time",sub:"Clocks go back Nov 1. Introduce Ray and the “every quote is real” promise."},
+  {from:8,to:14,name:"Work & Money",sub:"Habits, debt and scams. Veterans Day Nov 11, told through real stories."},
+  {from:15,to:21,name:"Love, Friends & Family",sub:"The most shareable week: people send these to their partners, parents and friends."},
+  {from:22,to:28,name:"Gratitude & Enough",sub:"Thanksgiving Nov 26, Black Friday Nov 27. Want less, buy one good thing."},
+  {from:29,to:30,name:"Last Month of the Year",sub:"Reflection and a December teaser."}
+];
+
+// s: [rule, quote, wish, story, ask]; "$" prefix = shop-linked
+var DAYS=[
+{d:1,th:"Clocks go back",hero:"Colonel Sanders",key:1,s:["“You got an hour back for free. Don't spend it on your phone.”","$“It is not that we have a short space of time, but that we waste much of it.” Seneca, On the Shortness of Life","5 things I wish I knew about time at 25","Colonel Sanders was in his 60s when he started franchising his chicken","Night question: “What would you do with one extra hour every day?”"]},
+{d:2,th:"First wins",hero:"Grandma Moses",s:["“Make your bed. Not for the bed. For the first win of the day.”","“Lost time is never found again.” Benjamin Franklin, Poor Richard's Almanack (1748)","Things that waste your 20s, ranked","Grandma Moses took up painting seriously in her late 70s","Ask Ray: “Is it too late to start at 30?”"]},
+{d:3,th:"Fake quote #1",hero:"Hiroo Onoda",s:["“Nobody's thinking about you as much as you think. That's freedom.”","That's Not Who Said It: there's no evidence Einstein said the “insanity is doing the same thing” line","Habits I'd start at 20 if I could do it again","Hiroo Onoda kept fighting World War II in the jungle until 1974","Night question: “What are you still fighting that already ended?”"]},
+{d:4,th:"Hard things first",hero:"Shackleton",s:["“Do the hard thing first. The rest of the day gets easier.”","“Plans are worthless, but planning is everything.” Dwight D. Eisenhower, 1957","How to actually use a Sunday","Shackleton's Endurance: the ship sank, and all 28 men came home. (The famous “men wanted” newspaper ad is probably fake. Say so.)","$Ask Ray: “What book should every young man read?” → Meditations"]},
+{d:5,th:"Look inward",hero:"The marshmallow test",s:["“Your phone has a screen-time report. Read it out loud once.”","“The unexamined life is not worth living.” Socrates, in Plato's Apology","Signs you're busy but not productive","The marshmallow test, and what the 2018 follow-up study actually found","Night question: “What did you do today that actually mattered?”"]},
+{d:6,th:"Fake quote #2",hero:"Regrets of the dying",s:["“Leave the party while you're still having fun.”","That's Not Who Said It: Churchill never said “Success is not final, failure is not fatal”","Things old men regret that young men are doing right now","Bronnie Ware, the palliative nurse who wrote down the top five regrets of the dying","Ask Ray: “How do I stop wasting my weekends?”"]},
+{d:7,th:"Simplify",hero:"Stanislav Petrov",s:["“Call whoever raised you. Today.”","$“Our life is frittered away by detail… Simplify, simplify.” Henry David Thoreau, Walden (1854)","Week 1 recap: 7 rules in 30 seconds","Stanislav Petrov, the officer who didn't trust the computer and may have prevented a nuclear war (1983)","Night question: “What's one thing you'd simplify?”"]},
+
+{d:8,th:"Pay yourself first",hero:"Ronald Read",s:["“Pay yourself first. Even if it's twenty bucks.”","“Price is what you pay. Value is what you get.” Warren Buffett, 2008 Berkshire Hathaway letter","Money rules I wish someone told me at 22","Ronald Read, the Vermont janitor and gas station attendant who left about $8 million","$Ask Ray: “What's the one money book to read?” → The Psychology of Money"]},
+{d:9,th:"Show up early",hero:"Sylvia Bloom",s:["“Show up ten minutes early. It's the cheapest reputation you'll ever buy.”","“Early to bed and early to rise, makes a man healthy, wealthy, and wise.” Franklin, Poor Richard's Almanack (1735)","Things a good boss notices that you think they don't","Sylvia Bloom, the legal secretary who quietly saved millions and left most of it to charity","Night question: “What are you saving for?”"]},
+{d:10,th:"Fake quote #3",hero:"Edison's fire",s:["“Learn one skill with your hands. Nobody can outsource that.”","That's Not Who Said It: no record shows Lincoln said the “six hours to chop down a tree” line","Trades nobody tells 20-year-olds about","Edison's lab burned down in December 1914, and what he reportedly said watching it","Ask Ray: “Should I quit my job?”"]},
+{d:11,th:"Veterans Day",hero:"Desmond Doss",key:1,s:["“Thank a veteran today. Not with a post. With a phone call.”","“It is not the critic who counts…” Theodore Roosevelt, “Citizenship in a Republic,” Paris, 1910","3 ways to support veterans that aren't a social media post","Desmond Doss refused to carry a rifle and saved about 75 men at Okinawa (Medal of Honor)","Night question: “Who do you owe a thank-you call?”"]},
+{d:12,th:"Don't borrow to impress",hero:"Victor Lustig",s:["“Don't borrow money to impress people. They aren't watching that closely.”","“Neither a borrower nor a lender be.” Shakespeare, Hamlet (said by Polonius, who's kind of a fool, and that's the lesson)","The 4 kinds of debt, ranked from fine to dangerous","Victor Lustig, the con man who “sold” the Eiffel Tower (1925)","Ask Ray: “How do I stop buying stuff I don't need?”"]},
+{d:13,th:"Scams",hero:"Charles Ponzi",s:["“If a deal needs an answer right now, the answer is no.”","“Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.” Warren Buffett (from interviews; check the source)","Scams that got smarter, and how to spot them","Charles Ponzi and the original Ponzi scheme (1920)","Night question: “What's the biggest money mistake you ever made?”"]},
+{d:14,th:"Rest",hero:"Week 2 stories",s:["“Rest is part of the work. Take the Saturday.”","Week recap: the week's quotes, and who really said them","$Ray's workbench: the basic tools every home should have","Story compilation: the week's 6 stories (over 60 s)","Ask Ray: comment replies"]},
+
+{d:15,th:"Choose your attitude",hero:"Harvard happiness study",s:["“Marry someone who's kind when they're tired.”","$“Everything can be taken from a man but one thing: the last of the human freedoms—to choose one's attitude…” Viktor Frankl, Man's Search for Meaning","Things I wish I knew about love at 25","The Harvard study that followed people for 80+ years and found what predicts a good life: relationships","Ask Ray: “How do you know if someone's the one?”"]},
+{d:16,th:"Friends",hero:"Lou Gehrig",s:["“Friendships from your 20s don't survive by accident. Call them.”","“You are the average of the five people you spend the most time with.” Widely attributed to Jim Rohn","Signs of a real friend","Lou Gehrig's “luckiest man” speech, July 4, 1939","Night question: “Tag the friend you haven't called in too long.”"]},
+{d:17,th:"Fake quote #4",hero:"Fred Rogers",s:["“Say sorry first. You don't lose anything.”","That's Not Who Said It: “people will forget what you said…” was printed years before it was credited to Maya Angelou","The 4 habits that predict divorce, from John Gottman's research","Fred Rogers and “look for the helpers”, the advice his mother gave him","Ask Ray: “My dad and I don't talk. Should I reach out?”"]},
+{d:18,th:"Visit your parents",hero:"The Choctaw gift",s:["“Your parents are getting older faster than you think. Visit.”","“We suffer more often in imagination than in reality.” Seneca, Letters to Lucilius, 13","Questions to ask your grandparents while you still can","The Choctaw Nation's 1847 donation to starving Irish families","Night question: “What would you ask your grandparents?”"]},
+{d:19,th:"Be one",hero:"Marcus Aurelius",s:["“Be the one who remembers birthdays.”","$“Waste no more time arguing about what a good man should be. Be one.” Marcus Aurelius, Meditations 10.16","What a good man actually looks like on a Tuesday","Marcus Aurelius wrote Meditations as a private notebook. It was never meant to be read.","Ask Ray: “How do I get more disciplined?”"]},
+{d:20,th:"Fake quote #5",hero:"Mr. Rogers, 1969",s:["“Put the phones in another room at dinner.”","That's Not Who Said It: Gandhi never said “Be the change you wish to see in the world”","$Gifts for dad and grandpa that actually get used","Fred Rogers' 1969 Senate testimony that saved public TV funding","Night question: “What did your dad or grandpa teach you?”"]},
+{d:21,th:"Write it down",hero:"Week 3 stories",s:["“Teach a kid something with your hands.”","Week recap: the week's quotes and sources","$The 5-year one-line-a-day journal: the cheapest family history there is","Story compilation: the week's stories (over 60 s)","Ask Ray: comment replies"]},
+
+{d:22,th:"Within your power",hero:"Lincoln's 1863 proclamation",s:["“Write down three things you're grateful for. Tonight. On paper.”","“Some things are within our power, while others are not.” Epictetus, Enchiridion 1","Things that make life feel rich and cost nothing","Lincoln declared a national Thanksgiving in 1863, in the middle of the Civil War","$Ask Ray: “What's a good gift for my grandpa?”"]},
+{d:23,th:"Enough",hero:"Franklin's turkey",s:["“Enough is a number. Know yours.”","“The mass of men lead lives of quiet desperation.” Thoreau, Walden","Signs you already have enough","Ben Franklin's 1784 letter calling the turkey “a much more respectable bird” than the eagle","Night question: “What's your ‘enough’?”"]},
+{d:24,th:"Fake quote #6",hero:"1621",s:["“Holiday table rule: phones in a basket by the door.”","That's Not Who Said It: nobody has traced “the best time to plant a tree was 20 years ago” to any ancient Chinese source","How to survive politics at the Thanksgiving table","What actually happened at the 1621 harvest feast","Ask Ray: “How do I deal with family who push my buttons?”"]},
+{d:25,th:"Travel day",hero:"Sarah Josepha Hale",s:["“Help in the kitchen. Don't ask. Just pick up a dish towel.”","“Gratitude is not only the greatest of virtues, but the parent of all the others.” Cicero, Pro Plancio","Thanksgiving questions that start real conversations","Sarah Josepha Hale campaigned for 17 years to make Thanksgiving a national holiday","Night question: “Who are you thankful for that you never told?”"]},
+{d:26,th:"Thanksgiving",hero:"Lou Gehrig, again",key:1,s:["“Happy Thanksgiving. Say it out loud to someone today.”","“Today I consider myself the luckiest man on the face of the earth.” Lou Gehrig, 1939","Ray's Thanksgiving rules","The Pilgrims' first year: about half of them died before the harvest feast","Night question: “What are you grateful for this year?”"]},
+{d:27,th:"Black Friday",hero:"Why it's called Black Friday",key:1,s:["“Before you buy it, ask: would I still want this if nobody could see it?”","“It is not the man who has too little, but the man who craves more, that is poor.” Seneca, Letters to Lucilius, 2","$Black Friday things that are actually worth it: a good book, good boots, a cast-iron pan","How Black Friday got its name: Philadelphia police in the 1950s and '60s","$Gifts for dad under $30"]},
+{d:28,th:"Shop small",hero:"Week 4 stories",s:["“Shop small today. Your neighbor's store lives on days like this.”","Week recap: the gratitude quotes","$Ray's reading list: 5 books, all linked","Story compilation: the week's stories (over 60 s)","Ask Ray: comment replies"]},
+
+{d:29,th:"One month left",hero:"November's top questions",s:["“One month left. You can still make this year count.”","“A journey of a thousand miles begins with a single step.” Lao Tzu, Tao Te Ching, ch. 64 (translations vary)","What to do in December so January doesn't wreck you","November's most-asked Ask Ray questions, answered (over 60 s)","Night question: “What's one thing you'll finish before the year ends?”"]},
+{d:30,th:"Write your rules",hero:"The Man in the Arena",key:1,s:["“Write down your own rules. Ten of them. Keep the paper.”","The month's best quote, as voted in the comments","$Cyber Monday: the journal, the books, the boots","Teddy Roosevelt's “Man in the Arena”: the story behind the 1910 speech","December teaser: “31 days of letters to my younger self”"]}
+];
+
+var PRODUCTS=[
+ ["Meditations (Marcus Aurelius)","Book","$8–15","Real Quote days 4, 19","The most-searched stoic book. Link the Hays translation if you quote it."],
+ ["Man's Search for Meaning (Frankl)","Book","$8–12","Nov 15","Short, life-changing, cheap: an easy yes."],
+ ["On the Shortness of Life (Seneca)","Book","$6–12","Nov 1","Pocket-sized, ideal for the “time” week."],
+ ["Walden (Thoreau)","Book","$6–12","Nov 7, 23","Classic; public domain, so cheap editions are everywhere."],
+ ["The Psychology of Money","Book","$12–20","Nov 8","The modern money book young men buy."],
+ ["5-year one-line-a-day journal","Journal","$15–25","Nov 21, 30","Fits the brand and works as a gift for anyone."],
+ ["Leather notebook + pen","Stationery","$15–30","“Write your rules” posts","Shows up in his B-roll anyway."],
+ ["Basic home tool kit","Tools","$25–45","Nov 14","On-brand for a carpenter; gifts for first apartments."],
+ ["Cast-iron skillet","Kitchen","$20–40","Black Friday","“Buy it once, it outlives you.” His whole philosophy in a pan."],
+ ["Flannel shirt","Clothing","$20–35","Gift guides","He wears one in every video."],
+ ["Wool socks (multi-pack)","Clothing","$15–25","Gift guides","The gift every dad actually wants."],
+ ["Enamel camp mug / percolator","Kitchen","$12–30","Morning Rule B-roll","The mug is on screen every morning."],
+ ["Wooden chess set","Game","$20–40","Gifts for grandpa","Teaching grandkids: a perfect Ray moment."],
+ ["Beard trimmer / beard care kit","Grooming","$20–40","No-Shave November","Timely; guys buy for themselves and as gifts."]
+];
+
+var ST={};
+try{ST=JSON.parse(localStorage.getItem(LSKEY)||"{}")||{};}catch(e){ST={};}
+function save(){try{localStorage.setItem(LSKEY,JSON.stringify(ST));}catch(e){}}
+var view="month";
+try{view=localStorage.getItem(LSKEY+"-view")||"month";}catch(e){}
+
+var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]; // Nov 1 2026 = Sunday
+var filt="all";
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function aTag(a){return '<span class="tag a-'+a+'">'+a.toUpperCase()+'</span>';}
+function weekIdx(d){for(var i=0;i<WEEKS.length;i++)if(d>=WEEKS[i].from&&d<=WEEKS[i].to)return i;return 0;}
+function posted(x){var n=0;for(var i=0;i<5;i++)if(ST[x.d+"-"+i])n++;return n;}
+
+function stats(){
+  var total=DAYS.length*5,done=0,shop=0;
+  DAYS.forEach(function(x){done+=posted(x);x.s.forEach(function(s){if(s[0]==="$")shop++;});});
+  var pct=Math.round(done/total*100);
+  document.getElementById("stats").innerHTML=
+   '<div class="stat"><div class="k">Posts planned</div><div class="v">'+total+'</div><div class="s">5 a day × 30 days</div></div>'+
+   '<div class="stat"><div class="k">Posted</div><div class="v">'+done+' <small>/ '+total+'</small></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+
+   '<div class="stat"><div class="k">Real stories</div><div class="v">30</div><div class="s">60 s+ each, Creator Rewards length</div></div>'+
+   '<div class="stat"><div class="k">Shop-linked</div><div class="v">'+shop+'</div><div class="s">books, journals, gifts for dad</div></div>';
+}
+
+function viewsw(){
+  var el=document.getElementById("viewsw");
+  el.innerHTML='<button data-v="month" aria-pressed="'+(view==="month")+'">Month</button><button data-v="list" aria-pressed="'+(view==="list")+'">List</button>';
+  el.onclick=function(e){var b=e.target.closest("button");if(!b)return;view=b.dataset.v;try{localStorage.setItem(LSKEY+"-view",view);}catch(err){}viewsw();render();};
+}
+function filters(){
+  var opts=[["all","All slots"]].concat(SLOTS.map(function(s){return [s.k,s.n];})).concat([["$","Shop-linked only"]]);
+  var el=document.getElementById("filters");
+  el.innerHTML=opts.map(function(o){return '<button class="chip" data-f="'+o[0]+'" aria-pressed="'+(filt===o[0])+'">'+o[1]+'</button>';}).join("");
+  el.onclick=function(e){var b=e.target.closest(".chip");if(!b)return;filt=b.dataset.f;filters();render();};
+}
+function show(i,s){
+  if(filt==="all")return true;
+  if(filt==="$")return s[0]==="$";
+  return SLOTS[i].k===filt;
+}
+
+function dayHTML(x,all){
+  var rows="";
+  x.s.forEach(function(s,i){
+    if(!all&&!show(i,s))return;
+    var sl=SLOTS[i],shop=s[0]==="$",txt=shop?s.slice(1):s,id=x.d+"-"+i,on=!!ST[id];
+    var stretch=x.d<RAMP[sl.k];
+    rows+='<li class="slot'+(on?' done':'')+(stretch?' stretch':'')+'"><input type="checkbox" data-id="'+id+'"'+(on?' checked':'')+' aria-label="Posted: '+sl.n+' Nov '+x.d+'">'+
+      '<span class="tm">'+sl.t+'</span><span class="pl" style="color:var(--'+sl.a+')">'+sl.n+'</span>'+
+      '<span class="tx">'+esc(txt)+(shop?'<span class="tag t-shop">LINK</span>':'')+'</span></li>';
+  });
+  if(!rows)return "";
+  return '<div class="day'+(x.key?' key':'')+'"><div class="date"><span class="m">NOV</span><span class="d">'+x.d+'</span><span class="w">'+WD[(x.d-1)%7]+'</span></div>'+
+    '<div><div class="dh"><h3>'+esc(x.th)+'</h3>'+(x.key?'<span class="tag t-key">'+KEY_LABEL+'</span>':'')+'<span class="hero">'+HERO_LABEL+': <b>'+esc(x.hero)+'</b></span></div>'+
+    '<ul class="slots">'+rows+'</ul></div></div>';
+}
+
+function monthHTML(){
+  var now=new Date(),isNov=now.getFullYear()===2026&&now.getMonth()===10,td=now.getDate();
+  var h='<div class="legend">'+WEEKS.map(function(w,i){return '<span><span class="pill w'+i+'">'+esc(w.name)+'</span>Nov '+w.from+'–'+w.to+'</span>';}).join("")+'</div>';
+  h+='<div class="month">'+WD.map(function(d){return '<div class="hd">'+d.toUpperCase()+'</div>';}).join("");
+  DAYS.forEach(function(x){
+    var n=posted(x),bars="";
+    for(var i=0;i<5;i++)bars+='<i'+(ST[x.d+"-"+i]?' class="on"':'')+'></i>';
+    var stl=n===5?"Posted":n?n+"/5 posted":"Not started";
+    var cls="cell"+(n===5?" done":n?" part":"")+(isNov&&td===x.d?" today":"");
+    h+='<button class="'+cls+'" data-d="'+x.d+'" aria-label="Nov '+x.d+': '+esc(x.th)+', '+stl+'">'+
+      '<span class="dn"><b>'+(x.d===1?"Nov 1":x.d)+'</b>'+(x.key?'<span class="flag" title="'+KEY_LABEL+'">★</span>':'')+'</span>'+
+      '<span class="pill w'+weekIdx(x.d)+'">'+esc(x.th)+'</span>'+
+      '<span class="ttl2">'+esc(x.hero)+'</span>'+
+      '<span class="mini">'+bars+'</span><span class="stl">'+stl+'</span></button>';
+  });
+  var pad=(7-DAYS.length%7)%7; // Nov 1 is a Sunday, so only the last row needs December fill
+  for(var j=1;j<=pad;j++)h+='<div class="cell other"><span class="dn"><b>'+(j===1?"Dec 1":j)+'</b></span></div>';
+  return h+'</div>';
+}
+
+function render(){
+  var el=document.getElementById("weeks");
+  document.getElementById("filters").hidden=(view==="month");
+  if(view==="month"){el.innerHTML=monthHTML();return;}
+  var h="";
+  WEEKS.forEach(function(w){
+    var days=DAYS.filter(function(x){return x.d>=w.from&&x.d<=w.to;}).map(function(x){return dayHTML(x,false);}).join("");
+    if(!days)return;
+    h+='<div class="week"><h2>'+w.name+'<span>NOV '+w.from+'–'+w.to+'</span></h2><p class="wsub">'+w.sub+'</p>'+days+'</div>';
+  });
+  el.innerHTML=h;
+}
+
+function openDay(d){
+  var x=DAYS.filter(function(y){return y.d===d;})[0];if(!x)return;
+  var ov=document.createElement("div");ov.className="ov";
+  ov.innerHTML='<div class="dlg" role="dialog" aria-modal="true" aria-label="Nov '+d+'"><button class="x" aria-label="Close">×</button>'+dayHTML(x,true)+'</div>';
+  function close(){ov.remove();document.removeEventListener("keydown",key);render();var b=document.querySelector('.cell[data-d="'+d+'"]');if(b)b.focus();}
+  function key(e){if(e.key==="Escape")close();}
+  ov.addEventListener("click",function(e){if(e.target===ov||e.target.closest(".x"))close();});
+  document.addEventListener("keydown",key);
+  document.body.appendChild(ov);ov.querySelector(".x").focus();
+}
+
+document.getElementById("weeks").addEventListener("click",function(e){var c=e.target.closest("button.cell");if(c)openDay(+c.dataset.d);});
+document.addEventListener("change",function(e){
+  var c=e.target;if(!c.dataset||!c.dataset.id)return;
+  if(c.checked)ST[c.dataset.id]=1;else delete ST[c.dataset.id];
+  save();c.closest(".slot").classList.toggle("done",c.checked);stats();
+});
+
+document.getElementById("slotTable").innerHTML='<tr><th>Time</th><th>Slot</th><th>Job</th><th>What it is</th></tr>'+
+  SLOTS.map(function(s){return '<tr><td class="num">'+s.t+'</td><td><b>'+s.n+'</b></td><td>'+aTag(s.a)+'</td><td>'+s.desc+'</td></tr>';}).join("");
+document.getElementById("prodTable").innerHTML='<tr><th>Product</th><th>Type</th><th>Typical price</th><th>Use on</th><th>Why</th></tr>'+
+  PRODUCTS.map(function(p){return '<tr><td><b>'+p[0]+'</b></td><td>'+p[1]+'</td><td class="num">'+p[2]+'</td><td>'+p[3]+'</td><td>'+p[4]+'</td></tr>';}).join("");
+
+var tabs=document.querySelectorAll(".tab");
+tabs.forEach(function(t){t.onclick=function(){
+  tabs.forEach(function(o){o.setAttribute("aria-selected",o===t);document.getElementById(o.dataset.tab).hidden=(o!==t);});
+};});
+
+stats();viewsw();filters();render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>✈️ Tiffany Travels — Caption Generator</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #2a3550;
+    --accent: #e2a84b;
+    --accent2: #f5c97a;
+    --blue: #4f8ef7;
+    --text: #e8eaf0;
+    --muted: #7a8299;
+    --success: #34d399;
+    --tag-bg: #1e2d4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .logo span { font-weight: 300; opacity: 0.7; }
+  .badge {
+    background: linear-gradient(135deg, var(--accent), #d4843a);
+    color: #0a0e1a;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .header-sub {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  /* ===== PANEL ===== */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .panel-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #d4843a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .panel-body { padding: 24px; }
+
+  /* ===== FORM ===== */
+  .field { margin-bottom: 20px; }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  label .required { color: var(--accent); margin-left: 3px; }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    padding: 12px 14px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+  }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: var(--surface); }
+
+  /* ===== PILL TOGGLES ===== */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .pill {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active {
+    background: linear-gradient(135deg, var(--accent), #d4843a);
+    border-color: var(--accent);
+    color: #0a0e1a;
+  }
+
+  /* ===== GENERATE BUTTON ===== */
+  .btn-generate {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), #d4843a);
+    color: #0a0e1a;
+    font-size: 15px;
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.3px;
+    margin-top: 8px;
+  }
+  .btn-generate:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-generate:active { transform: translateY(0); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ===== OUTPUT TABS ===== */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-count {
+    background: var(--tag-bg);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+
+  .tab-content { display: none; padding: 24px; }
+  .tab-content.active { display: block; }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* ===== HOOK CARDS ===== */
+  .hook-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .hook-card:hover { border-color: var(--accent); }
+  .hook-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .hook-text {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hook-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    background: var(--tag-bg);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .meta-tag.fire { color: #ff7b4f; background: rgba(255, 123, 79, 0.1); }
+  .meta-tag.viral { color: var(--success); background: rgba(52, 211, 153, 0.1); }
+
+  /* ===== CAPTION CARDS ===== */
+  .caption-section { margin-bottom: 28px; }
+  .caption-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .caption-section-title h3 { font-size: 14px; font-weight: 700; }
+  .char-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--tag-bg);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .caption-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+  }
+
+  /* ===== CTA CARDS ===== */
+  .cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .cta-grid { grid-template-columns: 1fr; } }
+  .cta-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cta-card:hover { border-color: var(--accent); }
+  .cta-goal {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .cta-text { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ===== HASHTAG SECTION ===== */
+  .hashtag-group { margin-bottom: 20px; }
+  .hashtag-group-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .hashtag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hashtag {
+    background: var(--tag-bg);
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .hashtag:hover { border-color: var(--blue); }
+  .hashtag.hot { color: var(--accent); background: rgba(226, 168, 75, 0.1); }
+  .hashtag.niche { color: var(--success); background: rgba(52, 211, 153, 0.1); }
+
+  .copy-all-btn {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .copy-all-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== COPY BUTTON ===== */
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+  /* ===== PLATFORM INDICATOR ===== */
+  .platform-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+  .platform-chip {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .platform-chip.tiktok { background: rgba(255, 0, 80, 0.1); color: #ff0050; border: 1px solid rgba(255, 0, 80, 0.3); }
+  .platform-chip.instagram { background: rgba(228, 64, 95, 0.1); color: #e4405f; border: 1px solid rgba(228, 64, 95, 0.3); }
+  .platform-chip.youtube { background: rgba(255, 0, 0, 0.1); color: #ff0000; border: 1px solid rgba(255, 0, 0, 0.3); }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* ===== TIPS BANNER ===== */
+  .tip-banner {
+    background: rgba(226, 168, 75, 0.08);
+    border: 1px solid rgba(226, 168, 75, 0.2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--accent2);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .tip-banner strong { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--success);
+    color: #0a0e1a;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 10px;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Tiffany<span>Travels</span></div>
+  <div class="badge">✨ Caption AI</div>
+  <div class="header-sub">Social Media Caption Generator</div>
+</header>
+
+<div class="container">
+
+  <!-- ===== INPUT PANEL ===== -->
+  <div class="panel" style="position: sticky; top: 85px;">
+    <div class="panel-header">
+      <div class="panel-icon">✍️</div>
+      <h2>Your Post Details</h2>
+    </div>
+    <div class="panel-body">
+
+      <div class="field">
+        <label>Destination / Topic <span class="required">*</span></label>
+        <input type="text" id="destination" placeholder="e.g. Bali, Paris, NYC budget trip..." />
+      </div>
+
+      <div class="field">
+        <label>What's the post about? <span class="required">*</span></label>
+        <textarea id="context" placeholder="e.g. Found a hidden beach café only locals know about. $5 drinks, unreal views, total vibe..." rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Content Type</label>
+        <div class="pills" id="content-type-pills">
+          <div class="pill active" data-val="destination">📍 Destination</div>
+          <div class="pill" data-val="budget">💰 Budget Hack</div>
+          <div class="pill" data-val="luxury">✨ Luxury</div>
+          <div class="pill" data-val="ugc">🤝 Brand Collab</div>
+          <div class="pill" data-val="tips">💡 Travel Tips</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Platform(s)</label>
+        <div class="pills" id="platform-pills">
+          <div class="pill active" data-val="tiktok">TikTok</div>
+          <div class="pill active" data-val="instagram">Instagram</div>
+          <div class="pill active" data-val="youtube">YouTube Shorts</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Caption Goal</label>
+        <div class="pills" id="goal-pills">
+          <div class="pill active" data-val="saves">💾 Saves</div>
+          <div class="pill" data-val="comments">💬 Comments</div>
+          <div class="pill" data-val="follows">👣 Follows</div>
+          <div class="pill" data-val="shares">📤 Shares</div>
+          <div class="pill" data-val="link">🔗 Link Clicks</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Vibe Tags <span style="color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0;">— pick all that apply</span></label>
+        <div class="pills" id="vibe-pills">
+          <div class="pill" data-val="solo">Solo Travel</div>
+          <div class="pill" data-val="girlstrip">Girls Trip</div>
+          <div class="pill" data-val="foodie">Foodie</div>
+          <div class="pill" data-val="adventure">Adventure</div>
+          <div class="pill" data-val="aesthetic">Aesthetic</div>
+          <div class="pill" data-val="hidden">Hidden Gem</div>
+          <div class="pill" data-val="budget">On a Budget</div>
+          <div class="pill" data-val="luxury2">Bougie Picks</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Brand Name (if collab)</label>
+        <input type="text" id="brand" placeholder="e.g. Airbnb, Away Luggage, Booking.com..." />
+      </div>
+
+      <button class="btn-generate" id="generateBtn" onclick="generate()">
+        ✨ Generate Viral Captions
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ===== OUTPUT PANEL ===== -->
+  <div class="panel" id="outputPanel">
+    <div id="emptyState" class="empty-state">
+      <div class="emoji">✈️</div>
+      <h3>Ready to go viral?</h3>
+      <p>Fill in your post details and hit generate.<br />You'll get hooks, captions, CTAs, and hashtags — all built for Tiffany's voice.</p>
+    </div>
+
+    <div id="outputContent" style="display:none;">
+      <div class="tab-bar" id="tabBar">
+        <div class="tab active" data-tab="hooks" onclick="switchTab('hooks')">🎣 Hooks <span class="tab-count" id="hookCount">5</span></div>
+        <div class="tab" data-tab="captions" onclick="switchTab('captions')">📝 Captions</div>
+        <div class="tab" data-tab="ctas" onclick="switchTab('ctas')">👉 CTAs <span class="tab-count" id="ctaCount">6</span></div>
+        <div class="tab" data-tab="hashtags" onclick="switchTab('hashtags')">🏷️ Hashtags</div>
+      </div>
+
+      <!-- HOOKS TAB -->
+      <div class="tab-content active" id="tab-hooks">
+        <div class="tip-banner">
+          <strong>💡 Pro Tip</strong>
+          The hook is everything — it's the first 1-3 seconds. Test 2-3 different hooks on the same post to see what converts best. Swipe or duplicate to A/B test.
+        </div>
+        <div id="hooksContainer"></div>
+      </div>
+
+      <!-- CAPTIONS TAB -->
+      <div class="tab-content" id="tab-captions">
+        <div class="tip-banner">
+          <strong>💡 Algorithm Tip</strong>
+          Short captions drive comments. Long captions drive saves. Medium drives follows. Pick based on your goal — or post all three across platforms!
+        </div>
+        <div id="captionsContainer"></div>
+      </div>
+
+      <!-- CTAs TAB -->
+      <div class="tab-content" id="tab-ctas">
+        <div class="tip-banner">
+          <strong>💡 CTA Strategy</strong>
+          Always end with ONE clear call to action — never give people two things to do. Mix and test these across your posts.
+        </div>
+        <div class="cta-grid" id="ctasContainer"></div>
+      </div>
+
+      <!-- HASHTAGS TAB -->
+      <div class="tab-content" id="tab-hashtags">
+        <div class="tip-banner">
+          <strong>💡 Hashtag Strategy</strong>
+          Mix 3-5 niche tags (under 500K posts), 3-5 medium tags (500K–5M), and 2-3 broad tags (5M+). Click any tag to copy it, or use "Copy All" for the full set.
+        </div>
+        <div id="hashtagsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✓ Copied!</div>
+
+<script>
+// ===== PILL TOGGLE LOGIC =====
+function setupPills(groupId, multiSelect = false) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      if (multiSelect) {
+        pill.classList.toggle('active');
+      } else {
+        group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      }
+    });
+  });
+}
+
+setupPills('content-type-pills', false);
+setupPills('platform-pills', true);
+setupPills('goal-pills', false);
+setupPills('vibe-pills', true);
+
+function getActive(groupId) {
+  return [...document.getElementById(groupId).querySelectorAll('.pill.active')]
+    .map(p => p.dataset.val);
+}
+
+// ===== TAB LOGIC =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+// ===== TOAST =====
+function showToast(msg = '✓ Copied!') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ===== COPY TO CLIPBOARD =====
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+    }
+    showToast();
+  });
+}
+
+// ===== DATA & TEMPLATES =====
+
+const hookTemplates = {
+  destination: [
+    (d, ctx) => `POV: you just landed in ${d} and literally nothing could have prepared you for this 😭✈️`,
+    (d, ctx) => `Nobody talks about ${d} enough and I'm genuinely upset about it 👀`,
+    (d, ctx) => `I gave ${d} 5 days and it gave me a full personality change. Here's what happened.`,
+    (d, ctx) => `Spending [X] days in ${d} as a solo girl was the reset I didn't know I needed 🌍`,
+    (d, ctx) => `Warning: watching this will make you book a flight to ${d} immediately ✈️`,
+    (d, ctx) => `${d} just went to the top of my "non-negotiable" travel list and here's why 🙃`,
+    (d, ctx) => `Rating ${d} based on vibes alone (spoiler: it passed 😮‍💨)`,
+    (d, ctx) => `The thing about ${d} they don't put in the travel guides... 🤫`,
+  ],
+  budget: [
+    (d, ctx) => `I spent less than $[X] in ${d} for [X] days and I genuinely lived my best life 💸`,
+    (d, ctx) => `${d} on a budget hits different when you know these hacks 🙏`,
+    (d, ctx) => `The budget travel trick in ${d} that nobody talks about... 👀`,
+    (d, ctx) => `POV: you're in ${d} spending $[X]/day like you own the place 💅`,
+    (d, ctx) => `I traveled ${d} on a budget and it was actually BETTER than going bougey 😭`,
+    (d, ctx) => `This ${d} money hack saved me hundreds — no one told me this beforehand 🤯`,
+    (d, ctx) => `Broke girl guide to ${d}: actually luxurious edition 🌟`,
+    (d, ctx) => `${d} doesn't have to cost a fortune. Thread of everything I did for under $[X] 🧵`,
+  ],
+  luxury: [
+    (d, ctx) => `This ${d} hotel had me absolutely weak and I will never recover 😭✨`,
+    (d, ctx) => `${d} just set the standard for what luxury travel actually looks like 👁️`,
+    (d, ctx) => `I don't know who needed to see this but ${d} is everything 🤌`,
+    (d, ctx) => `The ${d} experience I didn't know I was missing my whole life 🫶`,
+    (d, ctx) => `Okay ${d} really said "we don't miss" and I believe them 😮‍💨`,
+    (d, ctx) => `POV: ${d} completely broke your travel standards (in the best way) 🥂`,
+    (d, ctx) => `I'm never recovering from ${d}. Send help. Or don't. I'll stay here. ✈️🥹`,
+    (d, ctx) => `${d} served absolutely EVERYTHING and I'm obsessed 🌊`,
+  ],
+  ugc: [
+    (d, ctx) => `POV: [brand] sent me to ${d} and I can't stop crying 😭🙏`,
+    (d, ctx) => `My honest review of traveling ${d} with [brand] — nobody is sponsoring me to say this part`,
+    (d, ctx) => `[Brand] just made my dream ${d} trip possible and I need to tell you everything 🫶`,
+    (d, ctx) => `I tested [brand] on my ${d} trip so you don't have to (spoiler: obsessed) ✈️`,
+    (d, ctx) => `Real talk: here's what [brand] actually got right about my ${d} trip 👀`,
+    (d, ctx) => `The collab that had me booking a flight to ${d} immediately 💅`,
+    (d, ctx) => `[Brand] + ${d} = the travel era I didn't know I needed 🌍`,
+    (d, ctx) => `Not me crying in ${d} because [brand] made this possible 😭✨`,
+  ],
+  tips: [
+    (d, ctx) => `Things nobody tells you before going to ${d} 🧵`,
+    (d, ctx) => `Save this before you book your trip to ${d} — you'll thank me later 🙏`,
+    (d, ctx) => `The ${d} mistakes everyone makes (and how to avoid them) 👇`,
+    (d, ctx) => `Real girl tips for visiting ${d}: no fluff, no gatekeeping 💅`,
+    (d, ctx) => `I wish someone told me these things before my first trip to ${d} 😩`,
+    (d, ctx) => `${d} travel tips they don't put in the guidebooks 📍`,
+    (d, ctx) => `Do NOT visit ${d} without reading this first ⚠️`,
+    (d, ctx) => `The ${d} insider info I had to learn the hard way 🤦‍♀️ → save this`,
+  ]
+};
+
+const hookStyles = [
+  { label: 'Hook Style #1 — POV Hook', type: 'pov', strength: 'viral' },
+  { label: 'Hook Style #2 — Curiosity Gap', type: 'curiosity', strength: 'fire' },
+  { label: 'Hook Style #3 — Emotional Pull', type: 'emotional', strength: 'viral' },
+  { label: 'Hook Style #4 — Story Hook', type: 'story', strength: 'strong' },
+  { label: 'Hook Style #5 — Bold Claim', type: 'bold', strength: 'fire' },
+];
+
+function getHooks(dest, ctx, contentType) {
+  const templates = hookTemplates[contentType] || hookTemplates.destination;
+  // Shuffle and pick 5
+  const shuffled = [...templates].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 5).map(fn => fn(dest, ctx));
+}
+
+function getCaptions(dest, ctx, contentType, goal, vibes, brand, platforms) {
+  const isCollab = contentType === 'ugc' && brand;
+  const brandMention = isCollab ? `ad | gifted by ${brand}` : '';
+  const vibeStr = vibes.slice(0, 2).join(' & ');
+  const isHiddenGem = vibes.includes('hidden');
+  const isSolo = vibes.includes('solo');
+  const isFoodie = vibes.includes('foodie');
+
+  const shortOptions = [
+    `${dest} really said main character energy only ✈️${goal === 'saves' ? '\n\n📌 save this for your next trip' : ''}`,
+    `ngl ${dest} ate and left zero crumbs 😭🌍`,
+    `${dest} is the trip your soul needed. trust me on this one.`,
+    `can't stop thinking about ${dest} and I'm genuinely not okay 😮‍💨✈️`,
+  ];
+
+  const mediumOptions = [
+    `okay so ${dest} has officially entered my top 3 and I don't make the rules 🗺️
+
+${ctx || `the views, the food, the people — literally everything hit different`}${isCollab ? `\n\n${brandMention}` : ''}
+
+${goal === 'saves' ? '📌 save this before your next trip' : goal === 'comments' ? '👇 drop your fave thing about ' + dest : goal === 'follows' ? '✈️ follow for more honest travel content' : goal === 'shares' ? '📤 send this to your travel bestie' : '🔗 link in bio for the full guide'}`,
+
+    `${dest} lowkey changed me and I can't explain it without a whole video 😭
+
+${ctx || `honest review: it exceeded every expectation. and I came in with HIGH expectations.`}${isCollab ? `\n\n${brandMention}` : ''}
+
+${goal === 'saves' ? '⬇️ save this — future you will be grateful' : goal === 'follows' ? '✈️ follow @tiffanytravels for more real travel content' : '👇 what's your dream destination rn? drop it below'}`,
+  ];
+
+  const longOptions = [
+    `okay we need to talk about ${dest} because I feel like people aren't talking about it ENOUGH 👀✈️
+
+${ctx || `I went in with zero expectations and came out completely obsessed. the kind of place that makes you rethink your entire life plan.`}
+
+here's what I'll say: ${isHiddenGem ? 'it's still under the radar — for now. go before it blows up.' : isSolo ? 'solo travel here is actually perfect. safe, easy to navigate, incredibly welcoming.' : isFoodie ? 'the food scene alone is worth the flight. I ate my way through this city and I have zero regrets.' : 'the vibe is genuinely unlike anywhere I've been. and I've been a lot of places.'}
+
+${isCollab ? `📣 ${brandMention} — honestly made the whole experience even smoother, full honest review in bio ✨\n\n` : ''}would 100% go back. actually, already planning the return trip lol 😅
+
+${goal === 'saves' ? '📌 save this if ${dest} is on your list — more details in my stories!' : goal === 'comments' ? '💬 have you been to ${dest}? what did I miss?? tell me everything 👇' : goal === 'follows' ? '✈️ I post honest, no-gatekeeping travel content every week — follow along if that's your vibe 🙏' : goal === 'shares' ? '📤 share this with someone who needs this trip in their life asap' : '🔗 full itinerary, hotel deets, and budget breakdown in bio — no gatekeeping here'}`,
+  ];
+
+  return {
+    short: shortOptions[Math.floor(Math.random() * shortOptions.length)],
+    medium: mediumOptions[Math.floor(Math.random() * mediumOptions.length)],
+    long: longOptions[0],
+  };
+}
+
+function getCTAs(goal, dest, contentType) {
+  const all = [
+    // saves
+    { goal: 'save', text: `📌 save this before your trip to ${dest}` },
+    { goal: 'save', text: `bookmark this — future you will literally thank me 🙏` },
+    // comments
+    { goal: 'engage', text: `👇 drop the last place you traveled to below` },
+    { goal: 'engage', text: `💬 have you been to ${dest}? what's your #1 tip?` },
+    // follows
+    { goal: 'follow', text: `✈️ follow for zero-gatekeeping travel content` },
+    { goal: 'follow', text: `🙋‍♀️ follow @tiffanytravels — I post real trips, real prices, no fluff` },
+    // shares
+    { goal: 'share', text: `📤 tag your travel bestie who needs this trip` },
+    { goal: 'share', text: `send this to the person you'd bring on this trip 🫶` },
+    // link
+    { goal: 'link', text: `🔗 full itinerary + hotel links in bio — no gatekeeping` },
+    { goal: 'link', text: `everything you need to plan this trip is in my link in bio ✨` },
+    // dm
+    { goal: 'dm', text: `💌 DM me "${dest.toUpperCase()}" and I'll send you my full guide` },
+    { goal: 'dm', text: `drop a ✈️ in the comments and I'll dm you my packing list` },
+  ];
+  // Shuffle and return 6
+  return all.sort(() => Math.random() - 0.5).slice(0, 6);
+}
+
+function getHashtags(dest, contentType, vibes, platforms) {
+  const destClean = dest.toLowerCase().replace(/\s+/g, '');
+  const destWords = dest.toLowerCase().split(' ');
+
+  const niche = [
+    `#${destClean}travel`,
+    `#${destClean}ig`,
+    `#${destClean}life`,
+    `#${destWords[0]}blogger`,
+    `#hiddengemsof${destClean}`,
+    `#${destClean}guide`,
+    contentType === 'budget' ? '#budgettravel' : null,
+    contentType === 'luxury' ? '#luxurytravel' : null,
+    contentType === 'ugc' ? '#ugccreator' : null,
+    vibes.includes('solo') ? '#solofemaltravel' : null,
+    vibes.includes('girlstrip') ? '#girlstrip' : null,
+    vibes.includes('foodie') ? `#${destClean}food` : null,
+    vibes.includes('hidden') ? '#hiddengem' : null,
+  ].filter(Boolean);
+
+  const medium = [
+    `#${destClean}`,
+    `#travelin${destClean}`,
+    `#${destClean}vacation`,
+    '#travelreels',
+    '#travelcontentcreator',
+    contentType === 'budget' ? '#travelonabudget' : '#travelinspo',
+    vibes.includes('solo') ? '#solotraveler' : '#travelcouple',
+    '#travelblogger',
+    '#reelstravel',
+    '#explorewithme',
+  ];
+
+  const broad = [
+    '#travel',
+    '#travelgram',
+    '#wanderlust',
+    '#travelvlog',
+    '#ugctravel',
+    platforms.includes('tiktok') ? '#traveltiktok' : null,
+    platforms.includes('instagram') ? '#insttravel' : null,
+    '#tiffanytravels',
+    '#travelgirl',
+    '#girlswhotravel',
+  ].filter(Boolean);
+
+  return { niche, medium, broad };
+}
+
+// ===== MAIN GENERATE FUNCTION =====
+function generate() {
+  const dest = document.getElementById('destination').value.trim();
+  const ctx = document.getElementById('context').value.trim();
+  const brand = document.getElementById('brand').value.trim();
+
+  if (!dest) {
+    document.getElementById('destination').focus();
+    document.getElementById('destination').style.borderColor = 'var(--accent)';
+    setTimeout(() => document.getElementById('destination').style.borderColor = '', 2000);
+    return;
+  }
+
+  const contentType = getActive('content-type-pills')[0] || 'destination';
+  const platforms = getActive('platform-pills');
+  const goal = getActive('goal-pills')[0] || 'saves';
+  const vibes = getActive('vibe-pills');
+
+  // Generate all content
+  const hooks = getHooks(dest, ctx, contentType);
+  const captions = getCaptions(dest, ctx, contentType, goal, vibes, brand, platforms);
+  const ctas = getCTAs(goal, dest, contentType);
+  const hashtags = getHashtags(dest, contentType, vibes, platforms);
+
+  // === RENDER HOOKS ===
+  const hooksContainer = document.getElementById('hooksContainer');
+  hooksContainer.innerHTML = hooks.map((hook, i) => `
+    <div class="hook-card">
+      <div class="hook-label">${hookStyles[i].label}</div>
+      <div class="hook-text">${hook}</div>
+      <div class="hook-meta">
+        <span class="meta-tag ${hookStyles[i].strength}">${hookStyles[i].strength === 'viral' ? '🔥 High Viral' : hookStyles[i].strength === 'fire' ? '⚡ Strong' : '✅ Solid'}</span>
+        <span class="meta-tag">${hookStyles[i].type}</span>
+      </div>
+      <button class="copy-btn" onclick="copyText(\`${hook.replace(/`/g, "'")}\`, this)">Copy</button>
+    </div>
+  `).join('');
+
+  // === RENDER CAPTIONS ===
+  const capsContainer = document.getElementById('captionsContainer');
+  // Platform chips
+  const platformsHtml = platforms.map(p => `<div class="platform-chip ${p}">${p === 'tiktok' ? '🎵 TikTok' : p === 'instagram' ? '📸 Instagram' : '▶️ YouTube Shorts'}</div>`).join('');
+
+  capsContainer.innerHTML = `
+    <div class="platform-chips">${platformsHtml}</div>
+    <div class="caption-section">
+      <div class="caption-section-title">
+        <h3>⚡ Short Caption</h3>
+        <span class="char-count">${captions.short.length} chars — Comments/TikTok</span>
+      </div>
+      <div class="caption-box" style="position:relative;">
+        ${captions.short.replace(/\n/g, '<br>')}
+        <button class="copy-btn" onclick="copyText(\`${captions.short.replace(/`/g, "'")}\`, this)">Copy</button>
+      </div>
+    </div>
+    <div class="caption-section">
+      <div class="caption-section-title">
+        <h3>📝 Medium Caption</h3>
+        <span class="char-count">${captions.medium.length} chars — Instagram/Follows</span>
+      </div>
+      <div class="caption-box" style="position:relative;">
+        ${captions.medium.replace(/\n/g, '<br>')}
+        <button class="copy-btn" onclick="copyText(\`${captions.medium.replace(/`/g, "'")}\`, this)">Copy</button>
+      </div>
+    </div>
+    <div class="caption-section">
+      <div class="caption-section-title">
+        <h3>📖 Long-Form Caption</h3>
+        <span class="char-count">${captions.long.length} chars — Saves/Community</span>
+      </div>
+      <div class="caption-box" style="position:relative;">
+        ${captions.long.replace(/\n/g, '<br>')}
+        <button class="copy-btn" onclick="copyText(\`${captions.long.replace(/`/g, "'")}\`, this)">Copy</button>
+      </div>
+    </div>
+  `;
+
+  // === RENDER CTAs ===
+  const ctasContainer = document.getElementById('ctasContainer');
+  ctasContainer.innerHTML = ctas.map(cta => `
+    <div class="cta-card" onclick="copyText('${cta.text}', null); showToast('✓ CTA Copied!')">
+      <div class="cta-goal">${cta.goal.toUpperCase()}</div>
+      <div class="cta-text">${cta.text}</div>
+    </div>
+  `).join('');
+
+  // === RENDER HASHTAGS ===
+  const hashContainer = document.getElementById('hashtagsContainer');
+  const allHashtags = [...hashtags.niche, ...hashtags.medium, ...hashtags.broad];
+  hashContainer.innerHTML = `
+    <div class="hashtag-group">
+      <div class="hashtag-group-title">🎯 Niche Tags (highest ranking potential)</div>
+      <div class="hashtag-cloud">
+        ${hashtags.niche.map(h => `<span class="hashtag niche" onclick="copyText('${h}', null)">${h}</span>`).join('')}
+      </div>
+    </div>
+    <div class="hashtag-group">
+      <div class="hashtag-group-title">📈 Mid-Range Tags (500K–5M posts)</div>
+      <div class="hashtag-cloud">
+        ${hashtags.medium.map(h => `<span class="hashtag" onclick="copyText('${h}', null)">${h}</span>`).join('')}
+      </div>
+    </div>
+    <div class="hashtag-group">
+      <div class="hashtag-group-title">🔥 Broad Tags (5M+ posts)</div>
+      <div class="hashtag-cloud">
+        ${hashtags.broad.map(h => `<span class="hashtag hot" onclick="copyText('${h}', null)">${h}</span>`).join('')}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <button class="copy-all-btn" onclick="copyText('${allHashtags.join(' ')}', null); showToast('✓ All hashtags copied!')">
+      📋 Copy All ${allHashtags.length} Hashtags
+    </button>
+  `;
+
+  // Show output
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('outputContent').style.display = 'block';
+  switchTab('hooks');
+  document.getElementById('hookCount').textContent = hooks.length;
+  document.getElementById('ctaCount').textContent = ctas.length;
+}
+</script>
+</body>
+</html>

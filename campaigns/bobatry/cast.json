@@ -1,0 +1,161 @@
+{
+  "campaign": "Campus Matcha",
+  "status": "five casting alternatives",
+  "characters": [
+    {
+      "id": "01-maya",
+      "name": "Maya",
+      "direction": "Warm boba regular",
+      "look": "Chinese and Irish heritage, warm light skin, softly oval face, brown almond-shaped eyes, dark chestnut shoulder-blade length hair with curtain fringe, faint freckles across nose, slightly asymmetric friendly smile",
+      "outfit": "sage fitted crew-neck tee, straight blue jeans, white sneakers",
+      "gym": "sage athletic crew-neck top and charcoal full-length leggings",
+      "work": "cream tee and dark green apron, hair in low ponytail",
+      "major": "Communications",
+      "personality": "Warm, observant and lightly teasing; remembers everyone's order but forgets where she put her keys.",
+      "voice": "Conversational mid-register voice, relaxed pace, short amused pauses. No affected baby voice.",
+      "beauty": "Sheer peach blush, brown mascara and rose lip tint; natural freckles remain visible.",
+      "brands": "Lip tints, everyday cosmetics, matcha kits, reusable cups, small tote bags.",
+      "series": [
+        "Your order, explained kindly",
+        "Five-minute campus face",
+        "From tea shift to mat class"
+      ],
+      "hooks": [
+        "Your matcha deserves better than this clump.",
+        "This lip combo matches my drink. Accidentally.",
+        "I packed for Pilates like it was a weekend trip."
+      ],
+      "appeal": "Friendly eye contact and humor create approachability; beauty routines supply a reason to save and follow.",
+      "risk": "Can become generic if every clip is just smiling with a drink. Keep her observant barista humor.",
+      "age": 20,
+      "height": "5 ft 2 in (157 cm), nominal design target",
+      "occupation": "College student and part-time boba barista",
+      "sport": "Recreational gymnastics; exploring Pilates",
+      "fictional": true
+    },
+    {
+      "id": "02-nina",
+      "name": "Nina",
+      "direction": "Competitive campus athlete",
+      "look": "Korean and German heritage, light neutral skin, defined oval jaw, straight dark eyebrows, deep brown eyes, black hair in high ponytail, small mole on left cheek, broad confident smile, visibly strong shoulders and compact muscular legs",
+      "outfit": "navy fitted athletic tee, gray joggers, trainers",
+      "gym": "navy athletic tee and charcoal full-length leggings",
+      "work": "navy tee and sand apron, hair tied up",
+      "major": "Kinesiology student; not a licensed trainer",
+      "personality": "Competitive with herself, quick to laugh when humbled, organized about training but chaotic about laundry.",
+      "voice": "Bright, direct delivery with playful confidence and a quick laugh.",
+      "beauty": "Brushed brows, minimal base, coral lip balm; practical ponytail.",
+      "brands": "Pilates grip socks, gym bags, hair ties, activewear and straightforward beauty basics.",
+      "series": [
+        "Gymnast tries Pilates",
+        "What's in the training bag",
+        "Get ready between class and shift"
+      ],
+      "hooks": [
+        "Gymnast confidence. First Pilates class humility.",
+        "My gym bag has a snack pocket problem.",
+        "The ponytail is doing most of the styling today."
+      ],
+      "appeal": "Capability and playful confidence give athletic viewers something beyond a portrait; practical beauty adds category relevance.",
+      "risk": "Do not position her as a qualified instructor or fabricate athletic performance and product sweat tests.",
+      "age": 20,
+      "height": "5 ft 2 in (157 cm), nominal design target",
+      "occupation": "College student and part-time boba barista",
+      "sport": "Recreational gymnastics; exploring Pilates",
+      "fictional": true
+    },
+    {
+      "id": "03-remi",
+      "name": "Remi",
+      "direction": "Witty alternative creative",
+      "look": "Japanese and French heritage, light olive skin, angular oval face, dark brown eyes, chin-length dark espresso bob with wispy fringe, subtle winged eyeliner, tiny beauty mark below right eye, playful half smile",
+      "outfit": "washed charcoal fitted tee, olive cargo pants, black sneakers",
+      "gym": "plum athletic tee and black full-length leggings",
+      "work": "charcoal tee and plum apron, short hair pinned away from face",
+      "major": "Graphic design",
+      "personality": "Deadpan, inventive and sociable once comfortable; makes elaborate playlists for short walks.",
+      "voice": "Dry, slightly slower delivery; understated punchlines rather than constant enthusiasm.",
+      "beauty": "Soft plum liner, muted berry tint, dark short bob with visible texture.",
+      "brands": "Eyeliners, tinted balms, hair styling, phone accessories and independent lifestyle products.",
+      "series": [
+        "Color theory at the boba counter",
+        "One liner, three moods",
+        "Design student packs a mat bag"
+      ],
+      "hooks": [
+        "My eyeliner has a stronger deadline policy than I do.",
+        "I color-matched my lip tint to taro.",
+        "The tote is organized. The semester is not."
+      ],
+      "appeal": "A distinct haircut and dry wit support recognition; color-led tutorials connect directly to cosmetics.",
+      "risk": "Avoid making sarcasm cruel or adopting a fake alternative subculture identity without consistent taste.",
+      "age": 20,
+      "height": "5 ft 2 in (157 cm), nominal design target",
+      "occupation": "College student and part-time boba barista",
+      "sport": "Recreational gymnastics; exploring Pilates",
+      "fictional": true
+    },
+    {
+      "id": "04-claire",
+      "name": "Claire",
+      "direction": "Polished campus minimalist",
+      "look": "Vietnamese and Scottish heritage, light warm skin, longer oval face, dark hazel eyes, long espresso hair with soft caramel face-framing highlights, graceful straight nose, defined natural cupid bow, soft composed smile",
+      "outfit": "cream knit short-sleeve top, dark straight jeans, simple white sneakers",
+      "gym": "espresso athletic tee and matching full-length leggings",
+      "work": "cream tee and taupe apron, hair in neat low bun",
+      "major": "Business administration",
+      "personality": "Composed but self-aware; likes neat routines and admits when the routine takes too long.",
+      "voice": "Clear, calm delivery with occasional understated jokes; friendly rather than aloof.",
+      "beauty": "Soft brown liner, rose-nude lips, subtle blush and naturally textured skin.",
+      "brands": "Everyday premium-positioned makeup, brushes, cosmetic bags, matcha tools and Pilates accessories.",
+      "series": [
+        "One bag, class to Pilates",
+        "Three shades in daylight",
+        "Matcha before the calendar"
+      ],
+      "hooks": [
+        "Three lip shades. Same daylight. Pick your favorite.",
+        "The tiny bag has to earn its place.",
+        "My morning routine needed fewer steps."
+      ],
+      "appeal": "Composed styling and direct gaze provide visual appeal; comparison content makes the account useful to beauty shoppers.",
+      "risk": "Over-polished perfection can feel like an ad. Retain casual environments, texture and modest everyday problems.",
+      "age": 20,
+      "height": "5 ft 2 in (157 cm), nominal design target",
+      "occupation": "College student and part-time boba barista",
+      "sport": "Recreational gymnastics; exploring Pilates",
+      "fictional": true
+    },
+    {
+      "id": "05-ella",
+      "name": "Ella",
+      "direction": "Sunny outdoorsy gymnast",
+      "look": "Filipina and English heritage, medium golden skin, softly square face, warm brown eyes, long wavy dark brown hair with subtle sun-lightened ends, natural freckles on cheeks, wide joyful smile and one dimple",
+      "outfit": "butter-yellow fitted tee, blue straight jeans, retro sneakers",
+      "gym": "teal athletic tee and charcoal full-length leggings",
+      "work": "white tee and teal apron, hair in practical braid",
+      "major": "Environmental studies",
+      "personality": "Sunny, energetic and a little spontaneous; turns a short errand into a long walk.",
+      "voice": "Open, animated delivery with natural laughs and quick changes in emphasis.",
+      "beauty": "Peachy cheek color, warm lip tint and natural wavy hair; avoid manufactured product-result claims.",
+      "brands": "Matcha, casual activewear, water bottles, tinted lip products and hair accessories.",
+      "series": [
+        "Matcha and the long way home",
+        "Campus bag outside edition",
+        "Post-class five-minute reset"
+      ],
+      "hooks": [
+        "The walk was supposed to take ten minutes.",
+        "My matcha is coming on this side quest.",
+        "One hair clip versus this entire forecast."
+      ],
+      "appeal": "Warmth, expressive reactions and outdoor motion create energy; easy beauty and drink rituals connect that energy to products.",
+      "risk": "Keep sustainability and SPF claims tied to actual product evidence; sunny styling is not proof of efficacy.",
+      "age": 20,
+      "height": "5 ft 2 in (157 cm), nominal design target",
+      "occupation": "College student and part-time boba barista",
+      "sport": "Recreational gymnastics; exploring Pilates",
+      "fictional": true
+    }
+  ]
+}

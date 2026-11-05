@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tiff November Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F7F1EC; --surface:#FFFFFF; --surface-2:#EFE6DF; --ink:#2A1E1A; --muted:#76665F; --line:#E4D8CF;
+  --accent:#B03F65; --accent-ink:#FFFFFF;
+  --her:#A8365C; --her-bg:#F7E1E8; --him:#2F5478; --him-bg:#DFE8F2; --both:#7A5320; --both-bg:#F3E7D3;
+  --done:#2E7A4D; --warn:#8A5A00; --warn-bg:#FBEFD6;
+  --display:"Instrument Serif", Georgia, serif;
+  --body:"DM Sans", system-ui, sans-serif;
+  --mono:"DM Mono", ui-monospace, Consolas, monospace;
+  --w0:var(--her);--w0-bg:var(--her-bg);--w1:var(--both);--w1-bg:var(--both-bg);--w2:var(--him);--w2-bg:var(--him-bg);--w3:var(--warn);--w3-bg:var(--warn-bg);--w4:var(--accent);--w4-bg:var(--surface-2);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#171211; --surface:#211A18; --surface-2:#2C2320; --ink:#F2E8E2; --muted:#AE9E96; --line:#3A2F2B;
+    --accent:#EE7FA2; --accent-ink:#2A0E18;
+    --her:#F09AB6; --her-bg:#3D1E29; --him:#93B8DE; --him-bg:#1C2B3B; --both:#E2B877; --both-bg:#38291A;
+    --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#171211; --surface:#211A18; --surface-2:#2C2320; --ink:#F2E8E2; --muted:#AE9E96; --line:#3A2F2B;
+  --accent:#EE7FA2; --accent-ink:#2A0E18;
+  --her:#F09AB6; --her-bg:#3D1E29; --him:#93B8DE; --him-bg:#1C2B3B; --both:#E2B877; --both-bg:#38291A;
+  --done:#74D29A; --warn:#E8B04B; --warn-bg:#3A2C12;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+button{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 64px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:400 clamp(44px,8vw,78px)/.95 var(--display);margin:14px 0 10px;text-wrap:balance}
+h1 em{color:var(--accent)}
+.lede{max-width:66ch;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}
+.stat{background:var(--surface);padding:14px 16px;min-width:0}
+.stat .k{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 26px/1.15 var(--body);font-variant-numeric:tabular-nums;margin-top:4px}
+.stat .v small{font-size:15px;color:var(--muted);font-weight:500}
+.stat .s{font-size:13px;color:var(--muted)}
+.bar{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tabs{display:flex;gap:4px;margin-top:28px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 4px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tag{display:inline-block;font:500 11px/1 var(--mono);letter-spacing:.04em;padding:4px 7px;border-radius:4px;white-space:nowrap}
+.a-her{background:var(--her-bg);color:var(--her)}
+.a-him{background:var(--him-bg);color:var(--him)}
+.a-both{background:var(--both-bg);color:var(--both)}
+.t-shop{background:transparent;color:var(--accent);border:1px solid currentColor;padding:3px 6px}
+.t-broll{background:var(--him-bg);color:var(--him)}
+.t-ser{background:var(--both-bg);color:var(--both)}
+.t-key{background:var(--warn-bg);color:var(--warn)}
+.week{margin-top:32px}
+.week h2{font:400 32px/1 var(--display);margin:0 0 4px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.week h2 span{font:500 12px var(--mono);color:var(--muted);letter-spacing:.04em}
+.week .wsub{color:var(--muted);font-size:14px;margin:0 0 6px;max-width:72ch}
+.day{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.date{display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;border-radius:8px;background:var(--surface);border:1px solid var(--line);align-self:start}
+.date .m{font:500 10px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.date .d{font:400 36px/1 var(--display)}
+.date .w{font:500 11px var(--mono);color:var(--muted)}
+.day.key .date{border-color:var(--accent)}
+.day.key .date .w{color:var(--accent)}
+.dh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.dh h3{margin:0;font-size:19px;font-weight:700}
+.dh .hero{font-size:13px;color:var(--muted)}
+.dh .hero b{color:var(--ink);font-weight:600}
+.slots{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:2px}
+.slots{gap:8px}
+.slot{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;padding:12px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.slot input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--done);cursor:pointer}
+.slot summary{cursor:pointer;list-style:none}
+.slot summary::-webkit-details-marker{display:none}
+.slot .meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.slot .tm{font:500 12px/1.6 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.slot .pl{font:600 12px/1.6 var(--body)}
+.slot .hook{display:block;font:700 17px/1.3 var(--body);margin-top:4px;text-wrap:pretty}
+.slot .more{display:block;font:500 12px/1 var(--mono);color:var(--muted);margin-top:8px}
+.slot details[open] .more{display:none}
+.slot.done .hook{text-decoration:line-through;color:var(--muted)}
+.slot.stretch .tm::after{content:" opt";color:var(--warn)}
+.brief{display:grid;grid-template-columns:118px minmax(0,1fr);gap:8px 12px;margin-top:12px;font-size:14px}
+.brief dt{font:500 11px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.brief dd{margin:0}
+.brief ul{margin:0;padding-left:18px}
+.brief li{margin:2px 0}
+.brief .viral{background:var(--warn-bg);border-radius:6px;padding:7px 10px}
+.brief dt.vk{color:var(--warn);padding-top:7px}
+.brief .care{color:var(--her)}
+.copy{margin-top:12px;background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:7px 12px;font:600 13px var(--body);cursor:pointer}
+@media (max-width:640px){
+  .day{grid-template-columns:56px minmax(0,1fr);gap:10px}
+  .date .d{font-size:28px}
+  .slot{grid-template-columns:22px minmax(0,1fr);gap:8px;padding:10px}
+  .brief{grid-template-columns:minmax(0,1fr);gap:2px 0}
+  .brief dd{margin-bottom:8px}
+}
+.panel h2{font:400 34px/1.05 var(--display);margin:32px 0 8px}
+.panel h3{font-size:16px;margin:20px 0 6px}
+.panel p,.panel li{max-width:72ch}
+.panel ul{padding-left:20px;margin:6px 0}
+.panel li{margin:4px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{margin:6px 0 4px;font:400 26px/1.1 var(--display)}
+.card p{margin:0 0 8px;color:var(--muted);font-size:14px}
+.card ul{margin:0;padding-left:18px;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.tbl th{text-align:left;font:500 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.callout{border-left:3px solid var(--warn);background:var(--warn-bg);padding:12px 14px;border-radius:6px;margin:12px 0;max-width:78ch}
+.callout b{color:var(--warn)}
+/* month grid */
+.viewsw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.viewsw button{background:var(--surface);border:0;padding:6px 14px;font:600 13px var(--body);color:var(--muted);cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:14px 0 8px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto;grid-auto-rows:minmax(132px,auto);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);gap:1px}
+.month .hd{background:var(--surface-2);text-align:center;font:600 11px/1 var(--mono);letter-spacing:.08em;color:var(--muted);padding:9px 0}
+.cell{background:var(--surface);padding:8px;display:flex;flex-direction:column;gap:5px;min-width:0;text-align:left;border:0;font:inherit;color:inherit}
+button.cell{cursor:pointer}
+button.cell:hover{background:var(--surface-2)}
+.cell .dn{font:600 13px/1 var(--mono);display:flex;justify-content:space-between;align-items:center;min-height:22px}
+.cell .dn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px}
+.cell .dn .flag{font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.06em}
+.cell.other{background:var(--bg)}
+.cell.other .dn b{color:var(--muted);opacity:.6}
+.cell .pill{display:block;border-radius:4px;padding:4px 7px;font:600 12px/1.25 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill.w0{background:var(--w0-bg);color:var(--w0)} .pill.w1{background:var(--w1-bg);color:var(--w1)} .pill.w2{background:var(--w2-bg);color:var(--w2)} .pill.w3{background:var(--w3-bg);color:var(--w3)} .pill.w4{background:var(--w4-bg);color:var(--w4)}
+.legend .pill{display:inline-block;border-radius:4px;padding:3px 7px;font:600 12px/1.2 var(--body)}
+.cell .ttl2{font-size:12px;line-height:1.3;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.cell .mini{display:flex;gap:3px;margin-top:auto;padding-top:6px}
+.cell .mini i{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.cell .mini i.on{background:var(--done)}
+.cell .stl{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cell.done .stl{color:var(--done)}
+.cell.part .stl{color:var(--warn)}
+.cell.today{box-shadow:inset 0 0 0 2px var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.cell.today .dn b{background:var(--accent);color:var(--accent-ink)}
+.cell.today .dn::after{content:"TODAY";font:700 10px/1 var(--mono);color:var(--accent);letter-spacing:.08em}
+@media (max-width:760px){.cell .ttl2{display:none}.cell .pill{font-size:10.5px;padding:2px 4px}.month{grid-auto-rows:minmax(84px,auto)}.cell{padding:5px}.cell .stl{font-size:9px}}
+.ov{position:fixed;inset:0;background:rgba(10,10,14,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.dlg{background:var(--bg);border:1px solid var(--line);border-radius:12px;max-width:780px;width:100%;max-height:calc(100dvh - 32px);overflow:auto;padding:8px 20px 16px;position:relative}
+.dlg .x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:24px;line-height:1;color:var(--muted);cursor:pointer;padding:4px 8px}
+.dlg .day{border-top:0}
+.foot a{color:var(--accent)}
+.panel a{color:var(--accent)}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">AI UGC · TikTok Shop · Nov 1 – 30, 2026</div>
+  <h1>Tiff's <em>November</em></h1>
+  <p class="lede">The try-on girly: tight going-out fits, gym sets, cute trinkets and cozy fall/winter outfits on a TikTok Shop budget. Goal one is followers, goal two is sales. Six posts a day, including a free daily quote slideshow; Shop Drops mix Tiff with real product b-roll (unboxing, pouring, close-ups) so it's not just her on screen. The month builds toward Black Friday (Nov 27) and Cyber Monday (Nov 30).</p>
+  <div class="stats" id="stats"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="cal" aria-selected="true">Calendar</button>
+    <button class="tab" role="tab" data-tab="plan" aria-selected="false">Strategy</button>
+    <button class="tab" role="tab" data-tab="book" aria-selected="false">Playbook</button>
+    <button class="tab" role="tab" data-tab="shop" aria-selected="false">What to sell</button>
+    <button class="tab" role="tab" data-tab="ops" aria-selected="false">Production &amp; rules</button>
+  </div>
+
+  <section id="cal">
+    <div class="tools"><div class="viewsw" id="viewsw"></div></div>
+    <p style="color:var(--muted);font-size:14px;margin:12px 0 0;max-width:72ch">Every post now has a full brief: hook, angle, first second, beats, on-screen text and why it could go viral. Click a day to see all six. “Why it'll go viral” is a reasoned bet based on what the top competitor videos do, not a promise. Your Sunday numbers should overrule it.</p>
+    <div class="tools" id="filters"></div>
+    <div id="weeks"></div>
+  </section>
+
+  <section id="plan" class="panel" hidden>
+    <h2>Who Tiff is</h2>
+    <p><b>The fit-check girl who looks expensive for cheap.</b> Mid-20s, gym in the morning, going out at night, always trying on something new. You already have her signature look: sunglasses pushed up on her head, small gold hoops, long highlighted waves, and a brown, cream and black palette. Keep those in every video so people know it's her within a second.</p>
+    <p>One line for the bio: <i>“gym girl · try-ons · fits linked 🤍 · AI creator · collabs 📩 [email]”</i></p>
+
+    <h2>Two audiences, two jobs</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="tag a-her">HER · women 18–30</span>
+        <h3>She buys for herself</h3>
+        <p>She wants outfit ideas, gym fits, cute trinkets, and affordable versions of expensive looks.</p>
+        <ul>
+          <li>Hooks: “5 fits in 15 seconds”, “one skirt, three ways”, “what's in my gym bag”</li>
+          <li>Formats: GRWM, try-on hauls, outfit carousels, gym routines with product b-roll</li>
+          <li>Buys: tight skirts, gym sets, leggings, pre-workout/shakers, trinkets, jewelry, winter layers</li>
+          <li>She saves posts and comes back to them, so carousels and “3 ways to wear” videos convert well</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-him">HIM · men 18–35</span>
+        <h3>He buys gifts</h3>
+        <p>Fitted outfits and gym content pull men in and get the follow. Then give them something to do: rate the fit, learn what women want, buy it as a gift.</p>
+        <ul>
+          <li>Hooks: “rate the fit 1–10”, “POV: you matched with the gym girl”, “buy her this instead of flowers”</li>
+          <li>Formats: rate-the-fit, gym POVs, “from a girl” advice, gift guides</li>
+          <li>Buys: jewelry, pajama sets, slippers, wearable blankets, bags, all as gifts</li>
+          <li>Nov–Dec is the best time of year to sell to this audience: Black Friday, then Christmas</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag a-both">BOTH</span>
+        <h3>Shared ground</h3>
+        <p>Try-on hauls and fit checks are the follower engine: women save them, men rewatch them. The shop slots turn that reach into money.</p>
+        <ul>
+          <li>Your existing car, mirror and OOTD clips still work as Night Vibe remixes</li>
+          <li>Comment bait: “which fit?”, “rate it 1–10”, “guys, is this true?”, polls</li>
+          <li>Reply to comments with video. It's cheap content and the algorithm favors it</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>The six daily slots</h2>
+    <div class="scroll"><table class="tbl" id="slotTable"></table></div>
+    <p style="color:var(--muted);font-size:13px">Times are a starting point in your local time. After two weeks, check TikTok Analytics → Followers → “Most active times” and move the slots there. Keep at least 2–3 hours between posts.</p>
+
+    <h2>Ramp to six a day</h2>
+    <div class="scroll"><table class="tbl">
+      <tr><th>When</th><th>Posts/day</th><th>Slots</th><th>Goal</th></tr>
+      <tr><td>Nov 1–7</td><td class="num">4</td><td>Try-On, Slideshow, Shop Drop, For the Boys</td><td>Find out which hook styles get past 2-second swipes. Warm up the account. Slideshows cost nothing, so they run daily from day one.</td></tr>
+      <tr><td>Nov 8–14</td><td class="num">5</td><td>+ GRWM</td><td>Double down on whichever slot is winning. Repost the best clip with a new hook.</td></tr>
+      <tr><td>Nov 15 →</td><td class="num">6</td><td>All</td><td>Full schedule through Black Friday and Cyber Monday.</td></tr>
+    </table></div>
+    <p style="color:var(--muted);font-size:13px">Slots marked <b style="color:var(--warn)">opt</b> in the calendar are the ones you can skip during the ramp.</p>
+
+    <h2>What “winning” looks like</h2>
+    <ul>
+      <li><b>2-sec view rate above 70%</b> means the hook works. Below 50%, change the first frame and the text overlay, not the whole idea.</li>
+      <li><b>Saves above 0.5% of views</b> on Shop Drops means she'll buy. Make more in that category. The 11 competitor hits we measured ran 0.12–0.69%.</li>
+      <li><b>Shares and rewatches on try-ons</b> mean that format is pulling new followers in. Make a Pt. 2 within 48 hours.</li>
+      <li>Every Sunday, pick the top 3 posts of the week and remake each one with a new hook in the coming week.</li>
+    </ul>
+  </section>
+
+  <section id="book" class="panel" hidden>
+    <h2>What the top videos actually do</h2>
+    <p>Watched Oct 30, 2026: one frame plus the caption, sound and stats from each account's top video. Video length is exact.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Video</th><th>Views</th><th>Length</th><th>Saves</th><th>Shares</th><th>What's on screen</th></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@gracieloo19/video/7650357854712483103">@gracieloo19</a></td><td class="num">11.7M</td><td class="num">27s</td><td class="num">18.8K</td><td class="num">3,459</td><td>Talks to camera in a red tank. One line of text answers one worry about the fabric.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@partidaelena/video/7650744844515577119">@partidaelena</a></td><td class="num">8.6M</td><td class="num">1:03</td><td class="num">30.7K</td><td class="num">10.1K</td><td>Close-up talk about a waist trainer. <b>Don't copy the product</b>: shaping results break Tiff's rules.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@girlypopshopfinds/video/7665724254805052685">@girlypopshopfinds</a></td><td class="num">5.2M</td><td class="num">7s</td><td class="num">7,092</td><td class="num">10.9K</td><td>“Mama” fall sweatshirt on a faceless model, <b>labeled AI</b>. Identity item people send to family.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@fynzofinds/video/7690999459274116384">@fynzofinds</a></td><td class="num">4.5M</td><td class="num">10s</td><td class="num">5,266</td><td class="num">1,645</td><td>Tracksuit, framed from the neck down, one text line: “Flared Fits&gt;&gt;”.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@abigailtran/video/7618690020945251615">@abigailtran</a></td><td class="num">4.4M</td><td class="num">15s</td><td class="num">10.7K</td><td class="num">2,320</td><td>AI girl in a doorway, oversized tee, fan-style text. Uses a musician's fan base, so skip the licensing risk.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@prettypickedd/video/7669919042425064735">@prettypickedd</a></td><td class="num">3.4M</td><td class="num">51s</td><td class="num">8,912</td><td class="num">2,152</td><td>Mirror try-on of jeans. Caption gives her size across lengths.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@findsforthegirliesxx/video/7679904696706043159">@findsforthegirliesxx</a></td><td class="num">2.7M</td><td class="num">7s</td><td class="num">12K</td><td class="num">4,346</td><td>Bedroom mirror, phone up, fitted navy set.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@ellasfavfinds/video/7616539102779034883">@ellasfavfinds</a></td><td class="num">2.6M</td><td class="num">6s</td><td class="num">14.8K</td><td class="num">6,140</td><td>Walking away down a hallway in jeans, one line: “the most flattering jeans”.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@whatbrookebought/video/7682464001317424415">@whatbrookebought</a></td><td class="num">2.3M</td><td class="num">12s</td><td class="num">4,686</td><td class="num">2,503</td><td>Fall overalls, sunglasses on. Caption: “I'm wearing a small”.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@therealjoyymaria/video/7566757737313373454">@therealjoyymaria</a></td><td class="num">2.3M</td><td class="num">1:30</td><td class="num">5,307</td><td class="num">1,416</td><td>Reply to a comment, trying on every color of a set.</td></tr>
+      <tr><td><a target="_blank" rel="noopener" href="https://www.tiktok.com/@staygoldlex/video/7696382504067976479">@staygoldlex</a></td><td class="num">1.3M</td><td class="num">14s</td><td class="num">8,908</td><td class="num">1,717</td><td>Cozy patterned lounge set in a clean room. “Back in stock” caption.</td></tr>
+    </table></div>
+    <h3>What that means for Tiff</h3>
+    <ul>
+      <li><b>Two formats win.</b> Silent clips of 6–15 seconds with one line of text, or a talk of 27–90 seconds that answers one worry. The two biggest videos are both talks, so the calendar now mixes in spoken hooks.</li>
+      <li><b>One idea per video.</b> The hits show one product and make one point. Nothing explains the whole listing.</li>
+      <li><b>Saves run about 0.1–0.7% of views</b>, so the old 2% target was too high. It's now 0.5%.</li>
+      <li><b>Identity items get shared.</b> The “mama” sweatshirt got more shares than saves. People send it to the person it describes.</li>
+      <li><b>AI doesn't cap reach.</b> Two of these videos are AI (one labeled, one tagged #aigc), and both passed 4M.</li>
+      <li><b>Don't copy their claims.</b> “Lifts everything” and waist trainers are what got some of these views, and Tiff can't say or sell that honestly.</li>
+    </ul>
+
+    <h2>What the reference accounts actually do</h2>
+    <p>Studied Oct 26, 2026 from their public profiles, sorted by Popular. Tiff copies the <b>formats</b>, not the people: never their faces, names, captions word for word, or audio uploads.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Account</th><th>Size</th><th>What wins</th><th>Steal for Tiff</th></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@partidaelena">@partidaelena</a></b><br><a href="https://elena-ugc.vercel.app/shop">shop page</a></td><td class="num">18.8K followers<br>8.6M top video</td><td>Face shown, mirror try-ons. 2-piece workout/pilates sets bought “in every color”, but her 8.6M top video is a waist trainer talk. Size callouts (“5'7 wearing a S”). Tiny captions with ⭐️🤎✨. Also sells energy gummies + creatine sticks. Bio says “Top 1% TikTok Shop Affiliate” + business email. 708 videos, 274 products.</td><td><b>The model to copy.</b> Small following, huge shop sales. Volume + sets + email in bio for brand deals.</td></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@girlypopshopfinds">@girlypopshopfinds</a></b></td><td class="num">145K<br>5.1M top</td><td>Faceless POV: shoes/legs on a car floor or flat-lay, serif overlay “fall coded”, cozy brown palette. Almost every top video uses the <i>same</i> sound. Its 5.2M top video carries the AI label.</td><td>[POV B-roll] series, but cut to Tiff's face at the end. Pick one signature sound per series.</td></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@findsforthegirliesxx">@findsforthegirliesxx</a></b></td><td class="num">16.9K<br>2.6M top</td><td>Mirror try-on of fitted sets, phone half over the face, “5'6 in small”, “fits like skin”. Slowed pop edits as audio.</td><td>[Size Check]. Phone lowers to reveal Tiff's face.</td></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@ellasfavfinds">@ellasfavfinds</a></b></td><td class="num">45.6K<br>2.6M top</td><td>Bodycon going-out dresses, back-view reveals. Long emotional captions with a price anchor (“was £200, now £20”) + urgency (“literally run”).</td><td>[Price Drop], with confirmed prices only. <b>Skip her “rip-off of a brand” angle</b>: that's IP trouble for a shop account.</td></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@abigailtran">@abigailtran</a></b></td><td class="num">47.8K<br>4.4M top</td><td><b>An AI account (#aigc)</b> selling graphic tees. Same doorway backdrop, same pose, one item per video. Very cheap to generate.</td><td>[Doorway Drop]: one fixed Tiff set for batch generation. Avoid celebrity/band tees (likeness + licensing).</td></tr>
+      <tr><td><b><a href="https://www.tiktok.com/@upgraded.fr">@upgraded.fr</a></b></td><td class="num">13.7K</td><td>Old motivation/gaming account pivoted to shop finds. Its top shop posts (~1M) are fall clothing.</td><td>Proof that a shop pivot works on an account that already has reach.</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@crowdfinds">@crowdfinds</a>, <a href="https://www.tiktok.com/@kristine_walshe">@kristine_walshe</a></td><td class="num">45.8K / 69.1K</td><td colspan="2">TikTok rate-limited the video grid, so only the bios were read. Kristine has a mgmt email in her bio (same brand-deal play). Recheck later.</td></tr>
+    </table></div>
+
+    <h3>Attention accounts (format only, kept PG-13)</h3>
+    <p><a href="https://www.tiktok.com/@lilyilyb">@lilyilyb</a> (1.1M), <a href="https://www.tiktok.com/@wednesdaye0">@wednesdaye0</a> (1M), <a href="https://www.tiktok.com/@sarahberryrose">@sarahberryrose</a> (2.7K). Video grids were rate-limited and the Instagram accounts need a login, so this part comes from bios and the known format. Their bios funnel viewers off TikTok to paid pages. <b>Tiff funnels to the shop instead.</b> The part worth borrowing is the face-first, eye-contact, one-beat-drop style:</p>
+    <ul>
+      <li><b>[Glow Close-up]</b>: soft-glam selfie, hair flip or smile on the beat drop. No mouthing.</li>
+      <li><b>[Rate Me]</b>: one fit, slow turn, “rate it 1–10”. Comments are the reach.</li>
+      <li><b>[POV]</b>: “pov: you're my gym partner / date / airport buddy”. Wholesome-flirty, never sexual.</li>
+    </ul>
+    <div class="callout"><b>Line to hold:</b> fitted clothes and a pretty face are fine. No lingering body-part crops, no lingerie or try-on of underwear, no “let's get closer ;)” captions, and no off-platform funnel. TikTok down-ranks it, and an AI account doing it gets banned from the shop. If the thirst side really takes off, that's when to split it into its own account.</div>
+
+    <h2>Series formats</h2>
+    <div class="cards">
+      <div class="card"><span class="tag a-her">SHOP</span><h3>Every Color</h3><p>One set, cut to a new color on every beat. End on “collecting them all ⭐️”.</p></div>
+      <div class="card"><span class="tag a-both">SHOP</span><h3>Size Check</h3><p>Mirror, phone half covering the face, then lowered. Overlay “5'6 · wearing S”. The listing's size chart goes in the caption.</p></div>
+      <div class="card"><span class="tag a-her">SHOP</span><h3>Price Drop</h3><p>“Looks like $150. It's $28 here.” Only prices you've seen in the listing that day. No brand names.</p></div>
+      <div class="card"><span class="tag a-her">SHOP · B-ROLL</span><h3>POV B-roll</h3><p>Car-floor or flat-lay of the product, serif “___ coded” overlay, then a 1-second cut to Tiff's face.</p></div>
+      <div class="card"><span class="tag a-both">BATCH</span><h3>Doorway Drop</h3><p>Fixed backdrop + pose. Swap only the product, so one prompt makes 6 videos.</p></div>
+      <div class="card"><span class="tag a-her">SHOP · B-ROLL</span><h3>Gym Pour</h3><p>Scoop, pour, shake, ice, sip. Label facts only.</p></div>
+      <div class="card"><span class="tag a-her">SLIDESHOW</span><h3>Vibe Slideshow</h3><p>Slide 1: Tiff in a moody setting with a relatable quote over the sky (“Spending your 20s… &gt;”). Slides 2–4: Codex b-roll with nobody in it, in low light (coffee + flowers, pilates studio, city view, fruit stand, ocean). Soft trending sound. Built for saves and shares, and costs 0 credits.</p></div>
+    </div>
+
+    <h3>Brand deals (endorsement emails)</h3>
+    <ul>
+      <li>Put a business email in the bio on day 1, like Elena and Kristine: <i>“gym girl · try-ons · AI creator · collabs: tiff.[name]@gmail.com 📩”</i></li>
+      <li>Keep a one-page media kit: followers, average views, top 3 videos, audience % women/men, and the Every Color and Gym Pour series as samples.</li>
+      <li>Pitch the sellers you already sell for in TikTok Shop's affiliate messages first. They know your numbers.</li>
+      <li>Every paid post gets the <b>Paid partnership</b> toggle plus the AI label.</li>
+    </ul>
+  </section>
+
+  <section id="shop" class="panel" hidden>
+    <h2>What to sell from Tiff</h2>
+    <p>Everything here fits her look and sits in TikTok Shop's best-selling price range for impulse buys (roughly $10–$45). Fashion commissions on TikTok Shop usually run about 10–20%, and jewelry and accessories often pay more. Check each listing's actual rate in the affiliate marketplace before you build content around it.</p>
+    <div class="callout"><b>Why accessories first:</b> an AI woman “wearing” a top can't honestly prove how it fits. That's why Shop Drops now use <b>product b-roll</b>: hanger shots, fabric stretch, unboxing, pouring pre-workout. Real product footage (seller photos or your own samples) next to Tiff styling it. Treat clothing as styling inspiration (“how to wear it”), never a fit review (“true to size, so comfy”).</div>
+    <div class="scroll"><table class="tbl" id="prodTable"></table></div>
+  </section>
+
+  <section id="ops" class="panel" hidden>
+    <h2>Making 6 a day without burning credits</h2>
+    <p>Six posts a day doesn't mean six new AI videos a day. Aim for <b>about 2 new video generations a day</b>. Fill the other slots with carousels, remixes of clips you already have, and comment replies.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Post type</th><th>Per day</th><th>Cost</th><th>How</th></tr>
+      <tr><td>New Omni video clip</td><td class="num">~2</td><td>~20 credits per 10 s at 720p</td><td>One outfit per week means one reference sheet and 4–6 clips generated in a single batch</td></tr>
+      <tr><td>Photo carousel</td><td class="num">~1</td><td>Images only</td><td>Outfit sheets, “4 ways to wear”, gift guides. TikTok Shop carousels can carry product links</td></tr>
+      <tr><td>Vibe slideshow</td><td class="num">1</td><td>0 credits</td><td>One Tiff hook photo (Nano Banana Pro) + 2–3 Codex b-roll shots with no person. Batch a week of them at once (masterUGC Step 2b)</td></tr>
+      <tr><td>Remix of an existing clip</td><td class="num">~1</td><td>Free</td><td>Same clip, new hook text, new trending sound, different crop. Your car, mirror and OOTD clips each cover 3–4 posts</td></tr>
+      <tr><td>Product b-roll</td><td class="num">~1</td><td>Free–low</td><td>Seller listing photos/video, your own sample footage, or a short no-face Omni clip of hands pouring/unboxing. Reuse across GRWM + Shop Drop</td></tr>
+      <tr><td>Green-screen / reply</td><td class="num">~1</td><td>Free–low</td><td>Tiff still image + product image + text, or a reply to a comment</td></tr>
+    </table></div>
+    <p>That works out to about <b>14–20 new clips a week (~300–400 credits)</b> for Tiff alone. Budget roughly 3× that once Wise Guy and Mr. Meaty are posting too.</p>
+
+    <h3>Weekly rhythm</h3>
+    <ul>
+      <li><b>Sunday:</b> review the week's numbers, pick the 3 to remake, and lock next week's hero products</li>
+      <li><b>Monday:</b> batch-generate the outfit sheet plus 4–6 clips for the week's hero outfit</li>
+      <li><b>Wednesday:</b> make the carousels and gift guides, and pull product images from the listings</li>
+      <li><b>Sunday or Wednesday:</b> batch the next 7 vibe slideshows: 7 Tiff hook photos, then all of the b-roll in one parallel Codex run</li>
+      <li><b>Daily (15 min):</b> schedule posts in TikTok Studio, reply to comments, save comment ideas for replies</li>
+    </ul>
+
+    <h3>Getting into TikTok Shop</h3>
+    <ul>
+      <li>Affiliate access requires the account holder to be 18+ and to meet a follower minimum (5,000 in the US for a long time). Check Creator Center for the current number.</li>
+      <li>Until you're eligible, still post the Shop Drop slot as styling content. It teaches the algorithm who her buyers are, and you'll know which products work before you can link them.</li>
+      <li>Once you're approved, request free samples. Real b-roll of the actual product (fabric, clasp, inside the bag) next to Tiff makes the videos more honest and more convincing.</li>
+    </ul>
+
+    <h2>Rules that keep the account alive</h2>
+    <div class="callout"><b>This part protects everything else.</b> TikTok requires realistic AI content to be labeled, and US law (the FTC's 2024 rule on fake reviews) treats AI-generated testimonials about products as fake reviews. AI shop accounts that ignore this get their reach restricted or lose shop access.</div>
+    <ul>
+      <li>Turn on the <b>“AI-generated content” label</b> on every post, and say “AI creator” in the bio. Lean into it; it's part of the brand.</li>
+      <li><b>No first-person experience claims.</b> Not “I've worn these all month” or “softest thing I own”. Say “the one with the sunburst buckle” or “comes in 6 colors”. Take features from the listing.</li>
+      <li><b>No AI before/after results</b> (hair tools, skincare, shapewear). Show the product, not a made-up result.</li>
+      <li>In Shop Drops, show the <b>real product</b> (seller photos or sample footage) alongside Tiff.</li>
+      <li>No “dupe of [brand]” language, no fake brand logos, and only quote sale prices you've confirmed in the listing.</li>
+      <li>Fitted, tight and gym outfits are fine and are the point. Avoid sexualized camera framing (lingering body crops, suggestive poses/captions): TikTok cuts reach on it and can pull shop access.</li>
+      <li><b>Pre-workout / supplements:</b> show her using it, quote only the label (flavor, servings). No energy, fat-loss or performance claims, and check the category is open to your affiliate account.</li>
+    </ul>
+  </section>
+
+  <div class="foot" id="audio">
+    <h2 style="font:400 30px/1 var(--display);color:var(--ink);margin:0 0 6px">Audio library</h2>
+    <p style="margin:0 0 10px;max-width:78ch"><b>Read this first:</b> TikTok Shop and Business accounts can only use the <b>Commercial Music Library</b> (CML), which is pre-cleared and free. A trending song that isn't in the CML can get a shop video muted or blocked. On a Creator account you can use any sound in-app, but videos that link products are safest on CML tracks or TikTok-original sounds. Check each one in the app before posting; trends move weekly.</p>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Sound</th><th>Use it for</th><th>Safe for shop?</th></tr>
+      <tr><td><a href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/music/pc/en">Creative Center: trending music</a></td><td>Check this weekly. Filter to “Approved for business use”</td><td>Filtered list = yes</td></tr>
+      <tr><td><a href="https://usethirdchair.com/blog/tiktok-commercial-music-library-what-it-covers-and-what-it-doesn-t">Commercial Music Library explained (what it covers)</a></td><td>Every Shop Drop</td><td>Yes</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=Ramalama%20Bang%20Bang%20Roisin%20Murphy">“Ramalama (Bang Bang)”, Róisín Murphy</a></td><td>Try-On / Size Check: pan up from shoes to face on the drop</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=Upside%20Down%20Diana%20Ross%20transition">“Upside Down”, Diana Ross</a></td><td>Outfit transition, hand covers the lens → new fit</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=We%20Fell%20in%20Love%20in%20October%20girl%20in%20red">“We Fell in Love in October”, girl in red</a></td><td>[POV B-roll] fall coded, cozy fits</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=Housewife%20Tate%20McRae">“Housewife”, Tate McRae</a></td><td>Rising Oct 25. [Glow Close-up], [Rate Me]</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=Hello%20October%20Tung%20Tulip">“Hello, October”, Tung Tulip</a></td><td>Night Vibe, cozy</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@girlypopshopfinds/video/7665724254805052685">Lisa's Zauberstube original sound</a></td><td>girlypopshopfinds' signature (5.1M video). The POV b-roll vibe</td><td>User sound: creator account, unlinked posts</td></tr>
+      <tr><td><a href="https://www.tiktok.com/@girlypopshopfinds/video/7676130997481540894">“Brain Stew” (Know Good flip)</a></td><td>2.5M POV b-roll</td><td>Remix: avoid on shop posts</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=Talking%20Body%20slowed">“Talking Body” slowed</a> · <a href="https://www.tiktok.com/search?q=self%20esteem%20prttyaudios">“self esteem” (prttyaudios)</a></td><td>findsforthegirliesxx's top try-ons (1.7–1.9M)</td><td>Edit of a label song: avoid on shop posts</td></tr>
+      <tr><td><a href="https://www.tiktok.com/search?q=usher%20hey%20daddy%20sound">Usher, “Hey Daddy”</a></td><td>ellasfavfinds' going-out dress (900K)</td><td>Check CML</td></tr>
+      <tr><td><a href="https://www.tiktok.com/discover/trending-audio-october-2026">TikTok Discover: trending audio Oct 2026</a></td><td>Browse for the attention slots</td><td>Varies</td></tr>
+    </table></div>
+    <p style="margin-top:10px">Sources: <a href="https://buffer.com/resources/trending-songs-tiktok/">Buffer</a>, <a href="https://www.socialpilot.co/blog/tiktok-trends">SocialPilot</a>, <a href="https://later.com/blog/tiktok-trends/">Later</a>, <a href="https://newengen.com/insights/tiktok-trends/">NewEngen</a>, <a href="https://www.soundstripe.com/blogs/why-can-i-only-use-commercial-sounds-on-tiktok">Soundstripe on CML</a>, <a href="https://www.zolyp.com/blog/tiktok-trending-sounds">Zolyp</a>.</p>
+    <h2 id="accounts" style="font:400 30px/1 var(--display);color:var(--ink);margin:32px 0 6px">Accounts to watch</h2>
+    <p style="margin:0 0 10px;max-width:78ch">Checked Oct 30, 2026. Follower counts are from each profile. Video links open the post, labeled with views unless they say “likes”. Copy the format, never the face, caption or audio upload. If a profile shows no videos, TikTok is rate-limiting: wait a few minutes or log in.</p>
+    <div id="accountGroups"></div>
+    <p style="margin-top:10px"><b>Browse for more:</b> <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/tiktok-shop-fits">TikTok Shop fits</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/tiktok-shop-activewear">Shop activewear</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/workout-outfits-tiktok-shop">Workout outfits</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/tiktok-shop-clothes-women">Women's shop clothes</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/tag/aifashion">#aifashion</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/ugc-fashion">UGC fashion</a> · <a target="_blank" rel="noopener" href="https://www.tiktok.com/discover/try-on-haul-ugc-example">Try-on haul UGC</a></p>
+    <p>Tiff · AI UGC · Checkboxes save in this browser only.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SLOTS=[
+  {k:"grwm",t:"8:00a",n:"GRWM",a:"her",desc:"Get ready with me. Hair, jewelry, trinkets, gym bag. Soft-sells whatever is on her vanity."},
+  {k:"haul",t:"12:00p",n:"Try-On",a:"both",desc:"Try-on haul / fit check. Quick outfit changes on beat. The follower engine: women save it, men rewatch it."},
+  {k:"shop",t:"4:00p",n:"Shop Drop",a:"her",desc:"The money slot: one product, real b-roll of it, Tiff styling or using it, linked."},
+  {k:"boys",t:"7:00p",n:"For the Boys",a:"him",desc:"Rate-the-fit, POV, girl translator, gift guides. Turns male attention into follows and gift buys."},
+  {k:"vibe",t:"10:00p",n:"Night Vibe",a:"both",desc:"Trending sound, no mouthing. Mirror, car, gym, cozy. Easy remixes."},
+  {k:"slide",t:"2:00p",n:"Slideshow",a:"her",desc:"Quote/vibe photo slideshow. Slide 1: Tiff photo with the quote on it. Slides 2–4: moody, low-light Codex b-roll with no person in it. 0 credits, built for saves and shares."}
+];
+// display order by time (Slideshow is appended last so saved checkbox ids stay stable)
+var ORDER=[0,1,5,2,3,4];
+// first day each slot is required; earlier days show it as optional
+var RAMP={grwm:8,haul:1,shop:1,boys:1,vibe:15,slide:1};
+
+var WEEKS=[
+  {from:1,to:7,name:"Meet Tiff",sub:"Try-on hauls and fit checks from day one. Test which looks pull follows fastest: tight & going-out, gym, or cozy."},
+  {from:8,to:14,name:"Gym Girl Era",sub:"Gym sets, leggings, pre-workout and shaker b-roll. The gym content is the strongest male-follow driver, so post it daily."},
+  {from:15,to:21,name:"Gift Guide Era",sub:"Her wishlist for her, cheat sheets for him. Trinkets and cute stuff become the main sell."},
+  {from:22,to:28,name:"Black Friday Week",sub:"Thanksgiving Nov 26, Black Friday Nov 27. Every slot points at the cart."},
+  {from:29,to:30,name:"Cyber Weekend",sub:"Last-chance posts and a recap of the month's winners."}
+];
+
+// s: [grwm, haul, shop, boys, vibe] (+ slideshow from SLIDES below); prefixes: "$" = links a product, "+" = uses product b-roll
+// [Series] tags map to the formats on the Playbook tab
+var DAYS=[
+{d:1,th:"Meet Tiff",hero:"2-piece workout set",s:["GRWM intro: hoops, slick pony, white ribbed tank. “hi, I'm tiff, welcome… this page is all fashion, I'll put you on.” Text: “hi, I'm tiff 🤍”","[Size Check] Mirror try-on, phone covering half her face, then lowers it to show face. Text: “5'6 wearing a S”","$+[Every Color] 2-piece workout set: 5 colors, one cut per beat. Caption: “slowly collecting all the colors ⭐️”","[Rate Me] “rate the fit 1–10, be honest” (same set, slow turn)","[Glow Close-up] Soft-glam selfie close-up, hair flip on the drop"]},
+{d:2,th:"Pilates princess",hero:"Double-lined yoga set",s:["Pilates GRWM: claw clip, grip socks, shaker","[Size Check] Side + back angle in the set. Text: “double lined so it's not see-through”","$+Double-lined yoga set: fabric stretch b-roll (hands), then Tiff walking into the studio","[POV] “pov: you're my pilates partner”","[Glow Close-up] Post-workout glow, car selfie cam"]},
+{d:3,th:"Pre-workout",hero:"Energy gummies / pre-workout",s:["Morning: pre-workout pour into the shaker, shake, out the door","[Doorway Drop] Same doorway backdrop, gym fit, one pose → turn","$+[Gym Pour] Scoop, pour, shake, ice b-roll → Tiff sips in the car. Caption: flavor + “ingredients on the label” only","[Rate Me] “gym fit or going-out fit? pick one”","Car vibe, gym bag on the passenger seat"]},
+{d:4,th:"Going out",hero:"Bodycon going-out dress",s:["Going-out GRWM: gold jewelry, lip combo","[Size Check] Back-view reveal walking away from the mirror, then turn to face","$+[Price Drop] Bodycon dress: “looks like a $150 dress, it's $28 on here” (confirmed price only), fabric close-up b-roll","[Rate Me] “would you take me to dinner in this?”","[Glow Close-up] Going-out audio, earrings close-up"]},
+{d:5,th:"Fall coded",hero:"Suede ankle boots",s:["Cozy GRWM: fuzzy cardigan, claw clip, coffee","[Size Check] Fall try-on: cardigan / sweater dress / knit set","$+[POV B-roll] Car-floor POV of the boots, serif overlay “fall coded 🍂” → cut to Tiff's face in the rearview","[POV] “pov: we're going to the pumpkin patch”","Rain on the window, cozy vibe"]},
+{d:6,th:"Payday",hero:"Gold jewelry advent calendar",s:["Payday GRWM: stacking gold jewelry","Payday haul: “what I grabbed this week” (hands b-roll + Tiff wearing each)","$+Jewelry advent calendar: unboxing b-roll, opening 3 doors, then on Tiff","$“A gift she opens every day for 12 days” (for him)","[Glow Close-up] Hoops + hair flip"]},
+{d:7,th:"Weekend",hero:"Week 1 recap",s:["Weekend errands GRWM","Fit check: every fit from week 1 in 10 seconds","$Week 1 recap carousel: every fit, all linked","[Rate Me] “which week-1 fit is your favorite? 1–7”","“Saturday night in or out?” poll"]},
+
+{d:8,th:"Lazy Sunday",hero:"Fleece zip-up + sweatpants",s:["“Getting ready to do nothing” in the fleece set","[Size Check] Sweatpant try-on: barrel / flare / jogger","$+[Every Color] Fleece zip-up: 4 colors laid out → Tiff in each","[POV] “pov: lazy sunday on the couch with me”","Cozy blanket, lofi"]},
+{d:9,th:"Leg day",hero:"Seamless scrunch leggings",s:["Leg day GRWM: pony, sports bra, shaker","[Doorway Drop] Leggings, side angle, one turn","$+Seamless leggings: stretch-test b-roll, then gym mirror (styling only, no shaping claims)","[Rate Me] “rate my gym fit”","Gym mirror vibe"]},
+{d:10,th:"Gym bag",hero:"Gym duffel + trinkets",s:["What's in my gym bag: shaker, scrunchies, mini perfume, AirPods case","Bag try-on: duffel vs. tote vs. mini backpack","$+Gym duffel: packing b-roll (hands only), then Tiff carrying it in","$“Things to put in her gym bag” gift list","Car vibe, gym playlist"]},
+{d:11,th:"Shaker life",hero:"Cute shaker / tumbler",s:["Morning: creatine stick in the tumbler, shake","[Size Check] Matching set + tumbler in hand","$+[Gym Pour] Tumbler pour b-roll, ice, bow/charm close-up","$“Buy her this instead of flowers”","Night drive, iced drink in the cupholder"]},
+{d:12,th:"Tight & cozy",hero:"Ribbed bodycon dress",s:["Date GRWM in the ribbed dress","[Size Check] Bodycon dress with sneakers / boots / heels","$+[Price Drop] Ribbed bodycon: fabric b-roll + 3 shoe swaps, price on screen","[Rate Me] “first date outfit, rate it”","[Glow Close-up] Going-out audio"]},
+{d:13,th:"Date night",hero:"Faux leather mini skirt",s:["Friday date GRWM","Faux leather try-on: mini, pants, jacket","$+Faux leather mini: shine close-up b-roll, then with tights + boots","[POV] “pov: you picked me up for our date”","Going-out vibe"]},
+{d:14,th:"Gym recap",hero:"Gym week carousel",s:["Brunch GRWM","Video reply to comments: “you asked for more gym fits”","$Gym-girl week carousel, all linked","[Rate Me] “which gym set wins?”","Gym mirror vibe"]},
+
+{d:15,th:"Wishlist",hero:"Gifts for her under $25",s:["GRWM while I read my wishlist","Wishlist try-on: everything on my list","$+Wishlist under $50: product b-roll grid, then Tiff with each","$Gift guide for him to buy HER: under $25","Christmas lights vibe"]},
+{d:16,th:"Cute trinkets",hero:"Bag charms + keychains",s:["GRWM: decorating my bag with charms","[Doorway Drop] Same doorway, bag + charm held up","$+Bag charm set: unboxing b-roll, clipping them on","$Stocking stuffers for her under $15","Fairy-light room vibe"]},
+{d:17,th:"PJ season",hero:"Satin PJ set",s:["Night-to-morning in the satin PJ set","[Every Color] PJ set in 4 colors","$+Satin PJ set: fabric b-roll, colors laid out","$Gifts girls actually use vs. gifts guys usually buy","[POV] “pov: we're watching a christmas movie”"]},
+{d:18,th:"Winter coded",hero:"Faux fur trim coat",s:["Cold-morning GRWM: layering","[Size Check] Coat / puffer / sherpa over a fitted dress","$+[POV B-roll] Snowy car-floor POV, serif overlay “winter coded ❄️” → Tiff's face in the coat hood","$“Don't give her your jacket. Buy her this one.”","Snowy night car vibe"]},
+{d:19,th:"Fuzzy boots",hero:"Fuzzy mini boots / slippers",s:["GRWM in fuzzy mini boots","Try-on: mini boots with leggings / sweats / skirt","$+Fuzzy mini boots: squish b-roll, every color","[Rate Me] “ugg season or not?”","Cozy Saturday vibe"]},
+{d:20,th:"Hair day",hero:"Clip-in extensions",s:["GRWM: adding clip-ins (ponytail → full hair down; no ‘results’ claims)","Hair-flip transition: claw clip → hair down","$+Clip-ins: product b-roll (wefts, clips), then on Tiff","[Glow Close-up] “long hair or short hair?”","Going-out vibe"]},
+{d:21,th:"Guide recap",hero:"Gift guide recaps",s:["Holiday market GRWM","Video reply to comments","$Her picks: full gift guide carousel","$The guys' cheat sheet: full gift guide carousel","Cozy Saturday night"]},
+
+{d:22,th:"BF prep",hero:"Black Friday cart",s:["GRWM + what's in my Black Friday cart","Try-on: everything in my cart","$[Price Drop] “Add to cart now”: what's going on sale (confirmed prices only)","$“Fellas: Black Friday is your gift cheat code”","Christmas lights vibe"]},
+{d:23,th:"Matching sets",hero:"Knit 2-piece set",s:["Matching set GRWM","[Every Color] Knit set together vs. split","$+Knit set: flat-lay b-roll → Tiff","[Rate Me] “rate the set”","Night in, matching set"]},
+{d:24,th:"Layering basics",hero:"Square-neck bodysuit",s:["The bodysuit under every outfit","[Doorway Drop] Bodysuit: 4 outfits in 15 seconds","$Square-neck bodysuit: 4 outfits (styling only, no fit claims)","[POV] “pov: helping me pick a top”","Mirror fit check"]},
+{d:25,th:"Travel day",hero:"Airport set",s:["Airport GRWM: flare leggings + fleece","Airport fit check","$Airport outfit, fully linked","[POV] “pov: you're my airport buddy”","Car vibe: driving home for the holidays"]},
+{d:26,th:"Thanksgiving",hero:"Sweater dress",s:["Thanksgiving GRWM","Try-on: family dinner vs. bar after","$+Sweater dress + boots: knit b-roll, then the outfit","[POV] “pov: you're meeting my family”","Food-coma cozy vibe"]},
+{d:27,th:"BLACK FRIDAY",hero:"Top 5 of the month",key:1,s:["$Black Friday GRWM, all linked","$Try-on: the month's top 5 at Black Friday prices","$+[Price Drop] Black Friday Pt. 1: b-roll montage of the top 5","$Gifts for her at Black Friday prices","$Black Friday Pt. 2: late-night drop"]},
+{d:28,th:"Small Biz Saturday",hero:"Everything linked",s:["Saturday GRWM","Video reply: “what did you get?”","$Every Black Friday pick in one carousel","$“Gifts she'll actually wear”","Cozy Saturday night"]},
+
+{d:29,th:"Cyber weekend",hero:"Cyber deals",s:["Sunday reset GRWM","Try-on: what I'm grabbing Cyber Monday","$Cyber Monday preview: what's dropping","$“Still haven't bought her anything?”","Christmas lights vibe"]},
+{d:30,th:"CYBER MONDAY",hero:"Last chance",key:1,s:["$Cyber Monday GRWM, all linked","$Last-chance try-on haul","$+[Price Drop] Top 5 Cyber Monday picks, b-roll montage","$Last call for gifts for her","Month recap: “thank you for 30 days” vibe"]}
+];
+
+// Slideshow slot, one per day. Slide 1 = Tiff + quote; after the "·" = the b-roll slides (Codex, no person, low light)
+var SLIDES=[
+ "+[Vibe Slideshow] “Spending your 20s getting rid of trauma and generational curses >” · coffee + flowers / pilates studio / city view (made ✓)",
+ "+[Vibe Slideshow] “Be a good person in real life. None of this social media shit matters.” · fruit stand / ocean view (made ✓)",
+ "+[Vibe Slideshow] “Romanticize the 6am alarm. Future you is watching.” · empty gym at dawn / shaker on the counter / sunrise drive",
+ "+[Vibe Slideshow] “Dress like you already have the life you want” · heels by the door / gold jewelry dish / city at night",
+ "+[Vibe Slideshow] “Fall reset: new book, new candle, same goals” · candle + open book / rainy window / latte",
+ "+[Vibe Slideshow] “Saving for the life I want, not the one they expect” · notebook + pen / jewelry dish / sunset window",
+ "+[Vibe Slideshow] “A quiet week of keeping promises to myself >” · made bed in morning light / journal / coffee on the sill",
+ "+[Vibe Slideshow] “Lazy Sundays are part of the plan” · blanket on the couch / tea / rain on the window",
+ "+[Vibe Slideshow] “Discipline is just self-respect on a schedule” · empty gym / dumbbells on the floor / water bottle",
+ "+[Vibe Slideshow] “Things that changed my 20s: pilates, water, leaving the group chat” · reformer / water bottle / phone face down",
+ "+[Vibe Slideshow] “Hydrated, unbothered, in bed by 10” · glass of water on the nightstand / lamp / folded sheets",
+ "+[Vibe Slideshow] “You don't need a reason to dress up on a Tuesday” · lipstick on the vanity / mirror / candlelit table for one",
+ "+[Vibe Slideshow] “Date yourself first. The bar is set.” · solo dinner table / glass of wine / city lights",
+ "+[Vibe Slideshow] “Two weeks in. Proud of the girl who kept showing up.” · gym bag by the door / sunrise / journal",
+ "+[Vibe Slideshow] “The best gifts are the ones she mentioned once in October” · wrapped gifts / handwritten list / string lights",
+ "+[Vibe Slideshow] “Little treats are a personality trait” · pastry box / iced coffee / ribbon on a gift",
+ "+[Vibe Slideshow] “Soft life era: satin sheets and no plans” · unmade bed / candle / rainy night window",
+ "+[Vibe Slideshow] “Winter arc starts now” · snowy street at night / coat on a chair / hot chocolate",
+ "+[Vibe Slideshow] “Protect your peace, even from people you love” · quiet bedroom / closed door with fairy lights / tea",
+ "+[Vibe Slideshow] “Main character energy, minimal effort” · claw clip on the vanity / coffee to go / city crosswalk",
+ "+[Vibe Slideshow] “Grateful for the people who clap the loudest” · holiday market lights / two mugs / friends' dinner table",
+ "+[Vibe Slideshow] “Not buying everything. Buying the right things.” · shopping bags by the door / receipt-free flat-lay / candle",
+ "+[Vibe Slideshow] “Matching sets, matching energy” · folded knit set / coffee / morning window",
+ "+[Vibe Slideshow] “Your 20s are for building, not proving” · laptop + coffee / city morning / notebook",
+ "+[Vibe Slideshow] “Going home a different person than I left” · airport window / suitcase / car at night",
+ "+[Vibe Slideshow] “Thankful for the version of me that didn't give up” · candlelit table / pie / family window at dusk",
+ "$+[Vibe Slideshow] “Gifts that say ‘I listen’” · real listing photos of the top 5 gifts (no Codex product shots)",
+ "+[Vibe Slideshow] “Support small. Shop slow.” · little shop window / paper bags / coffee",
+ "+[Vibe Slideshow] “Ending the year softer than I started it” · candles / sunset / journal",
+ "$+[Vibe Slideshow] “30 days. Thank you for being here 🤍” · month recap: best Tiff stills + real listing photos of the top picks"
+];
+DAYS.forEach(function(x,i){x.s.push(SLIDES[i]);});
+// BRIEFS START
+// the full post briefs, one per slot
+var B={};
+// each post: [hook, angle, first second, [beats], on-screen/caption, why it'll go viral, care (optional)]
+// each day, in slot order: grwm, try-on, shop drop, for the boys, night vibe, slideshow
+B[1]=[
+["You got an extra hour today. I spent it getting ready.","Clocks went back overnight (Nov 1), so her intro rides a moment everyone is living today.","Tiff at the mirror, phone clock in hand, one hoop in.",["Clock on the phone, she shrugs at the camera","Slick pony, gold hoops, white ribbed tank","Turns to lens: “hi, I'm Tiff. This page is all fashion. I'll put you on.”"],"Text: “hi, I'm tiff 🤍” · Caption: what did you do with your extra hour?","It's tied to something true for every viewer today, and the caption question is easy to answer. Comments on a first post tell TikTok who to show her to."],
+["Guess my size before the phone comes down.","A guessing game turns a plain mirror fit check into a reason to stay to the end.","Mirror, phone covering half her face, fitted set, full body in frame.",["Slow side turn with the phone still up","Phone lowers on the beat to show her face","Size card pops: “listing size chart in caption”"],"Text: “guess the size 👀” · Caption: size chart + “drop your guess”","Same setup as findsforthegirliesxx's 2.7M mirror video (7 seconds, 12K saves). The guess gives people a reason to comment, and a loop this short gets rewatched.","Tiff is AI, so give the listing's size chart, never a claim about how it fits."],
+["This set comes in 5 colors. Choosing is the hard part.","Every Color: the beat does the selling and the viewer picks a favorite.","All 5 sets laid out on the bed, hands sweep across them.",["Fabric stretch close-up (real listing footage)","Tiff in a new color on each beat","Ends on all 5 side by side: “which one?”"],"Text: “5 colors. pick one.” · Caption: slowly collecting all the colors ⭐️","Picking a color is the lowest-effort comment there is. @therealjoyymaria's every-color reply video hit 2.3M, and a color poll makes people look at each option."],
+["Be honest. I can take it. 1–10.","A rating dare gets men to comment without having to think of something to say.","Tiff walks up to the lens, stops, raises one eyebrow.",["Steps back to show the whole set","One slow turn","Leans in: “…that's what I thought.”"],"Text: “rate the fit. be honest.” · Caption: lowest number gets a reply","A number takes two seconds to type, and “lowest gets a reply” invites people to argue. Those low ratings feed the reply videos later in the week."],
+["POV: it's midnight and you finally look how you feel.","No talking, just a mood and a beat drop. It pulls in rewatches instead of comments.","Dark bedroom, one warm lamp, Tiff's face half in shadow.",["Eyes up to the lens as the beat builds","Hair flip on the drop","Small smile, hold 2 seconds, loop"],"Text: “sunday night glow ✨”","Faces on a beat drop are built to be rewatched, and a short loop racks up completions. It costs almost nothing since it can reuse her intro footage."],
+["Spending your 20s getting rid of trauma and generational curses >","A quote people want to repost about themselves, with the feel of a quiet, expensive life.","Tiff in a moody setting with the quote across the sky.",["Slide 2: coffee + flowers","Slide 3: pilates studio","Slide 4: city view"],"Caption: soft and short, 3 hashtags max · Slides already made ✓","Shares come from people saying “this is me”. Slideshows also hold viewers longer because they swipe through every slide."]
+];
+B[2]=[
+["Pilates at 9. Getting ready at 8:58.","Relatable rush gag for the pilates crowd, with the claw clip and grip socks as the soft sell.","Tiff sprinting into frame, grip socks in her mouth.",["Claw clip twisted in one move","Socks on, shaker grabbed","Out the door; the bag swings into the lens"],"Text: “pilates at 9. it's 8:58.” · Caption: be honest, are you early or late?","It's a joke every pilates girl knows, and those are the videos that get sent to a friend. The question splits the comments into two camps."],
+["Can you see through it? Watch the window test.","A proof-style hook: she answers the top worry about leggings before anyone asks.","Hands hold the real fabric up against a bright window.",["Text: “double lined, per the listing”","Fabric folded and held to the light again","Cut to Tiff in the set, side and back angles"],"Text: “the window test” · Caption: fabric details from the listing","One worry solved in one line is the exact recipe of gracieloo19's 11.7M tank video (“double lined”, 18.8K saves). People save this for when they're ready to buy.","The test must be real footage of the real fabric, never AI. Only say “double lined” if the listing does."],
+["Pilates class, but make it matching.","The studio gives the set a place to live, without claiming anyone has worn it.","Hands stretching the fabric, close and tactile.",["Real fabric stretch b-roll, hands only","Cut to Tiff walking into the studio in it","Colors flash on screen, link tag appears"],"Text: “pilates class ready” · Caption: colors + size chart","The fabric shot is satisfying and shows real product. The identity line (“pilates class”) is what makes someone tag a friend.","Keep it a setting, not a personal claim like “I wear this every class”."],
+["POV: you're my pilates partner and you can't stop looking over.","A flirty point of view that puts the viewer in the scene, kept wholesome.","Tiff on a reformer, glances at the lens mid-stretch.",["Catches you looking, smirks","Mouths nothing, tilts her head","Throws a towel at the lens, cut"],"Text: “eyes on your own mat.” · Caption: tag your gym partner","POVs make the viewer the main character, and the towel at the end is a quick payoff worth rewatching. “Tag your gym partner” gives it a way to spread.","Keep the framing on her face and the funny beat, not body crops."],
+["Post-workout glow, car selfie cam.","The easy vibe post: the outfit stays in shot without pitching anything.","Selfie cam in a parked car, golden hour on her face.",["She pulls the sun visor down","Sunglasses pushed up on her head","Small laugh, looks out the window"],"Text: “this is the part I show up for”","This is a cheap reuse clip, and golden light on a face stops the scroll without saying a thing. The line is vague enough for anyone to feel it applies to them."],
+["Be a good person in real life. None of this social media shit matters.","A bit of irony on a social app, which people love reposting.","Tiff in soft light with the quote across the top.",["Slide 2: fruit stand","Slide 3: ocean view","Final slide: quote fragment repeated"],"Caption: minimal · Slides already made ✓","Saying social media doesn't matter, on social media, is a little funny and very shareable. The swear word is mild, but TikTok may limit it, so swap it if the first few slideshows get little reach."]
+];
+B[3]=[
+["Coffee first or pre-workout first? Wrong answers only.","A silly morning debate as cover for showing the pour.","Scoop hovering over the shaker, Tiff staring at the lens.",["Slow pour, shake, ice","Sip, face reaction to the flavor name on the label","Out the door with the shaker"],"Text: “coffee or pre first?” · Caption: wrong answers only","“Wrong answers only” is an open invitation for jokes, and funny comments get likes that push the video further.","Show it, quote the label. No energy, focus or performance claims."],
+["Same door. Same pose. New gym fit every day this week.","Starts Doorway Drop as a series people return to, with @abigailtran's setup as the model.","Fixed doorway, Tiff walks in and stops on her mark.",["Hands to hips, one small spin","Gym fit detail close-up","Text: “day 1. what should tomorrow be?”"],"Text: “same door. new fit.” · Caption: pick tomorrow's color","@abigailtran's same-doorway AI format reached 4.4M, and a series gives people a reason to follow. Viewers choosing tomorrow's fit keeps them coming back.","Avoid band or celebrity tees: likeness and licensing risk."],
+["The most satisfying 8 seconds of your gym morning.","Pure ASMR: the sound and the pour are the content.","Macro shot of powder falling, with crisp sound up.",["Scoop, pour, ice clink","Shaker close-up, flavor label readable","Tiff sips in the car, hands the label to the lens"],"Text: “pour with me” · Caption: flavor + “ingredients on the label”","Satisfying pours get rewatched with the sound on, and the short length makes them loop. It also needs no fake personal claim to sell.","Check the supplement category is open to your account. Label facts only."],
+["Gym fit or going-out fit? You only get one.","A forced choice men have strong opinions about.","Split screen: gym set left, going-out dress right.",["Left side does a turn","Right side does a turn","Both stop, hands up: “pick.”"],"Text: “one or two. pick.” · Caption: and tell me why","Binary choices get far more comments than open questions, and “tell me why” sparks arguments in the replies.","No body-part crops in either half."],
+["The gym bag rides shotgun.","Calm night drive with the product sitting in shot.","Passenger seat at night with the bag buckled in.",["Dash lights, city blur","Tiff glances at the bag and laughs","Hand reaches over, turns the music up"],"Text: “she never misses a session”","The bag with a seatbelt on is a tiny joke that makes people smile and share. It's a free remix of your car clips."],
+["Romanticize the 6am alarm. Future you is watching.","A motivational push aimed at the “starting over” mood of early November.","Tiff under a dim lamp with the quote; phone alarm glowing.",["Slide 2: empty gym at dawn","Slide 3: shaker on the counter","Slide 4: sunrise drive"],"Caption: who's getting up with me tomorrow?","Discipline quotes get saved as reminders, and the “who's with me” line makes it feel like a group. People repost these to hold themselves to it."]
+];
+B[4]=[
+["Wednesday is the new Friday. I don't make the rules.","Gives people permission to dress up midweek.","Tiff holds a lip liner up to the lens like a warning.",["Lip combo in two swipes","Gold jewelry stacked, one piece at a time","Stands up, full look, “where are we going?”"],"Text: “wednesday is the new friday” · Caption: where are we going tonight?","It's a light, quotable line people can send to the friend who always says yes. “Where are we going” gets easy replies."],
+["Wait for the turn.","Walk-away reveal: a two-word promise that keeps people to the end.","Tiff in a long hallway, back to the camera, walking away.",["Dress from behind, heels clicking","Text holds: “wait for the turn”","She spins at the far end and smiles"],"Text: “wait for the turn” · Caption: dress linked","Copies the structure of @ellasfavfinds' 2.6M hallway walk (6 seconds, 14.8K saves). It's short with one payoff, so people finish it and many watch twice.","Keep the camera wide. No lingering crops."],
+["Looks like $150. Check the price.","A price reveal creates a mini mystery and sends people to the listing.","Dress on a hanger, lit like a boutique window.",["Fabric close-up, real listing footage","Text: “what would you pay?”","Tiff in the dress, price card drops: “$[price] today”"],"Text: “what would you pay?” · Caption: price shown today, can change","Guessing a price gets comments, and the gap between guess and real price is what gets shared. @ellasfavfinds uses the same price-anchor idea in its captions.","Use the confirmed price from the listing that day. Don't name a brand."],
+["Would you take me to dinner in this? Where?","He doesn't just rate the outfit, he has to name a place.","Tiff at the door, keys in hand, looking at the lens.",["One slow turn","Holds the keys up","“Well? Where are we going?”"],"Text: “where are you taking me?” · Caption: best answer wins","Asking guys for a dinner spot gets longer, funnier comments than a 1–10, and they give you more to reply to. Bad answers get roasted, which brings more comments."],
+["Earrings catch the light at exactly the right second.","Close-up jewelry shimmer with a going-out song.","Macro of a gold hoop, totally still.",["Her head turns, light flares off the gold","Cut to her full face","Beat drop, half smile"],"Text: “getting dressed is the best part”","The flash of light is a small visual surprise that catches the eye in the first second. It also doubles as soft b-roll for the jewelry listings."],
+["Dress like you already have the life you want.","Aspirational line that gives her fashion content a deeper reason.","Tiff in a doorway at dusk, quote above her head.",["Slide 2: heels by the door","Slide 3: gold jewelry dish","Slide 4: city at night"],"Caption: tell me what you're manifesting","Manifesting content gets shared because posting it feels like setting an intention, and the question brings in very personal comments."]
+];
+B[5]=[
+["It's 58 degrees in California and I'm dressing like it's a blizzard.","A SoCal joke that fits her voice and pulls in everyone who overdresses for fall.","Tiff in a huge cardigan holding an iced coffee in full sun.",["Weather app: 58°F, she nods gravely","Claw clip, more layers","Walks outside, instantly regrets it"],"Text: “58 degrees. stay safe out there.” · Caption: tag someone who does this","Californians laughing at themselves is a dependable share. People from cold states pile on in the comments, and that clash drives reach."],
+["Fall outfit formula: three pieces, zero thinking.","A simple rule people can use tomorrow, which is why they'll save it.","Three pieces on the bed; a hand taps each one.",["Cardigan on","Sweater dress on","Knit set on, “pick your hard mode”"],"Text: “3 pieces. 0 thinking.” · Caption: full list linked","Formula videos get saved like recipes, and saves point to buyers. Brooke's 12-second fall overalls hit 2.3M on this same simple approach to fall outfits.","Styling only. Don't claim how it feels."],
+["Fall coded.","Two words over a beautiful shot of the boots, the exact girlypopshopfinds move.","Car floor POV, suede boots on a mat, soft daylight.",["Serif overlay: “fall coded 🍂”","Slow pan up the boots","1-second cut to Tiff's face in the rearview"],"Text: “fall coded 🍂” · Caption: boots linked","Same style as @girlypopshopfinds' 2.5M+ videos, plus her face at the end to build recognition. Calm, short and pretty means people finish and tap the link.","Use real boot photos or footage as reference, so the boots are accurate."],
+["POV: I dragged you to a pumpkin patch and you act annoyed but you love it.","A boyfriend scene men recognize and women will tag them in.","Tiff holding a tiny pumpkin to the lens, big grin.",["Hands you the pumpkin","Takes a selfie with you (the lens)","“Okay, now hold my coffee.”"],"Text: “you love this. admit it.” · Caption: tag your pumpkin patch hostage","Women send this to boyfriends, and that sharing is the real goal. Men still get the attention, and they're the ones who will buy gifts in three weeks."],
+["Rain on the window. No plans. Perfect.","A cozy loop with no pitch at all.","Rain drops on glass with a warm blurred lamp behind.",["Focus shifts to Tiff in a knit under a blanket","She sips, watches the rain","Holds still; loop"],"Text: “cancelled everything”","Rain plus a warm room is a comfort mood that holds attention all the way through. “Cancelled everything” is what plenty of people wish they could say on a Thursday."],
+["Fall reset: new book, new candle, same goals.","A cozy twist on the usual reset post, with a small wink at the end.","Tiff in a chunky knit with a candle lit, quote across the frame.",["Slide 2: candle + open book","Slide 3: rainy window","Slide 4: latte"],"Caption: what book are you on?","Book questions get long, friendly comment threads, and fall reset posts get saved as mood boards."]
+];
+B[6]=[
+["Friday. Payday. Everyone stay calm.","A payday joke that gives her jewelry stack a reason to appear.","Tiff at the vanity, phone buzzes, she looks up slowly.",["Direct deposit notification (blurred number)","One gold piece on, then another","Holds her hand to the lens: “I'm being responsible.”"],"Text: “payday. stay calm.” · Caption: how long does yours last?","Everyone with a job understands this one instantly, and “how long does yours last” brings jokes about being broke by Sunday. Payday posts also catch people when they're most willing to buy."],
+["The payday cart, ranked by how guilty it should make me.","A ranking gives the haul a story and a reason to wait for number one.","Five items in a line, Tiff holding a number 5 card.",["#5 to #2, quick cuts on each","Hands-only b-roll, then Tiff wearing each","#1 reveal on the beat"],"Text: “ranked by guilt” · Caption: all linked, what's your #1?","Rankings keep people watching to see the top pick, and a debatable order makes viewers correct you in the comments."],
+["A gift she opens every day for 12 days. You only buy it once.","Value framing: one purchase, twelve moments.","Closed advent box, hands lift the lid slowly.",["Door 1 opens: real unboxing footage","Doors 2 and 3, close and satisfying","Tiff wearing all three: “9 left”"],"Text: “12 days. 1 purchase.” · Caption: what's inside + price from the listing","Unboxing keeps people watching for what's behind the next door, and November is exactly when people start looking for this. Both women and men can see themselves buying it.","Show real contents from the listing. Confirm the door count."],
+["Guys, this is the one gift where you can't mess up the size.","Solves the biggest fear men have when buying a gift.","Tiff points straight at the lens, serious face.",["Holds up the box","“No sizes. No guessing.”","Opens one door: “you're welcome.”"],"Text: “no sizes. no guessing.” · Caption: linked for the boys","Naming a real fear makes the video feel useful, and his sister or girlfriend might send it to him as a hint. Those sends are strong signals, like the 10.9K shares on girlypop's “mama” video."],
+["Hoops, hair flip, gone.","Six seconds of pure confidence for Friday night.","Tight on a gold hoop in low red light.",["Face turns to the lens","Hair flip on the drop","She walks out of frame; empty room"],"Text: “see you never”","Walking out of frame leaves a little sting, which makes people watch again. Very short videos have the best odds of being watched all the way through."],
+["Saving for the life I want, not the one they expect.","A payday-day quote that speaks to quiet ambition.","Tiff by a window at sunset, quote above.",["Slide 2: notebook + pen","Slide 3: jewelry dish","Slide 4: sunset window"],"Caption: what are you saving for?","“Not the one they expect” has a little defiance in it, so people repost it to say something about themselves. Pairs well with payday, when money is on everyone's mind."]
+];
+B[7]=[
+["Saturday errands but make them look like a movie.","Elevates a boring day, so her viewer can picture doing it too.","Tiff in the car mirror, sunglasses down, one eyebrow up.",["Slow-mo walking through a parking lot","Coffee handoff","Carrying one small bag like it's luxury"],"Text: “errand run, main character edit”","Turning an errand run into a film scene is funny and aspirational at once. Lots of people will try it and tag you."],
+["Every fit from my first week. You pick the one that stays.","A vote that makes viewers feel they're shaping the page.","Quick flash of 7 outfits, each numbered on screen.",["One second per fit, on the beat","Freeze on all 7 in a grid","“Comment the number.”"],"Text: “pick 1–7” · Caption: winner gets a pt. 2","Voting with a number is easy, and giving a Pt. 2 to the winner gives them a reason to come back. Fast cuts also get rewatched by people looking for their pick.","Top 3 of the week get remade next week."],
+["Week one, all in one place so you can stop screenshotting.","A photo carousel that solves a real annoyance.","Cover slide: all fits in a collage, “saved you the search”.",["One slide per fit, with listing photo beside it","Colors and price from each listing","Last slide: “which one's going in your cart?”"],"Text: “stop screenshotting” · Caption: all linked","Carousels get saved and revisited, and every swipe counts as attention. Round-ups catch the people who missed the week and convert the fence-sitters.","Confirm every price on posting day."],
+["If you only saw one fit this week, it should be this one. Am I right?","Men vote on a single best look, chosen from the week's top performer.","Best-performing fit from the week, walking toward the lens.",["Stops, cocks her head","Flash of the other 6 options","“Or was it one of these?”"],"Text: “be honest. which one?” · Caption: 1–7","It reuses the best clip of the week, so the odds are already good. Asking “am I right?” dares people to disagree, and disagreement gets comments."],
+["Saturday night: in or out? Vote before I get dressed.","A poll that decides the next outfit, so viewers feel involved.","Half in pajamas, half in a going-out top, split down the middle.",["Left side waves","Right side waves","Both shrug at the lens"],"Text: “in or out?” · Use TikTok poll sticker","Poll stickers take one tap and get people interacting early. The half-and-half image is unusual enough to stop a thumb."],
+["A quiet week of keeping promises to myself >","Closes week one on a calm, self-respect note.","Tiff in morning light with quote across the frame.",["Slide 2: made bed in morning light","Slide 3: journal","Slide 4: coffee on the sill"],"Caption: did you keep yours?","The “>” quote style is what people repost to their own profile to show their mood. Weekend scrolling is when people are in the mood for it."]
+];
+
+B[8]=[
+["Getting ready to do absolutely nothing.","The funny contrast of a full routine that ends on the couch.","Tiff doing a serious skincare step, staring into the mirror.",["Fleece zip goes on like armor","Sweatpants, slippers, deep breath","Walks four feet and falls onto the couch"],"Text: “big day.” · Caption: what are we watching?","The dead-serious buildup to nothing is a joke with a clear punchline, so people send it to their couch buddy. “What are we watching?” gets easy replies."],
+["Barrel, flare or jogger? Your answer says a lot about you.","Turns a sweatpant comparison into a personality test.","Three pairs held up, Tiff squinting at you like a detective.",["Barrel: walk and turn","Flare: walk and turn","Jogger: walk and turn, then “explain yourself”"],"Text: “your answer says a lot” · Caption: all 3 linked","Personality-test framing makes people answer and then defend themselves. @fynzofinds' “Flared Fits>>” hit 4.5M in 10 seconds, so the sweats category clearly has reach."],
+["This zip-up comes in 4 colors, and I need you to help me stop.","Every Color with a little plea, so viewers feel they're helping.","Four zip-ups fanned out, one hand hovering.",["Real fabric close-up, zipper running","Tiff in each color on the beat","All four again, text: “which one do I put back?”"],"Text: “which one goes back?” · Caption: colors + size chart from the listing","Asking what to remove flips the normal “which do you want” and feels fresher. @staygoldlex's cozy set hit 1.3M with 8.9K saves, and cozy keeps selling all winter."],
+["POV: it's lazy Sunday and I've taken your side of the couch.","A cozy couple scene, sweet rather than thirsty.","Tiff under your blanket, looking up at the lens, not sorry.",["Pulls the blanket higher","Holds the remote out of reach","“You can have the floor.”"],"Text: “this is my side now.” · Caption: tag who steals yours","Couples tag each other on this, and it's a playful way to get men following. It also shows the fleece without ever mentioning it."],
+["Sunday scaries, cancelled.","Soft loop for the Sunday-night slump.","A lit candle and a blanket-covered lap, with lofi playing.",["Tea steam in the lamp light","Tiff turns her phone face down","Eyes close, small smile"],"Text: “monday can wait”","The Sunday scaries are a real shared feeling, and this posts right when people feel them. A calm, looping scene tends to hold them longer."],
+["Lazy Sundays are part of the plan.","Rest as strategy, which makes people feel good about doing nothing.","Tiff on the couch with the quote above her.",["Slide 2: blanket on the couch","Slide 3: tea","Slide 4: rain on the window"],"Caption: permission granted","People share things that excuse what they already want to do. “Permission granted” is a soft nudge to send it to a tired friend."]
+];
+B[9]=[
+["Nobody at the gym on a Monday night knows what's about to happen.","Dramatic hype for a totally normal leg day.","Slow-mo pony tie in a dark car, movie-trailer energy.",["Sports bra, shaker, one deep breath","Walks in like a boss fight","Cut: she's sitting on the leg press, scrolling"],"Text: “leg day.” · Caption: be honest, how much of your workout is scrolling?","The fake-epic setup and the letdown is a proven comedy shape, and gym-goers will all admit to it. Gym content is also your strongest pull for male follows."],
+["Doorway day 2: you picked this color. Now what?","Keeps the series going by crediting viewers for the pick.","Same doorway, same mark, and a sticky note with a commenter's choice.",["Tiff reads the note, nods","Side angle, one turn","“Tomorrow's yours too.”"],"Text: “you picked it” · Caption: tomorrow's color?","Seeing their pick on screen makes people come back and vote again, which is how a series earns followers. Repeat setups also make Tiff instantly recognizable.","Use a real comment if you have one. Don't invent one."],
+["Pull test: watch what happens when you stretch these.","A simple physical demo in place of a claim.","Two hands grip a legging waistband, close-up.",["Stretch to full width, snap back","Cut to the seam close-up","Tiff in the gym mirror wearing them"],"Text: “the pull test” · Caption: fabric % from the listing","Physical tests are rewatchable and feel honest because you can see them. gracieloo19's 11.7M tank works because one fabric fact does all the work.","The pull test must be real footage. Styling only, no shaping or lifting claims, even though competitors make them."],
+["Rate my gym fit, but you can only use one word.","A twist on rate-me that makes comments more creative.","Tiff walks away from a squat rack, spins to face you.",["Full fit, wide shot","She taps her imaginary watch","“One word. Go.”"],"Text: “one word only” · Caption: best one gets pinned","One-word limits make it a game, and pinning a comment gives people a prize. Funny answers get likes, which keeps the thread busy."],
+["The gym at 10pm hits different.","Mood piece for late lifters.","Empty gym mirror with one row of lights on.",["Tiff re-tying her hair","Headphones go on","Slow nod as the beat kicks in"],"Text: “just me and the mirror”","Late-gym people are a real tribe and they share what feels like theirs. It's easy to remix from existing mirror clips."],
+["Discipline is just self-respect on a schedule.","A sharp reframe people will want to screenshot.","Tiff in a dim gym, quote written across the mirror.",["Slide 2: empty gym","Slide 3: dumbbells on the floor","Slide 4: water bottle"],"Caption: write this somewhere you'll see it","Short quotes that rename something familiar get screenshotted. The caption gives people something to do with it, which encourages saves."]
+];
+B[10]=[
+["You can tell everything about a girl by her gym bag. Let's see.","A nosy “reveal” format, the kind people can't scroll past.","The bag dropped on a bench, zipper pulled in close-up.",["Item by item: shaker, scrunchies, mini perfume","“And why is there a fourth scrunchie?”","Everything laid out neatly: “your turn”"],"Text: “what's in my gym bag” · Caption: what's the weirdest thing in yours?","“What's in my bag” is a classic because it's pleasantly nosy. The “weirdest thing” question gets funny comments, and every item is a soft product mention."],
+["Duffel, tote or mini backpack? There is a wrong answer.","A fake-serious debate about gym bags.","Three bags on the floor, Tiff with arms crossed.",["Each bag on the shoulder, walking past the lens","Quick pack test for each","“One of these is a red flag.”"],"Text: “one of these is a red flag” · Caption: which one?","“Red flag” language always gets a reaction, and people want to defend their own bag. It's an easy three-product video with links."],
+["Everything fits. Watch me try to prove it wrong.","A packing challenge that creates tension.","Giant pile of gym stuff next to the empty duffel.",["Hands-only timelapse of packing","It keeps fitting; shoes last","Zips shut, Tiff drops the bag with a thud: “told you”"],"Text: “this will not fit.” · Caption: dimensions from the listing","Will-it-fit videos hold people to the end because they want the answer. Hands-only packing is real product b-roll and needs no AI clip at all.","Use real footage if you have the bag. If not, use listing images and skip the packing test."],
+["Fellas, her gym bag is the gift list. Here's what's missing.","Gives men a list that feels like inside information.","Tiff holds up an open gym bag and points inside.",["“Nice shaker.” Taps it","“No good hair ties.” Holds up a ratty one","Flash of 3 linked items with prices"],"Text: “her gym bag is the gift list” · Caption: linked, for the boys","It's practical and a bit sneaky, so women send it as a hint and men save it. This starts the gift-buying thread three weeks before Black Friday, while it's still cheap to get reach."],
+["Parking lot. Playlist. One more song before I go in.","That moment gym people know: stalling in the car.","Dark car, dashboard glow, Tiff's face and the gym sign behind her.",["Bag on the passenger seat","She skips the song, then skips it again","She finally reaches for the door, then doesn't"],"Text: “one more song”","It's a tiny, true habit that makes people say “that's me”, which is what drives shares and rewatches. Costs next to nothing since it's a car clip."],
+["Things that changed my 20s: pilates, water, leaving the group chat.","A funny list where the last item flips it.","Tiff in pilates clothes with the quote across the sky.",["Slide 2: reformer","Slide 3: water bottle","Slide 4: phone face down"],"Caption: add yours","“Leaving the group chat” is the laugh, and people will send it straight to that group chat. “Add yours” gets list-style comments.","This is a persona quote, so keep it about her vibe, not a health result."]
+];
+B[11]=[
+["It's 11/11. Make your wish, then shake your tumbler.","Today's date is the hook: 11:11 wishes are a TikTok ritual.","Phone screen reads 11:11, then eyes close.",["Tiff makes a wish, creatine stick in hand","Pours and shakes on the beat","Sips: “manifested.”"],"Text: “it's 11/11” · Caption: what did you wish for?","Date-based rituals only work today, so TikTok will be full of people searching for and engaging with 11/11 content. “What did you wish for” gets surprisingly personal comments.","Post it before or right at 11:11am to catch the moment. Label facts only for the stick."],
+["This whole outfit started with a tumbler.","A backwards outfit build that makes the accessory the star.","Tumbler on a bare table, color popping.",["Tiff picks a set to match it","Shoes to match the set","Full reveal, tumbler in hand, “you see the problem”"],"Text: “built around the cup” · Caption: all linked","It's a funny take on how tumbler people really think, and that community is huge. Women will tag friends with the same “problem”."],
+["The bow on this tumbler is doing too much, and I respect it.","A cute detail gets a one-liner in place of a sales pitch.","Macro of the bow/charm with ice clinking behind.",["Ice dropped in, pour in slow motion","Charm swings in close-up","Handed toward the lens"],"Text: “she's doing too much” · Caption: colors + price from the listing","Cute details stop people, and the pour gives it an ASMR quality. It's a low-priced gift, so the jump from watching to buying is small."],
+["Buy her this instead of flowers. Flowers die by Friday.","Blunt and a little harsh, which is why it works.","Tiff drops a bouquet into the trash without breaking eye contact.",["Holds up the tumbler","“This one lasts.”","“You're welcome. Link's right there.”"],"Text: “flowers die by friday” · Caption: linked","That first move is so unexpected that people stop scrolling, and flower-lovers will argue in the comments. The fight in the comments is what spreads it, and the gift angle gives men a reason to click."],
+["Night drive, iced drink, nobody needs anything from me.","An escapist mood that most people want.","Cupholder close-up in dashboard light, with ice shifting.",["City lights smear across the window","Tiff's hand reaches for the cup","Profile shot, slight smile"],"Text: “nobody needs anything from me”","That line speaks to anyone worn out, and it's simple to send to a friend. It's a free remix of an existing clip."],
+["Hydrated, unbothered, in bed by 10.","Tiny lifestyle flex, three beats long.","Tiff in soft lamp light, with the quote across the top.",["Slide 2: glass of water on the nightstand","Slide 3: lamp","Slide 4: folded sheets"],"Caption: goal or reality?","It's short enough to feel like a motto, and “goal or reality?” is an easy two-way answer. Self-care quotes get saved a lot."]
+];
+B[12]=[
+["Three shoes, one dress, and I still can't leave the house.","Everyone who has ever been late knows this.","Tiff on the floor surrounded by shoes, staring into the distance.",["Sneakers on, shakes her head","Boots on, considers it","Heels on, phone buzzes: “where are you??”"],"Text: “5 minutes away” (she isn't) · Caption: which one?","The fake “5 minutes away” text is the joke, and people will tag their late friends. Choosing a shoe also gets easy comments."],
+["Same dress. Three shoes. Three totally different dates.","Each shoe tells a mini story.","Dress on, feet only: sneakers.",["Sneakers: “coffee date”","Boots: “bar date”","Heels: “he planned this”"],"Text: “which date are you?” · Caption: dress linked","One piece worn three ways is the most saved format in fashion because it makes the purchase feel like better value. The labels give each viewer one to identify with.","Styling only. No fit claim."],
+["The price is on the screen because you won't believe me.","A price-anchor hook that dares people to check.","Dress on a hanger; a hand covers the price tag.",["Ribbed fabric close-up, real footage","Hand slides off: “$[price]”","Tiff in it with 3 shoe swaps"],"Text: “go check.” · Caption: confirmed today, it can change","“Go check” sends people straight to the listing, and tapping the link is the behavior you want. The reveal is a small payoff that keeps them to the end.","Use only that day's confirmed price."],
+["First date. This is what I'm wearing. What's your first move?","Puts him in the scene and asks for his game plan.","Tiff opens the door to you, looks you up and down.",["One slow turn","“You're late.”","“So what's the plan?”"],"Text: “what's the plan?” · Caption: women, grade his answers","“Women, grade his answers” pulls in both audiences, and that back-and-forth creates long threads. Bad date plans are comment gold."],
+["Getting ready music, volume too loud.","A quick beat-drop mood before a night out.","Dark room, Tiff's silhouette, earring going in.",["Beat builds, lights flicker on","Her face, dressed and done","She points at the lens, then the door"],"Text: “we're leaving in 5” · Caption: song?","Asking about the song is a cheap trick for comments that works, and beat-synced changes get rewatched.","Check the sound is cleared if the post has a link. This one should stay unlinked."],
+["You don't need a reason to dress up on a Tuesday.","Gentle permission to treat yourself.","Tiff at a vanity with lipstick, quote above.",["Slide 2: lipstick on the vanity","Slide 3: mirror","Slide 4: candlelit table for one"],"Caption: tag your dress-up-for-no-reason friend","Tagging gives it a built-in path to new people, and it fits with the page's “dress for yourself” idea. Yes, it's posted on a Thursday; that's a small joke for the comments."]
+];
+B[13]=[
+["It's Friday the 13th. I'm going on the date anyway.","Today's date gives her a one-day-only hook with a playful spooky feel.","Black cat image on the phone, Tiff rolling her eyes in the mirror.",["Mirror test: “nothing's cracked”","Red lip, gold hoops","Grabs the keys: “pray for me”"],"Text: “friday the 13th date” · Caption: send help","Friday the 13th only comes around sometimes, and everyone's feed is thinking about it today. A dating angle makes it funny and sets up a follow-up story.","Check the calendar: Nov 13, 2026 is a Friday."],
+["Bad luck or best outfit? Faux leather, three ways.","Keeps the Friday the 13th joke going through a try-on.","Tiff under a ladder in a leather jacket, grinning.",["Mini, with text “7 years bad luck”","Pants, with text “worth it”","Jacket, with text “one more”"],"Text: “worth the bad luck” · Caption: all linked","Date-relevant jokes get shared more, and three looks give people three chances to find something they want. Leather is a strong fall category."],
+["Wet-look shine in the light, and that's the whole pitch.","Lets the texture sell it: one close-up, one outfit.","Macro of faux leather catching red light, moving slowly.",["Hand drags across, shine shifts","Tights and boots added on the beat","Tiff walks toward the lens"],"Text: “that shine.” · Caption: skirt linked + sizes from the listing","Texture close-ups are hypnotic, and short videos with one idea get finished. Same short, single-focus approach as @fynzofinds' “Flared Fits>>” and its 4.5M views.","Use real listing footage for the texture shot."],
+["POV: you picked me up for our date, and you're nervous.","Sweet, slightly teasing scene from the passenger seat.","Tiff gets in the car and looks over at you, smiling.",["Clicks the seatbelt","“Why are you so quiet?”","Laughs, turns on the radio"],"Text: “why are you so quiet?” · Caption: what song are you playing?","The viewer gets to play the lead, and the song question gets personal replies. Men rewatch POVs, and sweetness keeps it safe for reach."],
+["Friday the 13th, 10pm. Nothing bad happened. Yet.","Tiny horror-movie tease to close the day's series.","Empty hallway, flickering light, Tiff at the far end.",["She walks closer in the going-out look","Light flicks off","Back on: she's right at the lens, laughing"],"Text: “…yet.”","A little jump is a strong rewatch trigger, and it finishes off today's running joke for anyone who saw the morning post. Keep it playful, nothing scary."],
+["Date yourself first. The bar is set.","A solo-date confidence quote for a Friday night.","Tiff alone at a candlelit table with the quote above.",["Slide 2: solo dinner table","Slide 3: glass of wine","Slide 4: city lights"],"Caption: where would you take yourself?","Self-dating is an evergreen topic that singles repost on Friday night. The question gets dreamy, personal answers."]
+];
+B[14]=[
+["Brunch GRWM, but the mimosa comes first.","Lighthearted order-of-operations joke for Saturday.","Tiff in a robe already holding a mimosa, no makeup yet.",["One sip per step","Hair, makeup, outfit getting looser","Done: “we're late, who cares”"],"Text: “priorities” · Caption: what's your brunch order?","Brunch orders are a question everyone can answer. It's weekend content that feels like a friend, not an ad.","Keep it obviously light and don't make drinking the joke's whole point. If you'd rather skip alcohol, use an iced latte."],
+["You asked for more gym fits. Fine. You're getting the ones you voted for.","A reply video that proves the page listens.","A real comment bubble pinned to the screen, Tiff pointing to it.",["She reads it and rolls her eyes","Top 3 voted gym fits, one per beat","“Keep asking.”"],"Text: reply bubble + “you asked” · Caption: what's next?","@therealjoyymaria's 2.3M video was also a reply to a comment. Replies give commenters a reason to come back, and they make the page feel alive.","Reply to a real comment only."],
+["Gym girl week, in one swipe.","A saved-for-later carousel of everything from the week.","Cover: Tiff in the mirror, “gym week. all linked.”",["One slide per set, with listing photos","Colors and sizes per slide","Last slide: “which set wins?”"],"Text: “stop asking where it's from” · Caption: all linked","Carousels get saves, and “stop asking where it's from” sounds like a popular account's problem, a neat bit of positioning. It's also a free post built from existing images."],
+["Which set wins? Men have been wrong about this all week.","Mild provocation asks men to prove the women wrong.","Tiff shows a tally sheet to the lens, shakes her head.",["Flash of the top 3 sets","“Girls say this one.”","“Guys say…” she laughs and points at the comments"],"Text: “settle this” · Caption: guys vs girls","Pitting two groups against each other is one of the most reliable ways to get comments, and it's friendly. People also come back to see who's winning."],
+["The gym mirror, last set of the week.","Calm closer to the Gym Girl era.","Quiet gym mirror, one light left on, Tiff stretching.",["Towel over her shoulder","Bottle drink, deep breath","Lights out, she walks past the lens"],"Text: “see you monday”","A closing shot gives the week a sense of ending, and the “see you Monday” is a soft promise that encourages follows."],
+["Two weeks in. Proud of the girl who kept showing up.","A small milestone post with a real sense of progress.","Tiff outside at sunrise with quote overhead.",["Slide 2: gym bag by the door","Slide 3: sunrise","Slide 4: journal"],"Caption: what did you keep showing up for?","People love cheering on someone keeping a streak, and they answer with their own. This is the one the page's true fans will share."]
+];
+
+B[15]=[
+["Reading my wishlist out loud so my boyfriend can't say he didn't know.","A hint in video form that women can forward as their own.","Tiff at the vanity with a long paper list, clearing her throat.",["Reads item one, points at the lens","Lipstick, list, another item","“I'm sending this to you. You know who you are.”"],"Text: “for legal reasons, you've been told” · Caption: send this to him","This video is designed to be forwarded, and sends are among the strongest signals on TikTok. It also starts gift season a week before anyone else gets loud."],
+["Everything on my wishlist, on, in 15 seconds.","Fast try-on with a countdown feel.","Text: “15 seconds, 6 things” with a timer in the corner.",["One item per beat","Timer ticking down","Final look at 0:00, breathless laugh"],"Text: “15 seconds. 6 things.” · Caption: all linked","A timer makes people stay to see if she makes it, and quick cuts get rewatched by people looking for one specific item."],
+["A whole wishlist under $50. Every item is real.","Budget ceiling plus real-product proof.","Grid of products shot flat, overhead, with a price card.",["Hands pick up each one, real b-roll","Tiff styled with each","Total on screen: “under $50 each”"],"Text: “all under $50” · Caption: confirmed prices, linked","A hard price ceiling makes the list feel safe to shop, and gift shoppers save these to come back to. Real product footage also builds more trust than AI alone.","Check every price the day you post."],
+["Guys: $25, zero stress, and she'll think you listened.","Low risk and high reward for a nervous gift buyer.","Tiff holding a small wrapped box in one hand, $25 in the other.",["Opens box toward the lens","Three gift ideas flash up","“You listened. Good job.”"],"Text: “she'll think you listened” · Caption: linked, you're welcome","It tells men exactly what they're getting and what it costs, and women forward it as a hint. The price point suits an impulse buy."],
+["First Christmas lights of the year. Too early? No.","Sparks a yearly debate at the perfect time.","Tiff unspooling a tangle of lights on the floor, in the dark.",["She plugs them in, room goes warm","Sits among them, cozy","Looks straight at the lens: “say something.”"],"Text: “too early? no.” · Caption: when do yours go up?","“Is it too early for Christmas?” is one of the most reliable arguments online in mid-November, and both sides love commenting."],
+["The best gifts are the ones she mentioned once in October.","Quote aimed at both people who give gifts and people who hint.","Tiff with string lights and quote across the frame.",["Slide 2: wrapped gifts","Slide 3: handwritten list","Slide 4: string lights"],"Caption: tag someone who needs to read this","Women tag partners, and men get the point. It's also quietly funny, so it doesn't read as an ad."]
+];
+B[16]=[
+["My bag has more personality than I do.","Self-deprecating and cute, and it gets people showing off their bags.","Plain bag on the vanity, Tiff sighing at it.",["One charm clipped on, then two","Five charms, it's getting heavy","She lifts it: “perfect.”"],"Text: “she's a personality hire” · Caption: show me yours","Bag charms are a current trend with a strong collector crowd, and “show me yours” invites photos and tags in the comments."],
+["Doorway day: the bag charm that sets off the metal detector.","A silly exaggeration in the fixed doorway.","Same doorway, Tiff walks through with a huge charm stack, beep sound.",["She stops, looks at the bag","Removes one tiny charm, walks through again: beep","Shrugs, keeps walking"],"Text: “worth it” · Caption: charm set linked","The repeated beep is a quick visual joke in a familiar series. Comedy makes a low-priced item shareable in a way a pitch can't."],
+["$[price] and your keys finally have a personality.","Very cheap upgrade people can justify in a second.","Boring car keys on a table, a hand drops the charm on top.",["Unboxing, tissue paper crinkling","Each charm clipped on, close-up","Tiff swinging her keys past the lens"],"Text: “for $[price]?” · Caption: stocking stuffer, linked","Cute plus cheap is the best combination for an impulse buy, and the unboxing sounds are satisfying. @girlypopshopfinds shows how far a simple product shot can go when the item is cute.","Confirm the price."],
+["Her stocking should not be socks. I'm begging you.","A plea that makes men listen and women cheer.","Tiff holding socks up like evidence, shaking her head.",["Drops the socks","Shows 5 items under $15, one by one","“You have no more excuses.”"],"Text: “not socks.” · Caption: all under $15 and linked","Women comment “THIS” and tag their partners. That pile-on is what makes it spread, and a $15 cap means little risk for the buyer."],
+["Fairy lights, a charm collection, and absolutely no plans.","A cozy room moment, charms lined up like a collection.","Fairy-light room, charms catching the glow in a row.",["Slow pan along the row","Tiff lying on the bed, looking at them","Reaches up, swings one"],"Text: “this is my hobby now”","A collector's vibe and warm light are soothing to watch, and “this is my hobby now” is funny enough to share."],
+["Little treats are a personality trait.","Fun version of the “treat yourself” idea.","Tiff with an iced coffee and pastry box, quote above.",["Slide 2: pastry box","Slide 3: iced coffee","Slide 4: ribbon on a gift"],"Caption: what's your treat today?","“Little treat” culture is big and friendly, and people love answering with their own. Soft food imagery gets slide-through views."]
+];
+B[17]=[
+["The nighttime routine that ends with me immediately checking my phone.","A pretty routine with an honest punchline.","Satin set, silk pillow, candles, everything too perfect.",["Lights candle, opens a book","Lies down, closes her eyes","Cut: 2am, face lit by phone, wide awake"],"Text: “goodnight.” then “2:14am” · Caption: what's your screen time?","Everyone has done this, so people laugh and share. It also shows the PJ set for the entire video without a pitch."],
+["Four colors of the same PJs. Yes, I sleep in shifts.","An absurd excuse for owning all four.","Four sets on hangers, Tiff pointing at a chart labeled “schedule”.",["Green, 10pm","Black, 1am","Pink, 4am, then white, 7am"],"Text: “sleep shift schedule” · Caption: colors linked","A silly premise makes every-color videos fresh, and color choice brings in comments. Pajamas also make an easy gift."],
+["Listen to this fabric.","Sound-first hook with satin sliding, turned up.","Black screen for half a second, then the sound of satin moving.",["Satin sliding over a hand, close-up","Colors laid out flat","Tiff in the set, sitting on a bed"],"Text: “sound on” · Caption: fabric + colors from the listing","“Sound on” makes people stop and turn up the volume, and ASMR gets replayed. It's real product footage with no claims needed.","Check the listing says satin before saying it."],
+["Gifts girls use vs. gifts guys always buy.","A side-by-side that's funny and useful.","Split table: a dusty candle set vs. a PJ set.",["Left: “she'll say she loves it”","Right: “she'll actually wear it”","Tiff taps the right side: “this one.”"],"Text: “she'll say she loves it” · Caption: linked","“She'll say she loves it” is painfully accurate, and women will pile in with their worst gifts. Those stories fill the comments and push it further."],
+["POV: Christmas movie, your couch, and I've already got the good blanket.","Warm scene with the set on full display.","Tiff on the couch in PJs, pulling a blanket up and looking at you.",["Pats the spot next to her","Holds up two movies","“Pick wrong and you sleep in the car.”"],"Text: “pick wrong and you sleep in the car” · Caption: which movie?","Everyone has a favorite Christmas movie, so this is an easy question to answer. It's also a sweet POV that men rewatch.","Don't show film posters or logos."],
+["Soft life era: satin sheets and no plans.","Luxury feeling at a low price.","Tiff in soft light in a satin set, quote above.",["Slide 2: unmade bed","Slide 3: candle","Slide 4: rainy night window"],"Caption: who's joining me?","“Soft life” is a mood people want to claim. Dim, expensive-looking rooms get saved to mood boards."]
+];
+B[18]=[
+["SoCal girl sees her first frost. This is not a drill.","Her SoCal identity meets winter, played for laughs.","Tiff in layers at a window pointing at a slightly frosty car.",["Coat goes on, then another","Scarf, hat, gloves","Walks out, it's 49°F, nods bravely"],"Text: “not a drill.” · Caption: where are you from, and what's cold there?","Temperature arguments between states never get old, and “where are you from” gets a flood of location replies that broadens her reach."],
+["Coat, puffer or sherpa over the same dress. Vote with your wallet.","Three outerwear options to compare over one fitted dress.","Same dress and pose; only the coat changes.",["Coat, door open, walking out","Puffer, same walk","Sherpa, same walk: “well?”"],"Text: “which one's going home with you?” · Caption: all linked","A/B/C compare videos help people decide, so they get saved. Coats are higher priced, so the commission is better per sale."],
+["Winter coded.","The same two-word format as Fall Coded, proving the series can repeat.","Snowy car-floor POV, boots and coat trim in soft light.",["Serif overlay: “winter coded ❄️”","Pan up the fur trim","1-second cut to Tiff's face in the hood"],"Text: “winter coded ❄️” · Caption: coat linked","Follows @girlypopshopfinds' winning pattern and gives regulars a sequel. It's short, pretty and easy to rewatch. If Fall Coded performed well, this is your safest bet of the week.","Base the coat on the real listing photos."],
+["Stop giving her your jacket. Buy her this one.","Turns a sweet gesture into a shopping tip.","Tiff drowning in a giant men's jacket, sleeves flopping.",["She takes it off and hands it back","Puts on the fitted faux fur coat","“Now we're both warm.”"],"Text: “keep your jacket” · Caption: linked for the boys","The visual swap explains itself in one second. It's flirty, it's funny, and it makes a nice nudge for a higher-priced gift."],
+["Snowy night. Heater on. Nowhere to be.","Quiet winter mood in the car.","Snow falling in headlights, Tiff's breath on the window.",["She draws a tiny heart in the fog","Face in the hood, soft smile","Headlights click off"],"Text: “first snow feeling”","The “first snow” feeling is one people want to save and share. Snowfall is also calming to watch, which helps people watch it through.","Stay with your own clip library when you can, so this costs little."],
+["Winter arc starts now.","Taps the running “winter arc” self-improvement trend.","Tiff in a hood at night in the snow, quote above.",["Slide 2: snowy street at night","Slide 3: coat on a chair","Slide 4: hot chocolate"],"Caption: what's your winter arc?","“Winter arc” is a known phrase that men and women both use, and it fits a late-November moment when people start planning for the new year. A question gets real goals in the comments."]
+];
+B[19]=[
+["There are two kinds of girls in November, and one is wearing these.","An identity split that makes people pick a side.","Tiff in fuzzy mini boots, staring down at them with love.",["Pulls on leggings","Twirls a mug, cozy walk","Looks up: “which one are you?”"],"Text: “two kinds of girls” · Caption: which one are you?","Identity hooks get people to claim a side in the comments, and fuzzy boots are a seasonal staple. Simple to make."],
+["Leggings, sweats or a skirt with fuzzy boots? One of these is illegal.","Debate about the skirt combination.","Boots only, then legs appear with each outfit.",["Leggings: cute","Sweats: cuter","Skirt: alarm sound, “illegal”"],"Text: “one of these is illegal” · Caption: fight me","The “illegal” joke invites people to disagree and defend their skirts. Boots with three outfits also saves people styling work."],
+["Squish test.","One finger, one boot, instant sensory payoff.","Finger pressing slowly into a fuzzy boot, close-up with soft sound.",["Squish, release, repeat","All the colors in a row","Tiff's feet slip in, happy wiggle"],"Text: “squish.” · Caption: colors + sizes from the listing","Squish videos are mesmerizing and very rewatchable, which builds views fast. One-word text keeps it easy to take in.","Use real product footage."],
+["Fuzzy boot season: yes or no? I need to know who I'm dealing with.","An attitude test that men find funny.","Tiff in a coffee shop chair, feet up, boots toward the lens.",["Eyebrow raised","Takes a slow sip","“Well? Yes or no?”"],"Text: “yes or no. choose carefully.” · Caption: I'll judge you","Yes-or-no comments are the simplest possible engagement, and “I'll judge you” adds a joking dare.","No brand names: call them fuzzy boots."],
+["Thursday? Saturday? I've lost track, and the boots don't care.","Cozy nonsense for a stay-in night.","Feet by a fake fireplace, soft flicker.",["Mug appears, steam rising","Tiff under a blanket, eyes half closed","Wiggles her toes"],"Text: “what day is it”","Short cozy content is easy to finish and pleasant to loop. Very little effort, so it's mostly reach for free."],
+["Protect your peace, even from people you love.","A harder-hitting line that invites people to reflect.","Tiff in a quiet room, soft fairy light, quote above.",["Slide 2: quiet bedroom","Slide 3: closed door with fairy lights","Slide 4: tea"],"Caption: holidays are coming","Right before the holidays, a line about family boundaries lands hard, and people repost it quietly. “Holidays are coming” tells them why it's relevant now."]
+];
+B[20]=[
+["Long hair in 30 seconds. Watch my hands, not my face.","Puts your attention on the process, which makes it look like a demo.","Short ponytail, clip-in weft held up to the lens.",["Part, clip, part, clip","Ponytail comes down","Shakes it out on the beat"],"Text: “watch my hands” · Caption: colors from the listing","Transformations hold people until the reveal. The hands-first framing feels like a how-to, so people save it for later.","No before-and-after results claims. Tiff is AI, so show the product itself and don't suggest a real result."],
+["Claw clip to full hair flip, one beat.","A one-cut hair transition, simple and satisfying.","Tight claw clip, Tiff looks down.",["Hand on the clip","Beat drops: clip off, hair flies","Looks up, full going-out look"],"Text: “wait for it” · Caption: linked","One-beat reveals are made for replays and are quick to generate. A big movement at a sound cue is one of the easiest ways to stop scrollers."],
+["The wefts up close, so you can decide for yourself.","Trust-first product shot: no claims, just a real look.","Weft draped across a hand under daylight.",["Clips snapped open and closed","Color range on a card","Then on Tiff, full hair flip"],"Text: “look closely.” · Caption: length + shades from the listing","An honest close-up stands out in a category full of big promises. “Decide for yourself” shows confidence, and buyers want to see the clips anyway.","Real listing footage only for the close-up."],
+["Long hair or short hair? Your answer can and will be used against you.","Hair debate with a playful warning.","Half her hair clipped up, half long, looking at the lens.",["Turns one side","Turns the other","“Choose wisely.”"],"Text: “used against you” · Caption: long or short?","Hair preference is a question men have strong opinions on, and women come to argue with them. The two-sided setup makes it easy to reply."],
+["Hair down, lights low, out the door.","Quick going-out moment to round off the day.","Her hair falling past the lens in slow motion, low red light.",["Face revealed","Earring swing","Door opens, street noise, gone"],"Text: “don't wait up”","Slow-motion hair on a beat is a classic because people like watching it. It's a low-effort remix of today's other clips."],
+["Main character energy, minimal effort.","The aspirational low-effort life.","Tiff crossing a city street with a to-go coffee, quote above.",["Slide 2: claw clip on the vanity","Slide 3: coffee to go","Slide 4: city crosswalk"],"Caption: tag your main character","“Main character” is a common phrase, so it's easy to relate to, and tagging spreads it to friends."]
+];
+B[21]=[
+["Holiday market GRWM: dressing for 40° and 400 strangers.","Specific details make the routine feel real.","Tiff zipping a coat with hot-cocoa-level excitement.",["Layer, layer, gold jewelry","Scarf toss","Market lights in the background"],"Text: “40° and 400 strangers” · Caption: what's your market must-have?","Holiday market season is starting, and these visuals are warm and shareable. The question gets foodie and shopping replies."],
+["You asked what to get your mom. I read every comment.","A reply that pulls real questions into a gift list.","Pinned comment asking for mom gift ideas, Tiff nodding.",["Three items, one sentence each","Reacts to a second comment","“Keep them coming.”"],"Text: reply bubble + “mom, covered” · Caption: all linked","Mom gifts are a huge search, and girlypop's “mama” sweatshirt got 10.9K shares from people sending it to family. Replies also make people more likely to comment next time.","Only reply to a real comment."],
+["Everything she actually asked for, in one place.","A definitive gift-guide carousel for her.","Cover slide: “the only list you need”.",["One slide per item, with real listing photos","Grouped by price","Last slide: “send this to someone”"],"Text: “the only list you need” · Caption: all linked","Carousels get saved and revisited during the buying window, and the last slide asks for shares directly. It's designed to be sent around.","Confirm prices at post time."],
+["The guys' cheat sheet. Screenshot this. You'll thank me.","A short and direct gift list for him.","Cover slide: Tiff holding a clipboard, “for the boys”.",["Under $25","Under $50","“If you only buy one”"],"Text: “screenshot this” · Caption: all linked","“Screenshot this” tells people exactly what to do, and men love having a shortcut. Women also send it to their boyfriends, so it gets two audiences."],
+["Saturday night in, holiday playlist on, no apologies.","Cozy Saturday mood before the Black Friday push.","Tree lights, Tiff in fuzzy socks, swaying with a mug.",["Sings silently into a wooden spoon","Drops onto the couch","Looks at the lens, caught"],"Text: “it's not too early”","Silly singing with a holiday song is warm and shareable, and it continues the too-early debate from last Sunday."],
+["Grateful for the people who clap the loudest.","A warm tribute, right before Thanksgiving week.","Tiff at a market with a warm drink, quote above.",["Slide 2: holiday market lights","Slide 3: two mugs","Slide 4: friends' dinner table"],"Caption: tag your person","Gratitude posts get tagged heavily in the run-up to Thanksgiving. People like publicly thanking someone."]
+];
+
+B[22]=[
+["My Black Friday cart is a cry for help. Let's review it.","Going through a cart together feels like a nosy friend moment.","Phone screen with a full cart, Tiff looking up guiltily.",["Scroll through, item by item","“Why is there a fourth set?”","“Fine. It stays.”"],"Text: “a cry for help” · Caption: what's in yours?","Everyone is building a cart this week, so this hits at the right moment, and “what's in yours” gets product-specific comments you can use for ideas.","Blur any account details on the phone."],
+["Everything in my cart, on, before I commit.","A last try-on before the big day.","Tiff in the first outfit with a “BUY / DROP” sign.",["Item 1, sign flips to BUY","Item 2, sign flips to DROP","Item 3, she hesitates, flips both"],"Text: “buy or drop?” · Caption: vote per look","Buy-or-drop is a quick judgment game that people like joining, and it shows a few products in one go. A tally also gives you data on what to feature Friday."],
+["Add these to your cart now, so you're not panicking on Friday.","A helpful planning tip that gets people preparing early.","Countdown “5 days” with a hand tapping “add to cart”.",["Three picks flash, real product shots","One line each: what it is and the price","“Go now. I'll wait.”"],"Text: “5 days.” · Caption: confirmed deals only","A countdown creates a real time frame, and this primes people to come back on Friday. A cart full of your links is the setup for Black Friday sales.","Don't claim a sale or low stock unless the listing confirms it. No fake urgency."],
+["Fellas: Black Friday is your cheat code. Here's how you use it.","Makes shopping sound like a video game for men.","Tiff with a controller in one hand, gift in the other.",["“Level one: find out her size”","“Level two: under $50”","“Boss level: wrap it”"],"Text: “cheat code” · Caption: linked","Game language hooks men who usually scroll past gifts, and the levels create a reason to stay. A clear checklist also gets saved."],
+["Five days of being normal before Black Friday ruins me.","A funny mood shot, playing on her cart addiction.","Christmas-lit room, Tiff staring at a calendar, circled date.",["She draws an X through today","Sighs, lies down","Phone lights up her face"],"Text: “5 days”","Keeps the countdown going in a non-salesy way, and the joke works whether or not they're shopping."],
+["Not buying everything. Buying the right things.","A grown-up line for a shopping week.","Tiff by the door with shopping bags, quote above.",["Slide 2: shopping bags by the door","Slide 3: receipt-free flat-lay","Slide 4: candle"],"Caption: what's the one thing you're buying?","It gives people a pleasant, thoughtful way to feel okay about shopping, which is a rare tone this week, so it stands out. The caption question reveals what they want."]
+];
+B[23]=[
+["A matching set means I've done all my decision-making for the day.","Treats laziness as a clever life hack.","Tiff lying flat on the bed next to a folded knit set.",["Puts it on in one jump cut","Looks in the mirror: “done”","Lies back down"],"Text: “decision-making: complete” · Caption: send to your tired friend","It's a smart excuse to own sets, and tired people share it. Fast and funny, with the set on screen the whole time."],
+["The same set, together and split. That's three outfits.","Simple math that makes it feel like a deal.","Text: “1 set = 3 outfits” over a folded set.",["Together, walking","Top with jeans","Bottoms with a tee"],"Text: “1 set = 3 outfits” · Caption: linked","Outfit math is why this format is saved: it justifies the price. Matching sets are also the category Elena's page leans on most, and they raise the order value."],
+["Flat-lay first, because this knit deserves it.","A calm look at the texture.","Overhead shot, hands arranging the knit set on linen.",["Close-up of the rib","Hands smooth it out","Cut to Tiff wearing it by a window"],"Text: “the knit.” · Caption: fabric + sizes from the listing","Pretty flat-lays work like @girlypopshopfinds' calm product shots and need no talking. Texture is what people want to see before buying online.","Real product footage for the flat-lay."],
+["Rate the set, but you're also rating my taste. Careful.","A slightly dangerous rating, which makes it more fun.","Tiff walks up in the set, eyes narrowed.",["One turn","Crosses her arms","“Go ahead.”"],"Text: “careful.” · Caption: 1–10","It's the familiar rate-me format with a little attitude, which is easy to watch. Comments arrive fast because it only takes a number."],
+["Monday night, matching set, a very small amount of joy.","Quiet stay-in loop.","Close on a mug and a knit sleeve, warm lamp behind.",["Tiff's head tilts up","Small sip","Slow smile"],"Text: “small joys”","“Small joys” is a soothing message during a stressful shopping week, and calm loops get completed. It's another free remix."],
+["Matching sets, matching energy.","Light, cute caption post for the set day.","Tiff in the knit set in morning light with quote overhead.",["Slide 2: folded knit set","Slide 3: coffee","Slide 4: morning window"],"Caption: tag your matching-energy friend","It's short and cute, so it spreads through tags. Soft morning slides do well as mood-board saves."]
+];
+B[24]=[
+["This one bodysuit is under every outfit I own, and now you know.","Feels like a shared secret.","Tiff unzipping a jacket to show the bodysuit, finger on her lips.",["Under a blazer","Under a cardigan","Under a jacket: “don't tell”"],"Text: “don't tell.” · Caption: where's yours from?","Secrets get attention, and basics have a long buying window because people need them all year. Saying “where's yours from” brings in recommendations.","Treat as styling. No fit or shaping claims."],
+["Doorway: one bodysuit, four outfits, fifteen seconds.","Returns to the series for the final push.","Same doorway, same mark, timer on screen.",["Outfit 1, 2, 3, 4 on the beat","Timer hits zero","She bows"],"Text: “15 seconds” · Caption: linked","It's a series regular for your followers and an efficient try-on for strangers. Short format, lots of change, plenty of rewatches."],
+["4 outfits from one $[price] top. Do the math.","Cost-per-wear framing in one line.","Bodysuit on a hanger, calculator next to it.",["Hand taps “4 outfits”","Each outfit flashes","“$[x] per outfit” on the screen"],"Text: “do the math” · Caption: confirmed price","Per-outfit math makes the buy feel smart, and “do the math” is a tiny challenge. It helps people talk themselves into the purchase.","Use the listing's real price for both numbers."],
+["POV: you've been waiting 45 minutes and I ask you to help me choose a top.","A familiar boyfriend struggle.","Tiff holding up two identical tops, totally serious.",["“This one or this one?”","You (the lens) say something","She picks a third one"],"Text: “they are the same top.” · Caption: tag who's waited","Men share this with a “this is us” comment, and women laugh at themselves. Identical tops are a clear joke that reads instantly."],
+["Mirror. One fit. Two seconds of confidence.","A simple check-in for Tuesday night.","Tiff in a dim mirror, tilting her head.",["Pulls down her top","Quick nod","Walks off"],"Text: “okay. we're good.”","That little self-approval moment is something most viewers do too. It's very short, so it's easy to finish and watch again."],
+["Your 20s are for building, not proving.","Focused, driven quote for people in their twenties.","Tiff at a laptop with coffee, quote overhead.",["Slide 2: laptop + coffee","Slide 3: city morning","Slide 4: notebook"],"Caption: what are you building?","“Not proving” catches people worried about others' opinions, and they repost it with pride. People like to answer “what are you building?” publicly."]
+];
+B[25]=[
+["If the airport is a runway, Thanksgiving Eve is fashion week.","The busiest travel day of the year as her stage.","Tiff with a rolling bag in an airport-style walkway, sunglasses on.",["Flare leggings, fleece, big walk","Bag spin","She nods at an imaginary crowd"],"Text: “thanksgiving eve fashion week” · Caption: are you flying today?","The day before Thanksgiving is a heavy travel day, so lots of people will be scrolling at gates. A timely, funny line feels made for them."],
+["The airport fit check, TSA-friendly edition.","Practical outfit checks: slip-ons, no belts, easy layers.","Tiff stops at a mock security tray, dropping her bag in.",["Slip-on shoes off in one move","Fleece off, tossed in","Through and dressed in 3 seconds"],"Text: “tsa speedrun” · Caption: all linked","“Speedrun” makes it a game, and travel tips get saved by people flying soon. It feels useful even if they aren't buying today."],
+["Everything I'd wear on a 6am flight, and nothing to think about.","Full look, fully linked, no effort.","Outfit pieces flat on a suitcase, hands picking them up.",["Real product shots, one piece at a time","Tiff wearing the full look","Links tag appears: “all of it”"],"Text: “no thinking required” · Caption: all linked","Full-look posts let people buy several things at once, which raises order value. Travel is also the need of the moment.","Say “you could wear”, not “I wore”, if it sounds like a personal review."],
+["POV: you're my airport buddy and I've already lost my boarding pass.","Lighthearted travel-chaos scene.","Tiff digging through her bag, looking at you in panic.",["Holds up everything but the pass","“Check your bag.”","You had it all along; she kisses it"],"Text: “check your bag” · Caption: tag your travel buddy","Everyone knows someone like this, so tags fly. Sweet and chaotic is a good combination for men and women alike."],
+["Driving home for the holidays, and the road knows.","Sentimental drive to a song, for anyone going home.","Highway at dusk, a childhood-home feeling, Tiff in soft focus.",["Hands on the wheel","Town sign passes (no real name)","Porch light in the distance"],"Text: “almost home”","Going home is a very emotional moment for this exact day, and people share things that say it for them. It's a remix of your car clips."],
+["Going home a different person than I left.","Personal growth meets the trip home.","Tiff with a suitcase at an airport window, quote above.",["Slide 2: airport window","Slide 3: suitcase","Slide 4: car at night"],"Caption: who else?","It's written for the day people are literally heading home. “Who else?” is a tiny prompt that gets a lot of quiet “me” comments."]
+];
+B[26]=[
+["Getting ready to answer “so are you seeing anyone?”","Everyone dreads the family question, so make it the hook.","Tiff at the mirror rehearsing her answer in different tones.",["Sweater dress on: “no.”","Boots on: “it's complicated.”","Done: “pass the rolls.”"],"Text: “rehearsing.” · Caption: what's your answer this year?","That dreaded question gets a laugh of recognition from anyone single, on the day it's most relevant. People forward this to siblings all morning."],
+["Family dinner fit vs. bar with your hometown friends after.","Two outfits, same night.","Split screen: grandma-approved vs. going-out.",["Left: sweater dress, hug pose","Right: same dress, boots, jewelry","Slow zoom on the right: “see you at 10”"],"Text: “same night.” · Caption: which is more you?","“Bar night with hometown friends” is a real tradition on Thanksgiving Eve and after dinner, so it's relatable. Two looks with the same dress make it feel like a clever hack."],
+["The knit, the boots, and the only photo your mom will post.","Warm, slightly funny outfit shot.","Close-up of the sweater knit, soft warm light.",["Boots close-up, real footage","Tiff posed by a window","Family photo pose with a forced smile"],"Text: “mom's facebook ready” · Caption: linked","“Mom's Facebook” is a universal joke that people will share. The cozy visuals show the product, and buyers can see it for pre-Black Friday shopping.","Use real listing footage for the knit shot."],
+["POV: you're meeting my family and my dad has questions.","Classic setup for a boyfriend POV.","Tiff in the doorway whispering: “be normal.”",["Straightens your collar","Hands you a pie","“Don't talk about crypto.”"],"Text: “be normal.” · Caption: what's the rule in your family?","“Don't talk about crypto” is a sharp little joke, and men know it's aimed at them. Family-rule comments get funny on the one day everyone has stories."],
+["Food coma, day's over, zero regrets.","A slow cozy wind-down the evening of Thanksgiving.","Couch, loosened cardigan, Tiff completely still.",["One eye opens","Reaches for a pie slice","Gives up, sinks back"],"Text: “i live here now”","It's what everyone's doing at that hour, posted when they're on their phones. People send it to whoever's next to them."],
+["Thankful for the version of me that didn't give up.","Sincere Thanksgiving quote with a personal twist.","Tiff at a candlelit table at dusk, quote above.",["Slide 2: candlelit table","Slide 3: pie","Slide 4: family window at dusk"],"Caption: what are you thankful for about yourself?","Thanksgiving quotes usually thank other people, so turning it inward stands out. People feel good reposting it, and it's the most shareable day of the month for gratitude content."]
+];
+B[27]=[
+["It's Black Friday. I've been awake since 5. This is what's in my cart.","She gets there first, while people are checking deals.","Dark room, phone glow on her face, one hoop in.",["Coffee, more makeup, faster cuts","Cart scrolled quickly","Full look, points at the link"],"Text: “5am. let's go.” · Caption: all linked, prices confirmed today","This is the highest-intent shopping day of the year, and people want someone to tell them what to buy. Early posts also have all day to spread.","Post earlier than 8am if you can. Check every price this morning."],
+["The month's top 5, on, at today's prices.","The proven winners only, so this is a safer bet.","Top 5 pieces in a row with prices covered by sticky notes.",["#5 to #2 on the beat, sticky peels off","Quick try-on per item","#1 reveal"],"Text: “peel the price” · Caption: today's prices","These items already proved they get attention this month. Peeling the sticky note is a small reveal, repeated five times, so people stay through the list.","Only real sale prices from the listing."],
+["Top 5, real footage, real prices. Nothing else today.","Plain and useful: in a sales flood, clarity stands out.","Text on black: “no talking. just the deals.” Then a hard cut.",["Real b-roll of each product","Price card per item","Final grid: “all linked”"],"Text: “just the deals” · Caption: confirmed prices","Everyone else is yelling today, so a calm list stands out. It's fast to skim and easy to save, and it sends people to the link directly.","Confirm every price within an hour of posting."],
+["Guys. Today. Under 60 seconds. I'll tell you exactly what to buy her.","No browsing, just an order, the way men want it.","Tiff sets a timer on the counter and looks at you.",["Item 1, price, why","Item 2, price, why","Item 3: “done. go.”"],"Text: “under 60 seconds” · Caption: linked","A clear time limit and a clear answer remove the stress of gift shopping. @partidaelena's 8.6M and gracieloo19's 11.7M show how far direct talk-to-camera can go.","Talk about what the item is, not personal experience of it."],
+["10pm. Still some of it left. Last round.","Late-night second wave.","Dark room, one lamp, Tiff holding up 3 fingers.",["Three items, one per beat","Price card on each","Lights off: “goodnight.”"],"Text: “last round tonight” · Caption: confirmed prices","Night-shift shoppers are a real group, and they've had all day to think about it. It catches people who saw your morning post and didn't buy.","Don't say “almost gone” unless the listing shows it."],
+["Gifts that say ‘I listen’.","The gift-giver's real goal, in three words.","Tiff with a wrapped gift and quote above.",["Slides 2–5: real listing photos of the top 5 gifts","Each slide: one line and the price","Last slide: “send this to him”"],"Caption: linked, confirmed prices","“I listen” is what every gift really says, and the last slide is designed to be forwarded. Slideshows also let people pause on what they like, which helps on a day full of noise.","Real listing photos only, no Codex product shots."]
+];
+B[28]=[
+["The morning after Black Friday. A moment of silence for my bank account.","A funny recovery post that everyone relates to today.","Tiff in a robe holding her phone, bank app blurred, staring.",["She closes the app","Packages pile up at the door","She opens the app again, sighs"],"Text: “moment of silence” · Caption: damage report?","It's the natural mood after a shopping day, and “damage report” gets people bragging in the comments. Their answers also tell you what sold.","Blur any numbers on the phone."],
+["Show me what you got. I'll rate your haul.","Flips the rating: viewers are the ones being judged.","Reply bubble, Tiff with a scorecard and glasses on.",["Reads a real comment","Holds up a “9”","“Next.”"],"Text: reply bubble + scorecard · Caption: drop your haul","Asking viewers to share their purchases brings in lots of comments, and those comments fuel a run of reply videos. It's easy, low-cost content.","Only rate real comments."],
+["In case you missed it: every Black Friday pick, in one swipe.","A round-up for people who waited, and people who forgot.","Cover: “you missed it. I've got you.”",["One slide per product, listing photos","Today's prices, updated","Last slide: “Cyber Monday's coming”"],"Text: “I've got you” · Caption: updated prices","Carousels are easy to save for later, and this catches every weekend shopper. Pointing ahead to Monday also keeps people following.","Update prices. Yesterday's deal may be over."],
+["Gifts she'll actually wear, and how to tell she means it.","A small dating tip joined with a list.","Tiff holds up a gift, doing a fake-smile impression.",["“This is the ‘aw, thanks’ face”","“This is the real one”","Three items that get the real one"],"Text: “this face means no” · Caption: linked","Women laugh and agree and men actually learn something. The face impressions are funny enough to share, even without the gift list."],
+["Saturday night. The packages can wait.","Slow, cozy end to a loud week.","Boxes by the door, Tiff walking past them to the couch.",["Lights low","Mug, blanket","Looks at the boxes, shrugs"],"Text: “tomorrow's problem”","A relaxed break from all the selling keeps the page from feeling like a pure ad. It's another free clip to keep up the post count."],
+["Support small. Shop slow.","Fits Small Business Saturday without pitching.","Tiff outside a little shop window with quote above.",["Slide 2: little shop window","Slide 3: paper bags","Slide 4: coffee"],"Caption: tag your favorite small shop","Tagging local shops gets real engagement today, and owners often reshare it. It's a feel-good break that gives the page some goodwill."]
+];
+B[29]=[
+["Sunday reset, because Monday wants more of my money.","A reset routine joined to a Cyber Monday joke.","Tiff making the bed, wearing a sheet mask, looking at her phone with suspicion.",["Clean room timelapse","Laptop opens on the bed","She closes it: “not yet.”"],"Text: “monday wants my money” · Caption: are you shopping tomorrow?","Sunday resets are a popular routine, and this adds a fresh joke for this particular Sunday. A yes/no question gets easy engagement."],
+["Try this on before Cyber Monday so you don't regret it.","A last check before the final sale.","Three outfits on a rail, with Tiff pushing them along.",["Each one on, one turn each","“Keep” or “skip” stamp","Stack of keepers"],"Text: “keep or skip” · Caption: which one?","Keep-or-skip is a simple game that also previews what's going on sale tomorrow, and that brings people back to you on Monday."],
+["Cyber Monday preview: set your alarm for these.","Setting a reminder is a way to get a second visit.","Phone alarm being set, then a product appears.",["Three picks, one sentence each","Real product shots","“See you tomorrow.”"],"Text: “set your alarm” · Caption: prices confirmed tomorrow","Announcing the next day's post brings in returning viewers, which helps Monday's video get off to a strong start.","Don't quote prices until they're live."],
+["It's the 29th. You still haven't bought her anything. I know.","Friendly callout that creates urgency.","Tiff at the lens with a disappointed-mom face.",["Shakes her head slowly","Shows her phone: “tomorrow's your last shot”","“I believe in you. Barely.”"],"Text: “I know.” · Caption: linked for the boys","Being called out is funny and a bit too real, and his friends will tag him. The deadline is a real one, so it feels helpful.","Say “last shot for Cyber Monday”, not last chance overall, since shops keep selling."],
+["Christmas lights on, packing tape everywhere.","Cozy moment for the last Sunday of the month.","Warm tree lights with a wrapping station on the floor.",["Tiff losing the end of the tape","Holds up a badly wrapped gift","Laughs at the lens"],"Text: “I'll be better at this by december”","Bad gift wrapping is a shared struggle, and people send it to people who wrap badly. It's warm content that gets the page ready for December."],
+["Ending the year softer than I started it.","Quiet end-of-year reflection.","Tiff at sunset, quote above.",["Slide 2: candles","Slide 3: sunset","Slide 4: journal"],"Caption: what's your word for this year?","End-of-year reflection posts get reposted a lot and start to appear from now on. One-word answers are easy to leave."]
+];
+B[30]=[
+["Cyber Monday. Laptop open, hoops on, this is my championship game.","Treats the last shopping day like a big game.","Tiff in a jersey-style pose, tying her hair like she's about to play.",["Laptop, coffee, hoops","Warm-up stretches at the desk","Clicks the mouse: “let's go”"],"Text: “this is my championship” · Caption: all linked, prices confirmed","The sports framing is funny and very shareable, and it gives the day its own energy. Cyber Monday shoppers are ready to buy, so the links matter here.","No league names or logos."],
+["Last-chance try-on: everything leaves my cart tonight.","A real end point makes this the urgent one.","Clock showing the date, Tiff in the first outfit.",["Fast cuts, one item per beat","“Keep” stamped on each","Final look: “that's a wrap”"],"Text: “tonight.” · Caption: all linked","The real calendar deadline gives genuine urgency without any invention. Quick cuts make the most of a day when attention is short.","Say the sale ends only if the listing confirms when."],
+["5 picks. 15 seconds. Real prices. Go.","The shortest, clearest version of the month's top sellers.","A big “5” on screen, then a hard cut to product footage.",["Real b-roll per item, price card on each","Beat-matched cuts","“All linked. Go.”"],"Text: “5 picks. 15 seconds.” · Caption: confirmed prices","The month's best sellers are the safest choice, and the 15-second cut matches what worked for @abigailtran (4.4M at 15 seconds). It's simple, fast and easy to act on.","Confirm prices the same day."],
+["Last call, boys. After today, you're paying full price and you know it.","A direct close aimed at men's last-minute instincts.","Tiff taps her watch, then points at you.",["3 gifts, 3 prices","“You've had a month.”","“Go.” Lights out."],"Text: “last call” · Caption: linked","After a month of hints, this is the payoff for men who've been watching the “For the Boys” series. Everyone likes a deadline to act on, and his friends will tag him for fun.","Only say full price returns if the listing shows the sale ends."],
+["Day 1 vs. day 30.","A heartfelt recap of the month's best moments.","Quick flash of the first video: “hi, I'm Tiff.”",["Clips from each week, cut to the beat","Best comment moments on screen","Tiff looks at the lens: “December?”"],"Text: “thank you 🤍” · Caption: what should December be?","Going from the first video to the last pays off for people who were there, and they'll comment. Asking about December gives you content ideas and shows followers there's more."],
+["30 days. Thank you for being here 🤍","A warm wrap-up slideshow that also resurfaces the month's top sellers.","Best Tiff still, with quote across the frame.",["Slides: best Tiff stills","Slides: real listing photos of the top picks","Last slide: “see you in December”"],"Caption: tell me your favorite post","Milestone posts earn warm comments from your regulars, which helps the page. The product slides also catch the last Cyber Monday shoppers.","Real listing photos only, no Codex product shots."]
+];
+// BRIEFS END
+
+var N=SLOTS.length;
+
+var PRODUCTS=[
+ ["2-piece workout / pilates set","Activewear","both","$20–40","Every Color, Size Check","Elena's #1 earner: pinned videos at 966K and 763K. Buy-every-color angle."],
+ ["Energy gummies / creatine sticks","Supplement","her","$20–45","Gym Pour","Elena sells these. Label facts only, no performance claims."],
+ ["Gold jewelry advent calendar","Jewelry","him","$25–45","Gift guides","Seasonal Nov–Dec gift; strong unboxing b-roll."],
+ ["Fleece zip-up / quarter-zip","Top","her","$20–40","Lazy Sunday, Every Color","Elena's cozy staple."],
+ ["Fuzzy mini boots / suede slippers","Shoes","both","$20–40","POV B-roll, gift","girlypopshopfinds' best category (shoes on a car floor)."],
+ ["Clip-in hair extensions","Hair","her","$25–60","Hair day","6.1K on Elena. Show the product; no before/after ‘results’."],
+ ["Bodycon midi skirt","Bottom","both","$15–30","Try-On, Shop Drop","Tight fits pull both audiences."],
+ ["Ruched / faux leather mini skirt","Bottom","both","$15–30","Going-out, date fits","High save + rewatch rate."],
+ ["Ribbed bodycon dress","Dress","both","$18–35","Date night, rate-the-fit","Easy 3-way styling with shoe swaps."],
+ ["Seamless gym set","Activewear","both","$20–40","Gym Girl week","Top male-follow driver. Multi-color listings convert well."],
+ ["Flare / scrunch leggings","Activewear","her","$15–30","Gym, lazy Sunday","Styling only, never shaping claims."],
+ ["Pre-workout","Supplement","her","$25–45","Gym morning b-roll","Show the pour/shake. Flavor + label facts only; no energy, weight or health claims. Check the category is open to your account."],
+ ["Cute shaker / tumbler bottle","Accessory","both","$12–25","Gym, gift","Great b-roll product, giftable."],
+ ["Gym duffel bag","Bag","both","$20–40","What's in my gym bag","Pairs with trinkets inside."],
+ ["Bag charms / keychains","Trinket","both","$8–15","Stocking stuffers","Cute, cheap impulse buy."],
+ ["Jewelry box / vanity tray","Trinket","him","$12–25","Vanity, gift guides","Satisfying open/close b-roll."],
+ ["Gold jewelry stack","Jewelry","both","$15–30","GRWM, BF","Commission usually higher than clothing."],
+ ["Initial / name necklace","Jewelry","him","$15–35","Gift guides","The top “thoughtful gift” for guys."],
+ ["Claw clips + scrunchies","Hair","her","$8–15","GRWM, gym","Works in every video."],
+ ["Fuzzy cropped cardigan","Top","her","$18–30","Cozy fall","Texture close-ups sell it."],
+ ["Faux fur trim coat","Outerwear","both","$35–60","Winter fits, gift","Higher price, more per sale."],
+ ["Knit two-piece matching set","Set","her","$30–45","BF week","Sets raise the order value."],
+ ["Square-neck bodysuit","Top","her","$15–30","Layering","Styling only. No shapewear or fit claims."],
+ ["Sweater dress + knee boots","Dress","her","$25–60","Thanksgiving, date","Fall staple."],
+ ["Satin pajama set","Sleepwear","him","$20–35","Gift guides, night vibe","A classic gift for guys to buy."],
+ ["Plush cloud slippers","Cozy","him","$15–25","Gift guides","Easy to show; gifts well."]
+];
+
+var ST={};
+try{ST=JSON.parse(localStorage.getItem("tiff-nov")||"{}")||{};}catch(e){ST={};}
+function save(){try{localStorage.setItem("tiff-nov",JSON.stringify(ST));}catch(e){}}
+var LSKEY="tiff-nov";
+var HERO_LABEL="Hero product";
+var KEY_LABEL="BIG SALES DAY";
+var view="month";
+try{view=localStorage.getItem(LSKEY+"-view")||"month";}catch(e){}
+
+var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function wd(d){return WD[(d)%7];} // Nov 1 2026 = Sunday
+var filt="all";
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function audTag(a){return '<span class="tag a-'+a+'">'+a.toUpperCase()+'</span>';}
+
+function weekIdx(d){for(var i=0;i<WEEKS.length;i++)if(d>=WEEKS[i].from&&d<=WEEKS[i].to)return i;return 0;}
+function posted(x){var n=0;for(var i=0;i<N;i++)if(ST[x.d+"-"+i])n++;return n;}
+
+function stats(){
+  var total=DAYS.length*N,done=0,shop=0;
+  DAYS.forEach(function(x){x.s.forEach(function(s,i){if(ST[x.d+"-"+i])done++;if(s[0]==="$")shop++;});});
+  var pct=Math.round(done/total*100);
+  document.getElementById("stats").innerHTML=
+   '<div class="stat"><div class="k">Posts planned</div><div class="v">'+total+'</div><div class="s">'+N+' a day × 30 days</div></div>'+
+   '<div class="stat"><div class="k">Posted</div><div class="v">'+done+' <small>/ '+total+'</small></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+
+   '<div class="stat"><div class="k">Linked to shop</div><div class="v">'+shop+'</div><div class="s">'+Math.round(shop/total*100)+'% of posts</div></div>'+
+   '<div class="stat"><div class="k">Black Friday</div><div class="v">Nov 27</div><div class="s">Cyber Monday Nov 30</div></div>';
+}
+
+function viewsw(){
+  var el=document.getElementById("viewsw");
+  el.innerHTML='<button data-v="month" aria-pressed="'+(view==="month")+'">Month</button><button data-v="list" aria-pressed="'+(view==="list")+'">List</button>';
+  el.onclick=function(e){var b=e.target.closest("button");if(!b)return;view=b.dataset.v;try{localStorage.setItem(LSKEY+"-view",view);}catch(err){}viewsw();render();};
+}
+function filters(){
+  var opts=[["all","All slots"]].concat(SLOTS.map(function(s){return [s.k,s.n];})).concat([["$","Shop-linked only"],["+","B-roll"],["him","Him audience"]]);
+  var el=document.getElementById("filters");
+  el.innerHTML=opts.map(function(o){return '<button class="chip" data-f="'+o[0]+'" aria-pressed="'+(filt===o[0])+'">'+o[1]+'</button>';}).join("")+
+    '<button class="chip" data-open="1" aria-pressed="'+openAll+'">Open all briefs</button>';
+  el.onclick=function(e){var b=e.target.closest(".chip");if(!b)return;if(b.dataset.open)openAll=!openAll;else filt=b.dataset.f;filters();render();};
+}
+
+function show(i,s){
+  if(filt==="all")return true;
+  if(filt==="$")return s[0]==="$";
+  if(filt==="+")return /^[$]?\+/.test(s);
+  if(filt==="him")return SLOTS[i].a==="him";
+  return SLOTS[i].k===filt;
+}
+
+var CARE_SHOP="Label it AI. Show the real product. Facts from the listing only, no first-person wear claims. Confirm prices the day you post.";
+var CARE_ALL="Label it AI. Fitted is fine, but no lingering body crops or suggestive framing.";
+var openAll=false;
+function brief(x,i){
+  var p=B[x.d][i];
+  return {hook:p[0],angle:p[1],first:p[2],beats:p[3],screen:p[4],viral:p[5],care:p[6]||(x.s[i][0]==="$"?CARE_SHOP:CARE_ALL)};
+}
+function briefText(x,i){
+  var b=brief(x,i),sl=SLOTS[i];
+  return "Tiff TikTok post: Nov "+x.d+", "+sl.t+", "+sl.n+" ("+x.th+"; hero product: "+x.hero+")\nHook: "+b.hook+"\nAngle: "+b.angle+"\nFirst second: "+b.first+"\nBeats:\n- "+b.beats.join("\n- ")+"\nOn screen / caption: "+b.screen+"\nWhy it'll go viral: "+b.viral+"\nCare: "+b.care+"\n\nMake this for Tiff using masterUGC.";
+}
+
+function dayHTML(x,all){
+  var rows="";
+  ORDER.forEach(function(i){
+    var s=x.s[i];
+    if(!all&&!show(i,s))return;
+    var sl=SLOTS[i],shop=s.indexOf("$")===0,txt=s.replace(/^[$+]+/,""),ser=(txt.match(/^\[([^\]]+)\] ?/)||[]),br=s.slice(0,s.length-txt.length).indexOf("+")>-1,id=x.d+"-"+i,on=!!ST[id];
+    var stretch=x.d<RAMP[sl.k],b=brief(x,i);
+    rows+='<li class="slot'+(on?' done':'')+(stretch?' stretch':'')+'"><input type="checkbox" data-id="'+id+'"'+(on?' checked':'')+' aria-label="Posted: '+sl.n+' Nov '+x.d+'">'+
+      '<details'+(all||openAll?' open':'')+'><summary><span class="meta"><span class="tm">'+sl.t+'</span><span class="pl" style="color:var(--'+sl.a+')">'+sl.n+'</span>'+
+      (ser[1]?'<span class="tag t-ser">'+esc(ser[1])+'</span>':'')+(br?'<span class="tag t-broll">B-ROLL</span>':'')+(shop?'<span class="tag t-shop">LINK</span>':'')+'</span>'+
+      '<span class="hook">'+esc(b.hook)+'</span><span class="more">See full brief ▾</span></summary>'+
+      '<dl class="brief"><dt>Angle</dt><dd>'+esc(b.angle)+'</dd><dt>First second</dt><dd>'+esc(b.first)+'</dd>'+
+      '<dt>Beats</dt><dd><ul>'+b.beats.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul></dd>'+
+      '<dt>On screen</dt><dd>'+esc(b.screen)+'</dd><dt class="vk">Why it\'ll go viral</dt><dd class="viral">'+esc(b.viral)+'</dd>'+
+      '<dt>Care</dt><dd class="care">'+esc(b.care)+'</dd></dl>'+
+      '<button class="copy" data-d="'+x.d+'" data-i="'+i+'">Copy brief for Claude</button></details></li>';
+  });
+  if(!rows)return "";
+  return '<div class="day'+(x.key?' key':'')+'"><div class="date"><span class="m">NOV</span><span class="d">'+x.d+'</span><span class="w">'+WD[(x.d-1)%7]+'</span></div>'+
+    '<div><div class="dh"><h3>'+esc(x.th)+'</h3>'+(x.key?'<span class="tag t-key">'+KEY_LABEL+'</span>':'')+'<span class="hero">'+HERO_LABEL+': <b>'+esc(x.hero)+'</b></span></div>'+
+    '<ul class="slots">'+rows+'</ul></div></div>';
+}
+
+function monthHTML(){
+  var now=new Date(),isNov=now.getFullYear()===2026&&now.getMonth()===10,td=now.getDate();
+  var h='<div class="legend">'+WEEKS.map(function(w,i){return '<span><span class="pill w'+i+'">'+esc(w.name)+'</span>Nov '+w.from+'–'+w.to+'</span>';}).join("")+'</div>';
+  h+='<div class="month">'+WD.map(function(d){return '<div class="hd">'+d.toUpperCase()+'</div>';}).join("");
+  DAYS.forEach(function(x){
+    var n=posted(x),bars="";
+    ORDER.forEach(function(i){bars+='<i'+(ST[x.d+"-"+i]?' class="on"':'')+'></i>';});
+    var stl=n===N?"Posted":n?n+"/"+N+" posted":"Not started";
+    var cls="cell"+(n===N?" done":n?" part":"")+(isNov&&td===x.d?" today":"");
+    h+='<button class="'+cls+'" data-d="'+x.d+'" aria-label="Nov '+x.d+': '+esc(x.th)+', '+stl+'">'+
+      '<span class="dn"><b>'+(x.d===1?"Nov 1":x.d)+'</b>'+(x.key?'<span class="flag" title="'+KEY_LABEL+'">★</span>':'')+'</span>'+
+      '<span class="pill w'+weekIdx(x.d)+'">'+esc(x.th)+'</span>'+
+      '<span class="ttl2">'+esc(x.hero)+'</span>'+
+      '<span class="mini">'+bars+'</span><span class="stl">'+stl+'</span></button>';
+  });
+  var pad=(7-DAYS.length%7)%7; // Nov 1 is a Sunday, so only the last row needs December fill
+  for(var j=1;j<=pad;j++)h+='<div class="cell other"><span class="dn"><b>'+(j===1?"Dec 1":j)+'</b></span></div>';
+  return h+'</div>';
+}
+
+function render(){
+  var el=document.getElementById("weeks");
+  document.getElementById("filters").hidden=(view==="month");
+  if(view==="month"){el.innerHTML=monthHTML();return;}
+  var h="";
+  WEEKS.forEach(function(w){
+    var days=DAYS.filter(function(x){return x.d>=w.from&&x.d<=w.to;}).map(function(x){return dayHTML(x,false);}).join("");
+    if(!days)return;
+    h+='<div class="week"><h2>'+w.name+'<span>NOV '+w.from+'–'+w.to+'</span></h2><p class="wsub">'+w.sub+'</p>'+days+'</div>';
+  });
+  el.innerHTML=h;
+}
+
+function openDay(d){
+  var x=DAYS.filter(function(y){return y.d===d;})[0];if(!x)return;
+  var ov=document.createElement("div");ov.className="ov";
+  ov.innerHTML='<div class="dlg" role="dialog" aria-modal="true" aria-label="Nov '+d+'"><button class="x" aria-label="Close">×</button>'+dayHTML(x,true)+'</div>';
+  function close(){ov.remove();document.removeEventListener("keydown",key);render();var b=document.querySelector('.cell[data-d="'+d+'"]');if(b)b.focus();}
+  function key(e){if(e.key==="Escape")close();}
+  ov.addEventListener("click",function(e){if(e.target===ov||e.target.closest(".x"))close();});
+  document.addEventListener("keydown",key);
+  document.body.appendChild(ov);ov.querySelector(".x").focus();
+}
+
+document.getElementById("weeks").addEventListener("click",function(e){var c=e.target.closest("button.cell");if(c)openDay(+c.dataset.d);});
+document.addEventListener("click",function(e){
+  var c=e.target.closest(".copy");if(!c)return;
+  var x=DAYS.filter(function(y){return y.d===+c.dataset.d;})[0],txt=briefText(x,+c.dataset.i);
+  function done(){c.textContent="Copied ✓";setTimeout(function(){c.textContent="Copy brief for Claude";},1500);}
+  function fallback(){var t=document.createElement("textarea");t.value=txt;c.parentNode.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(err){}t.remove();}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,fallback);else fallback();
+});
+document.addEventListener("change",function(e){
+  var c=e.target;if(!c.dataset||!c.dataset.id)return;
+  if(c.checked)ST[c.dataset.id]=1;else delete ST[c.dataset.id];
+  save();c.closest(".slot").classList.toggle("done",c.checked);stats();
+});
+
+document.getElementById("slotTable").innerHTML='<tr><th>Time</th><th>Slot</th><th>For</th><th>What it is</th></tr>'+
+  ORDER.map(function(i){var s=SLOTS[i];return '<tr><td class="num">'+s.t+'</td><td><b>'+s.n+'</b></td><td>'+audTag(s.a)+'</td><td>'+s.desc+'</td></tr>';}).join("");
+
+document.getElementById("prodTable").innerHTML='<tr><th>Product</th><th>Type</th><th>Buyer</th><th>Typical price</th><th>Use in</th><th>Why</th></tr>'+
+  PRODUCTS.map(function(p){return '<tr><td><b>'+p[0]+'</b></td><td>'+p[1]+'</td><td>'+audTag(p[2])+'</td><td class="num">'+p[3]+'</td><td>'+p[4]+'</td><td>'+p[5]+'</td></tr>';}).join("");
+
+// [handle, followers, what to study, [[label, video id], ...]]
+var ACCOUNTS=[
+ {n:"Your list",c:[
+  ["partidaelena","19.3K","The model to copy: mirror try-ons, sets in every color, size callouts. Top 1% shop affiliate. Skip her 8.6M waist trainer angle.",[["8.6M","7650744844515577119"],["1.4M","7600156321081543967"],["1.4M","7681060531632917790"]]],
+  ["gracieloo19","16.7K","Talks to camera in a 27-second tank video that hit 11.7M: one fabric fact, one line of text. The hook style to copy.",[["11.7M","7650357854712483103"],["2.9M","7614392391381962015"],["1.1M","7630572745973157150"]]],
+  ["girlypopshopfinds","145.3K","Faceless POV b-roll, “fall coded” serif overlays, one repeated sound. Its top video is a labeled-AI “mama” sweatshirt with 10.9K shares.",[["5.2M","7665724254805052685"],["2.5M","7676130997481540894"],["2.5M","7669876353755303199"]]],
+  ["findsforthegirliesxx","17.5K","Mirror try-ons of fitted sets, phone half over the face, height and size on screen.",[["2.7M","7679904696706043159"],["2.4M","7675064146412588310"],["2.3M","7683546576463219990"]]],
+  ["ellasfavfinds","45.9K","Bodycon going-out dresses, back-view reveals, price anchors in the caption.",[["2.6M","7616539102779034883"],["1.6M","7623942966574468374"],["1.5M","7614315737900993814"]]],
+  ["abigailtran","47.8K","AI account: same doorway and pose, one graphic tee per video.",[["4.4M","7618690020945251615"],["3.7M","7631738206978968845"],["3.5M","7623600736651332895"]]],
+  ["upgraded.fr","14K","Pivoted to shop finds. Its most-viewed posts predate the pivot, so scroll the latest posts instead.",[]],
+  ["crowdfinds","47K","“The crowd's best recommendations.” Videos were rate-limited, so sort the profile by Popular.",[]],
+  ["kristine_walshe","70.6K","Management email in the bio (the brand-deal play). Videos were rate-limited, so sort the profile by Popular.",[]]
+ ]},
+ {n:"More shop finds",c:[
+  ["whatbrookebought","120.5K","Simple everyday outfits, Top 1% Star Creator, height and weight in the bio.",[["2.3M","7682464001317424415"],["1.4M","7689261763140881695"]]],
+  ["staygoldlex","365.6K","Fashion and beauty, with a separate TikTok Shop email in the bio. Cozy loungewear restock posts.",[["1.3M","7696382504067976479"],["1.1M","7602455790925925662"],["693.5K","7696720539448053023"]]],
+  ["prettypickedd","312.6K","“Finds you'll actually check out”, posting in bursts. Size callout on jeans.",[["3.4M","7669919042425064735"]]],
+  ["therealjoyymaria","194.1K","“I bought every color” try-on of a gold zipper set. Skip the weight-loss angle.",[["2.3M","7566757737313373454"],["383.4K","7482070797779995950"]]],
+  ["leahstyle4","12.1K","Small shop-only account posting many times a day. Good for volume and reply-to-comment fall fits.",[["96.9K likes","7698720168956005645"]]],
+  ["fynzofinds","7.7K","German finds account with a tracksuit hit far bigger than its following.",[["4.5M","7690999459274116384"]]]
+ ]},
+ {n:"AI accounts",c:[
+  ["theegiamonet","68.1K","<b>Closest AI match to Tiff:</b> AI fit checks in a brown and cream palette, with the “Contains AI-generated media” label on. Also sells a faceless-content course.",[["6.5K likes","7684491382865562911"],["Jeans fit","7684457023580163359"]]],
+  ["chloe.melb","14.1K","AI girl fashion clips, tagged #aifashion.",[["AI fashion clip","7643930520400792853"]]],
+  ["ellastroy.co","1.3K","Bio says “AI influencer”. The AI fall haul format is close to Tiff's, but it only got 34 likes, so don't copy its hook or funnel.",[["AI fall haul","7685856538073861407"]]],
+  ["nala.vae","16.2K","Teaches AI avatars. Useful for hooks and workflow, but it sells a course.",[["312.2K","7651273289926593814"],["116.1K","7566332766200024342"]]],
+  ["maya.fashiongrowth","124","Promotes an AI fashion video tool. Treat any sales claims as ads.",[["33.9K","7684220364045503775"],["17.6K","7691598059624516895"]]],
+  ["facelessbytrish.ai","5K","AI try-on and reveal walkthrough, with a paid funnel in the bio.",[["Try-on + reveal","7657467265104760095"]]]
+ ]},
+ {n:"UGC creators",c:[
+  ["dianacreates_xo","11.9K","Organic activewear-brand example, polished and aesthetic.",[["8.6K likes","7343326964431801632"]]],
+  ["tracy.lee.ugc","11.3K","Paid fashion UGC example, with collab email in the bio.",[["4.2K likes","7646790329080761631"]]],
+  ["ugc.with.viki","31.4K","Autumn outfit moment. Her bio is beauty-first, so study the styling.",[["395 likes","7701031038683712790"]]],
+  ["sonia.raee.ugc","5K","“Dream fashion brand” sample video, and her bio pitch is worth copying.",[["413 likes","7654363859502796063"]]],
+  ["savannahjmcgregor","","Athletic apparel UGC with quick cuts. Follower count not checked.",[["Athletic apparel","7688834636104895775"]]],
+  ["hannah.thomas.ugc","","Try-on haul lesson: show the clothing and keep it practical. Follower count not checked.",[["Try-on example","7336257811367841070"]]]
+ ]},
+ {n:"One-off hits",c:[
+  ["serena_us","","2-piece gym tracksuit set from TikTok's search page. Profile not checked.",[["7.1M","7486855229246360878"]]],
+  ["ettanyx","","Zip-up gym set. Profile not checked.",[["2.1M","7654176458134359327"]]],
+  ["rubylayfits","","Zip-up workout set. Profile not checked.",[["2.1M","7681603290815057165"]]]
+ ]}
+];
+function ttLink(path,label){return '<a target="_blank" rel="noopener" href="https://www.tiktok.com/@'+path+'">'+label+'</a>';}
+document.getElementById("accountGroups").innerHTML=ACCOUNTS.map(function(g){
+  return '<h3 style="font-size:15px;color:var(--ink);margin:16px 0 6px">'+g.n+'</h3><div class="scroll"><table class="tbl"><tr><th>Account</th><th>Followers</th><th>What to study</th><th>Top videos</th></tr>'+
+  g.c.map(function(a){return '<tr><td><b>'+ttLink(a[0],'@'+a[0])+'</b></td><td class="num">'+(a[1]||'–')+'</td><td>'+a[2]+'</td><td class="num">'+(a[3].map(function(v){return ttLink(a[0]+'/video/'+v[1],v[0]);}).join(' · ')||ttLink(a[0],'Open profile'))+'</td></tr>';}).join("")+'</table></div>';
+}).join("");
+
+var tabs=document.querySelectorAll(".tab");
+tabs.forEach(function(t){t.onclick=function(){
+  tabs.forEach(function(o){o.setAttribute("aria-selected",o===t);document.getElementById(o.dataset.tab).hidden=(o!==t);});
+};});
+
+stats();viewsw();filters();render();
+})();
+</script>
+</body>
+</html>
