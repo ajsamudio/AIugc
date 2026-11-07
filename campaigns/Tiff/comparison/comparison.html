@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Tiff Model Comparison</title>
+<style>
+body{margin:0 auto;max-width:1700px;background:#111;color:#eee;font-family:system-ui,sans-serif;padding:16px}
+h1{font-size:20px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:110px repeat(6,1fr);gap:10px;align-items:start}
+.head{font-weight:700;text-align:center;font-size:18px;padding:6px;background:#222;border-radius:6px;position:sticky;top:0;z-index:1}
+.row{font-weight:600;writing-mode:horizontal-tb;align-self:center}
+figure{margin:0}
+img{width:100%;border-radius:6px;display:block;cursor:zoom-in}
+figcaption{font-size:12px;color:#aaa;margin-top:4px;text-align:center}
+#lb{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:95vw;max-height:95vh;width:auto}
+</style></head><body>
+<h1>Tiff — Muse vs Nano Banana (Muse) vs Nano Banana (Claude) vs Codex</h1>
+<div class="grid">
+<div></div><div class="head">Muse</div><div class="head">Nano Banana (Muse)</div><div class="head">Nano Banana (Claude)</div><div class="head">Codex</div><div class="head">Codex + Grain</div><div class="head">Codex → NB Pro texture</div>
+<div class="row">Cabo Sunset</div>
+<figure><img src="muse/Tiff in Cabo orange set, Muse version.webp"><figcaption>Muse</figcaption></figure>
+<figure><img src="nano/Tiff in Cabo orange set.webp"><figcaption>Nano Banana (Muse)</figcaption></figure>
+<figure><img src="nanoClaude/tiff_ig4_cabo_orange.png"><figcaption>Nano Banana (Claude)</figcaption></figure>
+<figure><img src="codex/Cabo Sunset.png"><figcaption>Codex</figcaption></figure>
+<figure><img src="codexGrain/Cabo Sunset.jpg"><figcaption>Codex + Grain</figcaption></figure>
+<figure><img src="nanoTexture/Cabo Sunset.jpg"><figcaption>Codex → NB Pro texture</figcaption></figure>
+<div class="row">Pink Miami</div>
+<figure><img src="muse/Tiff in pink Miami set, Muse version.webp"><figcaption>Muse</figcaption></figure>
+<figure><img src="nano/Tiff in pink Miami balcony set.webp"><figcaption>Nano Banana (Muse)</figcaption></figure>
+<figure><img src="nanoClaude/tiff_ig4_pink_mesh_v2.png"><figcaption>Nano Banana (Claude)</figcaption></figure>
+<figure><img src="codex/Pink Outfit.png"><figcaption>Codex</figcaption></figure>
+<figure><img src="codexGrain/Pink Outfit.jpg"><figcaption>Codex + Grain</figcaption></figure>
+<figure><img src="nanoTexture/Pink Outfit.jpg"><figcaption>Codex → NB Pro texture</figcaption></figure>
+<div class="row">NYC Rooftop</div>
+<figure><img src="muse/Tiff on NYC rooftop, Muse version.webp"><figcaption>Muse</figcaption></figure>
+<figure><img src="nano/Tiff on NYC rooftop.webp"><figcaption>Nano Banana (Muse)</figcaption></figure>
+<figure><img src="nanoClaude/tiff_ig4_rooftop_corset_v2.png"><figcaption>Nano Banana (Claude)</figcaption></figure>
+<figure><img src="codex/NYC Rooftop.png"><figcaption>Codex</figcaption></figure>
+<figure><img src="codexGrain/NYC Rooftop.jpg"><figcaption>Codex + Grain</figcaption></figure>
+<figure><img src="nanoTexture/NYC Rooftop.jpg"><figcaption>Codex → NB Pro texture</figcaption></figure>
+<div class="row">Yosemite</div>
+<figure><img src="muse/Tiff in Yosemite, Muse version.webp"><figcaption>Muse</figcaption></figure>
+<figure><img src="nano/Tiff in Yosemite, back view.webp"><figcaption>Nano Banana (Muse)</figcaption></figure>
+<figure><img src="nanoClaude/tiff_ig4_yosemite_v2.png"><figcaption>Nano Banana (Claude)</figcaption></figure>
+<figure><img src="codex/Yosemite.png"><figcaption>Codex</figcaption></figure>
+<figure><img src="codexGrain/Yosemite.jpg"><figcaption>Codex + Grain</figcaption></figure>
+<figure><img src="nanoTexture/Yosemite.jpg"><figcaption>Codex → NB Pro texture</figcaption></figure>
+</div>
+<div id="lb" onclick="this.style.display='none'"><img></div>
+<script>document.querySelectorAll('.grid img').forEach(i=>i.onclick=()=>{const l=document.getElementById('lb');l.firstChild.src=i.src;l.style.display='flex'})</script>
+</body></html>

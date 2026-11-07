@@ -4,7 +4,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 # WindowsApps can't be globbed; ask Appx for the current install folder
-CODEX="$(cygpath -u "$(powershell -NoProfile -c '(Get-AppxPackage *codex*).InstallLocation' | tr -d '\r')")/app/resources/codex.exe"
+CODEX="$(cygpath -u "$(powershell -NoProfile -c '(Get-AppxPackage OpenAI.Codex).InstallLocation' | tr -d '\r')")/app/resources/codex.exe"
 out="$1"; prompt="$2"; shift 2
 imgs=(); for r in "$@"; do imgs+=("--image=$r"); done
 stamp="$(mktemp)"; log="$(mktemp)"; sleep 1
