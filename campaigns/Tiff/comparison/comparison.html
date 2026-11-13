@@ -44,6 +44,14 @@ figcaption{font-size:12px;color:#aaa;margin-top:4px;text-align:center}
 <figure><img src="codexGrain/Yosemite.jpg"><figcaption>Codex + Grain</figcaption></figure>
 <figure><img src="nanoTexture/Yosemite.jpg"><figcaption>Codex → NB Pro texture</figcaption></figure>
 </div>
+<h1 style="margin-top:40px">Upscale — Omni original vs Real-ESRGAN 1080p vs Real-ESRGAN 4K</h1>
+<div class="vgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1100px">
+<figure><video src="upscale/original_omni.mp4" controls loop playsinline style="width:100%;border-radius:6px"></video><figcaption>Original (Omni 720p → Flow 1080p)</figcaption></figure>
+<figure><video src="upscale/realesrgan_1080p.mp4" controls loop playsinline style="width:100%;border-radius:6px"></video><figcaption>Real-ESRGAN x4 → 1080p + grain</figcaption></figure>
+<figure><video src="upscale/realesrgan_4k.mp4" controls loop playsinline style="width:100%;border-radius:6px"></video><figcaption>Real-ESRGAN x4 → 4K + grain</figcaption></figure>
+</div>
+<button id="playall" style="margin:10px 0;padding:8px 16px;border-radius:6px;border:0;cursor:pointer">▶ Play all in sync</button>
+<script>document.getElementById('playall').onclick=()=>{const v=[...document.querySelectorAll('.vgrid video')];v.forEach((x,i)=>{x.currentTime=0;x.muted=i>0;x.play()})}</script>
 <div id="lb" onclick="this.style.display='none'"><img></div>
 <script>document.querySelectorAll('.grid img').forEach(i=>i.onclick=()=>{const l=document.getElementById('lb');l.firstChild.src=i.src;l.style.display='flex'})</script>
 </body></html>

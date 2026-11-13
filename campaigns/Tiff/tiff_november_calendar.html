@@ -183,6 +183,7 @@ button.cell:hover{background:var(--surface-2)}
     <button class="tab" role="tab" data-tab="book" aria-selected="false">Playbook</button>
     <button class="tab" role="tab" data-tab="shop" aria-selected="false">What to sell</button>
     <button class="tab" role="tab" data-tab="ops" aria-selected="false">Production &amp; rules</button>
+    <button class="tab" role="tab" data-tab="ss" aria-selected="false">Slideshows</button>
   </div>
 
   <section id="cal">
@@ -372,6 +373,17 @@ button.cell:hover{background:var(--surface-2)}
       <li>Fitted, tight and gym outfits are fine and are the point. Avoid sexualized camera framing (lingering body crops, suggestive poses/captions): TikTok cuts reach on it and can pull shop access.</li>
       <li><b>Pre-workout / supplements:</b> show her using it, quote only the label (flavor, servings). No energy, fat-loss or performance claims, and check the category is open to your affiliate account.</li>
     </ul>
+  </section>
+
+  <section id="ss" class="panel" hidden>
+    <h2>Slideshows · 100 ideas</h2>
+    <p>Same build as the three made so far (<i>my favorite ab workouts</i>, <i>my favorite books rn</i>, <i>my go-to high protein meals</i>): slide 1 is Tiff in a moody photo with the title on it, then five slides of the items in one matching low-light set, each with one numbered line of text. Each one costs 0 Flow credits. Click any idea and copy the brief straight into <code>/MakeSlideshow</code>.</p>
+    <div class="legend" id="ssLegend"></div>
+    <div class="callout"><b>Built for reach, not sales.</b> Each idea is picked to do one job the algorithm rewards: <b>saves</b> (a list people want to come back to), <b>shares</b> (“this is so us”, sent to a friend) or <b>comments</b> (a ranking or a hot take people want to argue with). There are no product links and no shop angle. Her SoCal Mexican-American side (pozole, tamales, Día de Reyes, café de olla) shows up on purpose: it's a real point of view, and the shop-finds accounts don't have it. ★ marks the 15 best bets to make first.</div>
+    <div class="tools" style="justify-content:space-between"><span style="color:var(--muted);font-size:14px">Click any idea for its full brief and a Copy button.</span><div class="viewsw" id="ssView"></div></div>
+    <div class="tools" id="ssFilters"></div>
+    <p style="color:var(--muted);font-size:13px;margin:4px 0 12px">Suggested order only: one a day from Nov 9 to Feb 16, timed to what people search each week (cozy season, Thanksgiving, Christmas, New Year gym season, Valentine's). Post it as a second slideshow or swap it into the 2:00p slot. Nothing here changes the November calendar.</p>
+    <div id="ssBody"></div>
   </section>
 
   <div class="foot" id="audio">
@@ -983,6 +995,221 @@ tabs.forEach(function(t){t.onclick=function(){
 };});
 
 stats();viewsw();filters();render();
+})();
+</script>
+<script>
+// Slideshows tab: 100 growth-first ideas, one a day from Nov 9 2026 to Feb 16 2027.
+// [pill, slide-1 title, kind (6 = Tiff + 5 items, 2 = Tiff + one list slide, V = vibe quote + b-roll), goal (save/share/debate), items, slide-1 scene, why it gets reach, star]
+(function(){
+"use strict";
+var SS=[
+["Glute day","my glute day, 5 moves","6","save",["hip thrusts","bulgarian split squats","romanian deadlifts","cable kickbacks","abductor machine"],"gym mirror selfie at night, black long-sleeve set, ponytail","Glute workouts are the most-saved gym list on women's FitTok, and it sits right next to the ab workout one you already made, so it starts a series.",1],
+["Pozole","my mom's pozole rojo, the 5 things that make it","6","share",["the hominy","dried guajillo chiles","slow-cooked pork","shredded cabbage + radish","lime, oregano, tostadas"],"Tiff at a warm kitchen stove stirring a big pot, steam rising, string lights in the window","Food from her own culture gets shared by people who grew up on it (“this is my mom's too”), and it's the first cold week, so soup is peaking.",1],
+["Cozy night","cozy night in essentials","6","save",["fleece throw","fuzzy socks","vanilla candle","hot cocoa mug","a comfort show queued up"],"Tiff curled on a couch under a blanket, TV glow, lamp light","Cozy-season lists are evergreen saves from November to February, and the dim warm look is exactly the brand.",0],
+["Pre-gym food","what i eat before the gym","6","save",["banana + peanut butter","rice cakes with honey","greek yogurt + berries","overnight oats","iced coffee + protein"],"Tiff in the car in gym clothes, holding a banana, dusk light","Practical, quick and saveable. People screenshot pre-workout food lists before their next session.",0],
+["Hot girl walk","hot girl walk essentials","6","share",["a podcast queued","claw clip","iced coffee","walking shoes","the sunset route"],"Tiff on a palm-lined street at golden hour, back to camera, looking over her shoulder","“Hot girl walk” is a known phrase with search volume, and it's an easy tag-a-friend.",0],
+["Fall soups","high protein soups for cold nights","6","save",["chicken tortilla soup","lasagna soup","turkey chili","white bean + sausage","creamy tomato w/ cottage cheese"],"Tiff at the stove ladling soup, steam, under-cabinet LED light","A follow-up to your protein meals slideshow, with the same look and audience, timed to the first cold weeks.",1],
+["Sunday reset","my sunday reset","6","share",["fresh sheets","fridge restock","nails done","plan the week","long walk"],"Tiff making a bed in a dim bedroom, lamp on, hair in a claw clip","Sunday-reset content gets huge Sunday-night views, and it's relatable enough to send to a friend.",0],
+["Gym icks","gym icks, ranked","6","debate",["not wiping the bench","curling in the squat rack","filming everyone","grunting on lat pulldown","staring in the mirror (guilty)"],"Tiff on a bench between sets, side-eyeing the camera","Ranked icks make people argue about the order in the comments, and the last one is a self-own that makes her likeable. It also pulls male viewers.",1],
+["Comfort shows","shows i rewatch when i'm sad","6","debate",["gilmore girls","new girl","the office","jane the virgin","gossip girl"],"Tiff on the couch with a blanket and a bowl of popcorn, TV glow on her face","People argue with TV picks in the comments (“where's Friends??”). Show TVs and props only, never the show's posters or screenshots.",0],
+["Winter fits","winter outfit ideas","6","save",["long coat + knee boots","oversized sweater + leather skirt","puffer + leggings","turtleneck + trousers","sherpa + matching set"],"Tiff in a long coat on a city sidewalk at night, breath visible","Outfit inspo is the core of her niche and gets heavy saves. It's styling ideas only, with no links.",0],
+["Girls night","girls night in, but make it cute","6","share",["charcuterie board","pink mocktails","face masks","rom-com lineup","matching pjs"],"Tiff on a living-room floor with pillows, candles, laughing off-camera","A sleepover vibe gets tagged in group chats for the weekend. It goes up on Friday.",0],
+["Winter books","books to read under a blanket this winter","6","save",["a court of thorns and roses","fourth wing","book lovers","the love hypothesis","happy place"],"Tiff in a window seat with a knit blanket, fairy lights, holding a paperback","BookTok is huge and your books slideshow is your proven format. Use the real covers as refs, the way you did for the first books slideshow.",1],
+["Café de olla","my coffee orders, ranked","6","debate",["café de olla","iced horchata latte","vanilla cold foam cold brew","iced matcha","plain black (when i'm desperate)"],"Tiff in a car cupholder POV holding an iced coffee, dusk","Coffee rankings get endless “you're wrong” comments, and the horchata and café de olla picks make it hers.",0],
+["Things men do","small things men do that we notice","6","share",["walking on the street side","remembering your order","holding the door","texting “home safe?”","fixing the thing without asking"],"Tiff on a date-night sidewalk, coat on, soft smile at the camera","Women share it with their boyfriends and men share it to learn. Both audiences engage, which grows her male following without anything thirsty.",1],
+["Leg day","leg day that actually works","6","save",["hack squat","romanian deadlift","leg press","walking lunges","hamstring curls"],"Tiff tying her shoes on a gym bench, ponytail, dim gym","Gym list number three makes the series feel like a program, so people follow for the next one.",0],
+["Thanksgiving fits","thanksgiving outfits (abuela approved)","6","share",["sweater dress + boots","cream knit + trousers","brown leather skirt + turtleneck","plaid midi + cardigan","jeans + oversized blazer"],"Tiff on a porch at dusk in a sweater dress","“Abuela approved” is the hook: specific, funny and shareable to cousins. Seasonal outfit lists get searched this week.",0],
+["Thanksgiving table","thanksgiving at a mexican-american house","6","share",["turkey AND tamales","the red rice nobody asked for","tía's flan","pan dulce at 10am","the cousins' table"],"Tiff at a long family table with candles, warm light, laughing","Two-culture holiday content is very shareable (“this is literally us”) and almost nobody in her niche makes it.",1],
+["Gratitude","little things that made this year soft","V","share",["morning coffee alone","gym friends","sunset drives","mom's cooking","slow sundays"],"Tiff at a candlelit table at dusk, the quote over the sky","A Thanksgiving-day quote people repost to their own stories.",0],
+["Leftovers","thanksgiving leftovers, ranked","6","debate",["turkey sandwich","tamales reheated on the comal","mashed potatoes","pie for breakfast","stuffing (top tier, fight me)"],"Tiff in the kitchen at midnight, fridge light on her face, fork in hand","A ranking with a “fight me” pick gets the comments arguing on a high-scroll holiday weekend.",0],
+["Mall walk","black friday but i'm just here for the vibes","V","share",["mall lights","pretzel","window shopping","iced coffee","empty-handed and happy"],"Tiff in a mall walkway with holiday lights, coffee in hand","An anti-shopping joke on the biggest shopping day stands out from every haul in the feed.",0],
+["Wishlist","my christmas wishlist this year","6","share",["a weekend trip","gym membership paid off","a new perfume","a silk pillowcase","peace and quiet"],"Tiff writing a list on the couch, tree lights behind her","Wishlist posts get “same” comments and friends send them to each other as hints. It's for reach only, with nothing linked.",0],
+["Cyber Monday","things i'm not buying this year","6","debate",["another tumbler","fast fashion i'll wear once","viral skincare","a 12th claw clip","gym clothes i don't need (lying)"],"Tiff at a desk with a laptop, unimpressed face, lamp light","Anti-haul content is a growing trend and gets debated, and the last item is a self-own that makes it funny.",0],
+["December era","my december era","V","share",["holiday lights","gym before work","hot chocolate walks","gifting early","saying no more"],"Tiff under string lights on a balcony, the quote over the sky","A month-opener quote people repost on Dec 1.",0],
+["Upper body","upper body day, 5 moves","6","save",["lat pulldown","seated shoulder press","cable row","lateral raises","tricep pushdown"],"Tiff at a cable machine, back to camera, glancing back","Gym list number four. By now people follow to collect the set.",0],
+["Christmas movies","christmas movies i rewatch every year","6","debate",["the holiday","elf","love actually","the grinch (2000)","home alone"],"Tiff on the couch with a blanket, tree lights, TV glow","People argue with holiday movie picks every December. Show props only, never the posters.",0],
+["Protein desserts","high protein desserts that taste illegal","6","save",["protein brownie batter","cottage cheese cheesecake cup","chocolate PB bites","protein hot cocoa","greek yogurt bark"],"Tiff on the kitchen counter eating from a bowl, LED strip light","“Taste illegal” is a proven hook, and the dessert recipes get heavy saves before the holidays.",1],
+["Holiday party fits","holiday party outfit ideas","6","save",["red satin slip","black velvet mini","sequin top + trousers","white corset + leather pants","green knit dress"],"Tiff in a doorway with party lights behind her","Party outfit searches peak the first half of December.",0],
+["6am","my 6am winter morning","6","share",["alarm in the dark","espresso","gym before sunrise","hot shower","makeup by the window"],"Tiff in a dark kitchen, only the espresso machine lit","Early-morning routines get aspiration saves and shares, and it reinforces the gym girl persona.",0],
+["Christmas cookies","christmas cookies my family makes every year","6","share",["polvorones","biscochitos","sugar cookies","chocolate crinkles","gingerbread"],"Tiff in an apron at a floury counter, oven light glowing","Family cookie traditions get shared (polvorones especially), and baking content goes up all December.",0],
+["Winter dates","winter date ideas","6","save",["ice skating","christmas market","drive to see the lights","baking cookies together","cabin weekend"],"Tiff in a scarf under holiday lights, looking at someone off camera","Date-idea lists get saved and sent to partners, and both audiences engage.",0],
+["Gym hair","5 gym hairstyles that stay put","6","save",["slicked high bun","claw clip twist","braided ponytail","half-up clip","bubble braid"],"Tiff from behind in a gym mirror, high bun","Hair how-tos get big saves. The item slides need her refs (back of the head), so say so in the brief.",0],
+["Mexican Christmas","how my family does christmas eve","6","share",["tamales all day","pozole at midnight","ponche on the stove","buñuelos","opening gifts at 12"],"Tiff at a stovetop with a big pot, string lights, family blur behind","Nochebuena traditions get shared by everyone who celebrates the same way. This is her standout culture post.",1],
+["Hot cocoa","hot chocolate, ranked","6","debate",["champurrado","mexican hot chocolate","peppermint mocha","white hot chocolate","the packet kind (nostalgia)"],"Tiff holding a mug with both hands by a window at night","A short ranking that's easy to argue with.",0],
+["Last minute","last minute gift ideas you can get tonight","6","save",["a photo frame with a pic","baked cookies in a tin","a playlist + handwritten note","a candle + their fave snack","an experience voucher you make yourself"],"Tiff wrapping something on the floor, ribbon everywhere, lamp light","Last-minute gift searches spike Dec 20–24. These are all DIY, so it's helpful without selling anything.",0],
+["Xmas Eve fits","christmas eve outfit ideas","6","save",["red knit set","velvet slip + cardigan","white sweater + plaid skirt","black turtleneck dress","green satin midi"],"Tiff by a lit tree, red knit set","Last-minute outfit searches peak the day before.",0],
+["Little things","it's the little things this christmas","V","share",["tree lights at night","matching pjs","grandma's kitchen","wrapping paper chaos","everyone home"],"Tiff on a couch by the tree in pjs, the quote above","A feel-good repost on Christmas Eve.",0],
+["Christmas morning","christmas morning in my house","6","share",["cinnamon rolls","coffee by the tree","wrapping paper chaos","new pjs","tamales for lunch"],"Tiff on the floor by the tree in pjs, mug in hand, morning light","A low-effort, high-relatability post on the day.",0],
+["Post-holiday reset","post-holiday reset","6","save",["closet clear-out","fridge restock","10k steps","early night","journal it out"],"Tiff on a made bed with a journal, lamp light","Reset content peaks between Christmas and New Year.",0],
+["NYE fits","new year's eve outfit ideas","6","save",["sequin mini","black feather trim","silver slip dress","metallic corset + jeans","all-black velvet"],"Tiff in a sequin dress at a rooftop party at night, city lights","NYE outfit searches peak Dec 26–31.",0],
+["Vision board","what's on my 2027 vision board","V","share",["5 gym days a week","a solo trip","a savings goal","24 books","the glow up"],"Tiff at a desk with magazine cutouts and a candle","Vision boards get reposted at the turn of the year, and it sets up her New Year arc.",0],
+["NYE traditions","mexican new year's traditions i still do","6","share",["12 grapes at midnight","yellow underwear (for luck)","walking a suitcase around the block","sweeping the house out","lentils in your pocket"],"Tiff holding a little bowl of grapes at midnight, sparklers","Superstitions people actually do get shared and debated (“we do the suitcase too!!”). Highly shareable on Dec 30–31.",1],
+["Leaving in 2026","things i'm leaving in 2026","V","share",["people pleasing","texting back the wrong people","skipping leg day","3am overthinking","doubting myself"],"Tiff on a balcony with sparklers, the quote over the sky","The most reposted post type of NYE.",0],
+["2027 goals","resolutions that actually stick","6","save",["walk 10k steps","lift 3x a week","read before bed","phone out of the bedroom","water before coffee"],"Tiff on a morning run, sunrise, breath visible","New Year searches peak Jan 1–7.",0],
+["Beginner gym","gym plan for beginners (save this)","2","save",["day 1: push","day 2: pull","day 3: legs","day 4: cardio + core","day 5: rest"],"Tiff on a gym floor holding a clipboard, soft smirk","January is the busiest gym month of the year. A one-slide plan is easy to screenshot and save.",1],
+["Meal prep","sunday meal prep, high protein","6","save",["chicken burrito bowls","turkey meatballs","egg bites","overnight oats","beef + broccoli"],"Tiff at a counter with glass prep containers lined up","Meal prep peaks with New Year goals, and it's protein series number three.",0],
+["Día de Reyes","january 6 at my abuela's","6","share",["rosca de reyes","hot chocolate","finding the baby (you owe tamales)","the whole family at the table","leftover pan dulce"],"Tiff cutting a rosca at a family table, warm light","A tradition her audience shares in group chats. Searches for “rosca” spike on the day.",1],
+["Cardio","cardio i actually don't hate","6","debate",["incline walk","stairmaster","pilates class","boxing","dancing in my kitchen"],"Tiff on a treadmill on incline, phone propped up","Cardio opinions get debated in the comments, and New Year gym-goers are searching for it.",0],
+["Self-help books","books that rewired my brain","6","save",["atomic habits","the mountain is you","the let them theory","the four agreements","you are a badass"],"Tiff at a cafe table with a book and a latte, window light","Self-improvement BookTok peaks in January. Use the real covers as refs.",0],
+["Smoothies","high protein smoothies","6","save",["strawberry banana","PB chocolate","mango greek yogurt","berry oat","iced coffee protein"],"Tiff at a blender in workout clothes, kitchen LED light","An easy recipe save for New Year healthy-eating searches.",0],
+["Habits","5 habits that changed my 20s","V","share",["morning walks","lifting heavy","reading before bed","saying no","drinking water first"],"Tiff on a morning walk, the quote over the sky","Advice for your 20s is a proven repost format, and it fits the “Spending your 20s…” vibe slideshows you already post.",0],
+["Core at home","10 min core, no equipment","6","save",["dead bugs","plank","bicycle crunches","leg raises","side plank"],"Tiff on a living-room mat at night, lamp light","A no-gym version of your ab slideshow for people who can't get to one.",0],
+["Red flags","gym red flags in a guy","6","debate",["skips leg day","no wipe after","calls you “bro” mid-set","ego lifts then gets hurt","gives unsolicited form tips"],"Tiff on a bench with a water bottle, unimpressed","Men argue in the comments and women tag friends, so both audiences engage. Keep it playful.",0],
+["Coffee drinks","coffee drinks i make at home","6","save",["café de olla","iced brown sugar oat","horchata cold brew","vanilla latte","dirty chai"],"Tiff at a home espresso bar at dawn","Home-barista recipes are a big save niche, and café de olla makes it hers.",0],
+["Date night in","date night at home ideas","6","save",["homemade pasta night","movie fort","at-home wine tasting","cook-off","board games + snacks"],"Tiff on a living-room floor fort with fairy lights","Date-at-home ideas are a steady save in January when everyone's broke.",0],
+["Pilates","pilates moves for a strong core","6","save",["the hundred","single leg stretch","teaser","swimming","side kick series"],"Tiff in a pilates studio mirror selfie, matching set","Pilates is the biggest women's fitness trend, so it's worth more than one post.",1],
+["Crockpot","crockpot meals for busy weeks","6","save",["birria tacos","white chicken chili","salsa verde chicken","pot roast","beef + barley soup"],"Tiff lifting a crockpot lid, steam, warm kitchen","Easy dinner lists are among the highest-save posts on the app.",0],
+["Hobbies","hobbies that cost under $20","6","share",["journaling","thrift flipping","baking","run club","pottery class (once)"],"Tiff journaling at a cafe, golden light","A post-holiday budget mood plus “send to your bestie” energy.",0],
+["Glow-up list","glow up checklist for february","V","save",["sleep 8 hours","walk every day","water first","new playlist","delete the ex's number"],"Tiff in a bathroom mirror, hair in a towel, soft light","Glow-up checklists are a top save format, and the last line is a joke that makes it shareable.",0],
+["Mirror selfies","how to take a better mirror selfie","6","save",["clean the mirror","phone at chest, angled down","warm lamp, not overhead","pop one hip","0.5 lens for full fits"],"Tiff in a classic mirror selfie, warm lamp","Meta-tips on the exact thing she's known for, and people save it to try.",0],
+["Scents","scents that get the most compliments","6","debate",["vanilla","pistachio","coconut","cherry","clean musk"],"Tiff spritzing perfume at a vanity, candle lit","Scent opinions get heavy comments. List the notes only, never brands.",0],
+["Jan recap","january, but make it soft","V","share",["early gym sessions","new books","slow dinners","cold mornings","choosing me"],"Tiff wrapped in a blanket on a balcony at dusk","A monthly recap quote, a recurring series people expect.",0],
+["Things girls want","things girls actually want for valentine's","6","share",["a handwritten note","their fave snack, unprompted","a planned date (you planned it)","flowers on a random tuesday","you putting your phone down"],"Tiff on a couch holding a single rose, soft smile","Girls send it to their boyfriends, so it gets more shares than almost any other Valentine's post. Nothing to buy.",1],
+["Tamal ranking","tamales, ranked (día de la candelaria)","6","debate",["rojo de puerco","verde de pollo","rajas con queso","dulce (the pink ones)","elote"],"Tiff at a kitchen table unwrapping a tamal, steam","A food ranking from her culture on the day itself. The dulce pick starts an argument.",0],
+["Date night fits","date night outfit ideas","6","save",["black satin slip","red mini + tights","corset + jeans","sweater dress + boots","leather pants + bodysuit"],"Tiff in a restaurant booth by candlelight","Valentine's outfit searches start early February.",0],
+["Galentine's ideas","galentine's ideas for the girls","6","share",["brunch at home","pottery painting","sleepover + face masks","matching pjs photo shoot","dinner + karaoke"],"Tiff at a brunch table with friends' hands in frame, mimosas","Very taggable, and it gets sent in group chats.",0],
+["Pink fits","pink outfits for february","6","save",["pink knit set","red + pink combo","baby pink slip","hot pink blazer","pink gym set"],"Tiff on a sidewalk in a pink coat, golden hour","Pink and red outfit inspo peaks early February.",0],
+["Game day","game day snacks (high protein)","6","save",["buffalo chicken dip","air fryer wings","greek yogurt 7-layer dip","sliders","elote dip"],"Tiff at a counter with snacks, a game on the TV behind","A protein spin on game-day food. Check the game date before scheduling.",0],
+["Love languages","date ideas by love language","6","share",["words: a letter jar","touch: a massage night","gifts: a scavenger hunt","acts: cook their fave meal","quality time: a phone-free day"],"Tiff writing a note at a table, candle lit","Love languages are a well-known format that gets heavy comments (“mine is acts”).",0],
+["Rom-coms","rom-coms to watch alone on valentine's","6","debate",["how to lose a guy in 10 days","crazy rich asians","10 things i hate about you","to all the boys i've loved before","the proposal"],"Tiff on a couch with ice cream and a blanket, TV glow","Rom-com lists get debated and saved for the night. Props only, never posters.",0],
+["Date makeup","date night makeup steps","6","save",["skin prep","soft bronze","lined lips","flushed cheeks","one swipe of gloss"],"Tiff at a vanity in a robe, ring of warm bulbs","How-to steps get saved. Show the steps only, with no brand names and no AI before/after.",0],
+["Vday dinner","valentine's dinner at home menu","6","save",["steak + garlic butter","creamy tuscan pasta","chocolate strawberries","pink mocktail","candles everywhere"],"Tiff plating food at a candlelit table for two","A cook-at-home menu gets saved on Feb 12–14.",0],
+["Galentine's brunch","galentine's brunch spread","6","share",["mini pancakes","mimosa bar","charcuterie board","heart pastries","fresh flowers"],"Tiff at a brunch table, pastel light, laughing","Galentine's Day (Feb 13) gets very tag-heavy posts.",0],
+["Self-love","single on valentine's? same.","V","share",["flowers for myself","a solo dinner","a long bath","a new book","in bed by 10"],"Tiff alone at a candlelit table, smirking, the quote above","Single-on-Valentine's posts get reposted all day long.",0],
+["Feb 15","february 15th, the real holiday","V","share",["discount chocolate","discount flowers","leftover candles","sweatpants","no plans"],"Tiff in sweatpants eating heart chocolates on the couch","A joke post the day after, when everyone's feeds are tired of Valentine's.",0],
+["Spring gym","spring gym fits i'm eyeing","6","save",["sage green set","butter yellow set","lilac flare set","white tennis set","baby blue zip set"],"Tiff in a sunny gym mirror selfie, pastel set","A seasonal refresh that closes the run with a bright change from the moody winter palette.",0]
+];
+// more ideas; these fill the open dates in list order
+var MORE=[
+["Claw clips","claw clip hairstyles for every hair day","2","save",["sleek low twist","messy high bun","half-up flip","french twist","side clip"],"Tiff from behind in a mirror twisting her hair, lamp light","Quick hair how-tos are some of the most-saved posts with women 18–30.",0],
+["Lip combos","lip combos for a night out","6","save",["brown liner + clear gloss","mauve + nude","berry stain + balm","red + matching liner","espresso + gloss"],"Tiff at a vanity lining her lips, candlelight","Lip-combo content gets saved and screenshotted. Show swatches and products only, with no brands.",0],
+["Jewelry","gold jewelry stacking ideas","6","save",["chunky hoops","layered necklaces","stacked rings","bangle + watch","pearl drops"],"Tiff's hand on her chin, gold everywhere, warm lamp","Styling inspo that fits her look. It's ideas only.",0],
+["Tumblers","the tumbler collection is getting out of hand","6","share",["the pink one","the sage one","the black one","the holiday one","the one i just bought (help)"],"Tiff at a counter crowded with tumblers, guilty face","A funny self-own that every tumbler girl tags a friend in, tying into your tumbler videos.",0],
+["Wedding guest","winter wedding guest outfit ideas","6","save",["velvet midi","satin slip + faux fur","sequin wrap dress","one-shoulder gown","jumpsuit + blazer"],"Tiff at a candlelit venue in a satin dress","Winter wedding searches are steady and get high saves.",0],
+["Nails","holiday nail inspo","6","save",["chrome red","velvet cat eye","glazed white","gold tips","burgundy french"],"Tiff holding a mug, nails in focus, tree lights","Nail inspo is a top save category in December. Use hands-only close-ups for the item slides.",0],
+["Pjs","matching pjs for the girls","6","share",["red plaid","candy cane stripe","green waffle","satin red","fleece snowflake"],"Tiff and two friends on a couch in matching pjs, only Tiff's face shown","Matching-pj photos are a December tradition people tag their friends in.",0],
+["Winter skin","my winter skin routine (dry skin edition)","6","save",["gentle cleanser","hydrating serum","thick moisturizer","overnight lip mask","SPF even in winter"],"Tiff at a sink with her hair in a towel, warm light","Skincare steps get saved. Steps only, with no brands, no results and no before/after.",0],
+["Snow trip","snow trip packing list","6","save",["long puffer","thermal set","beanie","gloves","lip balm"],"Tiff in a cabin doorway with snow outside, mug in hand","Winter travel lists get saved before trips. It's a SoCal girl's first snow trip energy.",0],
+["Desk","wfh desk essentials","6","save",["monitor riser","desk lamp","mug warmer","candle","a plant (still alive)"],"Tiff at a desk with a laptop at night, lamp lit","Pairs with your corporate WFH video, and desk setups get saved.",0],
+["Solo dates","solo date ideas","6","share",["a bookstore + cafe","a museum alone","a sunset drive","a nice dinner for one","a movie, best seat"],"Tiff alone at a cafe window, reading","It ties into your self-dating quote post and gets heavy saves and shares.",0],
+["Hair wash","my hair wash day routine","6","save",["pre-shampoo oil","scalp scrub","deep conditioner","heat protectant","silk scrunchie overnight"],"Tiff in a bathroom with a towel turban, warm light","Long-hair care routines are a big save category. Steps only, no brands.",0],
+["Things that slap","things that hit different in winter","V","share",["soup","fresh sheets","a hot shower after the gym","heated seats","bed at 9pm"],"Tiff in a car with the heated seat on, wrapped in a scarf","An instantly relatable “so true” post that gets shared.",0],
+["Spotify","my gym playlist, ranked","6","debate",["reggaetón for warmups","2016 throwbacks for leg day","rap for PRs","pop for cardio","sad songs for the cooldown"],"Tiff with headphones on between sets","Music rankings start fights in the comments. Use genres and moods, not song files.",0],
+["Abs v2","ab workouts, part 2","6","save",["hanging knee raises","cable crunches","plank shoulder taps","reverse crunches","v-ups"],"Tiff in a gym mirror, high bun","A sequel to your first ab slideshow, so people who saved part 1 follow for part 2.",0],
+["Things i'm proud of","small wins nobody claps for","V","share",["went to the gym tired","drank water","left on read (on purpose)","cooked instead of ordering","went to bed early"],"Tiff in her car post-gym, messy bun, the quote above","An “I'm proud of you” style quote gets very reposted.",0],
+["Arms","toned arms, 5 moves","6","save",["bicep curls","hammer curls","tricep dips","overhead extension","push-ups (modified ok)"],"Tiff at the dumbbell rack, ponytail","Another gym series entry. Arms get searched ahead of summer.",0],
+["Cozy breakfast","cozy breakfasts for cold mornings","6","save",["chilaquiles","cinnamon oatmeal","egg + avocado toast","protein pancakes","conchas + coffee"],"Tiff at a kitchen table with a mug, morning window light","Breakfast recipes get saves, and the chilaquiles and conchas make it hers.",0],
+["Perfect night","my perfect night in","V","share",["face mask","comfort show","takeout","fresh pjs","phone on DND"],"Tiff on a couch wrapped in a blanket, the quote above","A low-effort, high-relatability post.",0],
+["Car essentials","car essentials every girl needs","6","save",["phone mount","mini emergency kit","hair ties","perfume rollerball","a gym bag (always)"],"Tiff in the driver seat, ponytail, dusk","Her car clips are a recurring setting, and car-organization lists get saved.",0],
+["Hot takes","gym hot takes","6","debate",["cardio before weights is fine","you don't need pre-workout","rest days are workouts","form > weight","mirror selfies are mandatory"],"Tiff on the gym floor, arms crossed, smirk","Hot takes are built to start arguments, and comments drive reach.",0],
+["Little treats","little treats that fix my whole day","6","share",["iced coffee","a new song","the sunset","clean sheets","a hot shower"],"Tiff in her car with an iced coffee, sunset","“Little treat” culture is relatable and gets shared.",0],
+["Vday for him","valentine's ideas for him (that aren't cologne)","6","share",["his fave meal, homemade","a sports game date","a letter","a framed photo","a planned day, zero chores"],"Tiff on a couch holding a card, soft smile","Women save it, men see it, and both comment. There's nothing to buy.",0],
+["Rainy day","rainy day in LA","V","share",["window streaks","café de olla","an old movie","the cozy hoodie","nobody knows how to drive"],"Tiff at a rainy window with a mug","An LA-specific joke at the end gets local shares.",0],
+["Book boyfriends","book boyfriends, ranked","6","debate",["rhysand","xaden riordan","adam carlsen","charlie lastra","jamie fraser"],"Tiff in bed with a stack of books, fairy lights","BookTok rankings get the most comments of any book post. Show book-themed props only, with no covers or fan art.",1]
+];
+SS=SS.concat(MORE);
+// order: holiday-pinned ideas are fixed on their dates; the rest fill the gaps in list order
+var PIN={"Thanksgiving fits":15,"Thanksgiving table":16,"Gratitude":17,"Mall walk":18,"Leftovers":19,"Wishlist":20,"Cyber Monday":21,"December era":22,"Christmas movies":27,"Nails":30,"Holiday party fits":31,"Christmas cookies":37,"Pjs":40,"Last minute":41,"Hot cocoa":42,"Xmas Eve fits":43,"Little things":44,"Mexican Christmas":45,"Christmas morning":46,"Post-holiday reset":48,"NYE fits":49,"Vision board":50,"NYE traditions":51,"Leaving in 2026":52,"2027 goals":53,"Beginner gym":54,"Meal prep":55,"Día de Reyes":58,"Rainy day":64,"Glow-up list":82,"Jan recap":83,"Pink fits":84,"Tamal ranking":85,"Date night fits":86,"Galentine's ideas":87,"Game day":88,"Things girls want":89,"Vday for him":90,"Love languages":91,"Date makeup":93,"Rom-coms":94,"Vday dinner":95,"Galentine's brunch":96,"Self-love":97,"Feb 15":98,"Spring gym":99};
+// keep each idea's own pin unique; anything that collides falls back to the open queue
+var slots=new Array(100),used={};
+SS.forEach(function(s){var p=PIN[s[0]];if(p!=null&&!slots[p]){slots[p]=s;used[s[0]]=1;}});
+var q=SS.filter(function(s){return !used[s[0]];}),qi=0;
+for(var i=0;i<100;i++){if(!slots[i])slots[i]=q[qi++];}
+var IDEAS=slots.filter(Boolean);
+
+var START=new Date(2026,10,9); // Mon Nov 9 2026
+function dateOf(i){var d=new Date(START);d.setDate(d.getDate()+i);return d;}
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var GOAL={save:["SAVE","w2"],share:["SHARE","w0"],debate:["DEBATE","w1"]};
+var KIND={"6":"6 slides: Tiff + 5 items","2":"2 slides: Tiff + one numbered list","V":"Vibe: Tiff quote slide + 5 b-roll moods"};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+var CARE="Label it AI. No brand names or logos on any slide; show TVs, props and real book covers only where noted, never film or show posters. Fitted is fine, but no lingering body crops.";
+
+var view="cal",goal="all",star=false;
+try{view=localStorage.getItem("tiff-ss-view")||"cal";}catch(e){}
+
+function brief(i){
+  var s=IDEAS[i],d=dateOf(i),n=s[2]==="2"?2:6;
+  var items=s[4].map(function(t,k){return (k+1)+". "+t;});
+  return "/MakeSlideshow "+s[1]+" "+n+"\n"+
+    "Persona: Tiff · suggested date "+MON[d.getMonth()]+" "+d.getDate()+" · goal: "+GOAL[s[3]][0].toLowerCase()+"s\n"+
+    "Format: "+KIND[s[2]]+"\n"+
+    "Slide 1 text: "+s[1]+"\n"+
+    "Slide 1 scene: "+s[5]+". No sunglasses. Low, moody, warm light.\n"+
+    (s[2]==="V"?"B-roll slides (no people): ":"Items: ")+items.join(" | ")+"\n"+
+    "Why it gets reach: "+s[6]+"\n"+
+    "Caption: lowercase title + one-line hook + numbered list with one emoji each + "+(s[3]==="debate"?"\"which one would you swap? 👇\"":s[3]==="share"?"\"send this to the friend who…\"":"\"save this for later 📌\"")+", 6–8 hashtags. No product links.\n"+
+    "Care: "+CARE;
+}
+function briefHTML(i){
+  var s=IDEAS[i],d=dateOf(i),g=GOAL[s[3]];
+  return '<div class="k" style="font:500 11px/1.4 var(--mono);letter-spacing:.06em;color:var(--muted);text-transform:uppercase">Slideshow #'+(i+1)+' · '+MON[d.getMonth()]+' '+d.getDate()+' · '+KIND[s[2]]+'</div>'+
+    '<h3 style="font:700 20px/1.25 var(--body);margin:6px 0 8px">'+(s[7]?'★ ':'')+esc(s[1])+'</h3>'+
+    '<span class="pill '+g[1]+'" style="display:inline-block;border-radius:4px;padding:3px 7px;font:600 12px/1.2 var(--body)">'+g[0]+'</span>'+
+    '<dl class="brief"><dt>Slide 1</dt><dd>'+esc(s[5])+'</dd>'+
+    '<dt>'+(s[2]==="V"?'B-roll moods':'The 5 items')+'</dt><dd><ol style="margin:0;padding-left:20px">'+s[4].map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ol></dd>'+
+    '<dt class="vk">Why it gets reach</dt><dd class="viral">'+esc(s[6])+'</dd>'+
+    '<dt>Care</dt><dd class="care">'+esc(CARE)+'</dd></dl>'+
+    '<button class="copy ss-copy" data-i="'+i+'">Copy brief for Claude</button>';
+}
+function match(s){return (goal==="all"||s[3]===goal)&&(!star||s[7]);}
+
+function calHTML(){
+  var h="",i=0,months=[];
+  for(var k=0;k<IDEAS.length;k++){var d=dateOf(k),key=d.getFullYear()+"-"+d.getMonth();if(months.indexOf(key)<0)months.push(key);}
+  months.forEach(function(key){
+    var y=+key.split("-")[0],m=+key.split("-")[1],first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();
+    h+='<h3 style="font:400 28px/1 var(--display);margin:26px 0 10px">'+MONL[m]+' '+y+'</h3><div class="month">'+["SUN","MON","TUE","WED","THU","FRI","SAT"].map(function(w){return '<div class="hd">'+w+'</div>';}).join("");
+    for(var p=0;p<first.getDay();p++)h+='<div class="cell other"></div>';
+    for(var dd=1;dd<=days;dd++){
+      var idx=Math.round((new Date(y,m,dd)-START)/864e5),s=IDEAS[idx];
+      if(idx<0||!s){h+='<div class="cell other"><span class="dn"><b>'+dd+'</b></span></div>';continue;}
+      var g=GOAL[s[3]],dim=match(s)?"":' style="opacity:.3"';
+      h+='<button class="cell ss-cell" data-i="'+idx+'"'+dim+' aria-label="'+esc(MON[m]+" "+dd+": "+s[1])+'"><span class="dn"><b>'+dd+'</b><span class="flag">'+(s[7]?'★ ':'')+'#'+(idx+1)+'</span></span>'+
+        '<span class="pill '+g[1]+'">'+esc(s[0])+'</span><span class="ttl2">'+esc(s[1])+'</span><span class="stl" style="margin-top:auto">'+g[0]+'</span></button>';
+    }
+    var tail=(7-(first.getDay()+days)%7)%7;for(var t=0;t<tail;t++)h+='<div class="cell other"></div>';
+    h+='</div>';
+  });
+  return h;
+}
+function listHTML(){
+  return '<div class="scroll"><table class="tbl"><tr><th>#</th><th>Date</th><th>Slideshow</th><th>Goal</th></tr>'+
+    IDEAS.map(function(s,i){if(!match(s))return "";var d=dateOf(i),g=GOAL[s[3]];
+      return '<tr><td class="num">'+(s[7]?'★ ':'')+(i+1)+'</td><td class="num">'+MON[d.getMonth()]+' '+d.getDate()+'</td><td><details><summary style="cursor:pointer"><b>'+esc(s[1])+'</b><div style="color:var(--muted);font-size:13px">'+esc(s[4].join(" · "))+'</div></summary>'+briefHTML(i)+'</details></td><td><span class="pill '+g[1]+'" style="display:inline-block;border-radius:4px;padding:3px 7px;font:600 12px/1.2 var(--body)">'+g[0]+'</span></td></tr>';}).join("")+
+    '</table></div>';
+}
+function render(){
+  var sw=document.getElementById("ssView");
+  sw.innerHTML='<button data-v="cal" aria-pressed="'+(view==="cal")+'">Calendar</button><button data-v="list" aria-pressed="'+(view==="list")+'">List</button>';
+  var c={all:IDEAS.length,save:0,share:0,debate:0};IDEAS.forEach(function(s){c[s[3]]++;});
+  document.getElementById("ssFilters").innerHTML=[["all","All "+c.all],["save","Save "+c.save],["share","Share "+c.share],["debate","Debate "+c.debate]].map(function(o){return '<button class="chip" data-g="'+o[0]+'" aria-pressed="'+(goal===o[0])+'">'+o[1]+'</button>';}).join("")+
+    '<button class="chip" data-star="1" aria-pressed="'+star+'">★ Make first</button>';
+  document.getElementById("ssBody").innerHTML=view==="cal"?calHTML():listHTML();
+}
+document.getElementById("ssLegend").innerHTML=
+  '<span><span class="pill w2">SAVE</span>a list people come back to (recipes, workouts, outfits, books)</span>'+
+  '<span><span class="pill w0">SHARE</span>“this is so us”, sent to a friend or partner</span>'+
+  '<span><span class="pill w1">DEBATE</span>rankings and hot takes that pull comments</span>';
+document.getElementById("ssView").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;view=b.dataset.v;try{localStorage.setItem("tiff-ss-view",view);}catch(err){}render();});
+document.getElementById("ssFilters").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;if(b.dataset.star)star=!star;else goal=b.dataset.g;render();});
+document.getElementById("ssBody").addEventListener("click",function(e){
+  var c=e.target.closest(".ss-cell");if(!c)return;var i=+c.dataset.i;
+  var ov=document.createElement("div");ov.className="ov";
+  ov.innerHTML='<div class="dlg" role="dialog" aria-modal="true" aria-label="Slideshow '+(i+1)+'" style="padding:20px 44px 20px 20px"><button class="x" aria-label="Close">×</button>'+briefHTML(i)+'</div>';
+  function close(){ov.remove();document.removeEventListener("keydown",key);c.focus();}
+  function key(ev){if(ev.key==="Escape")close();}
+  ov.addEventListener("click",function(ev){if(ev.target===ov||ev.target.closest(".x"))close();});
+  document.addEventListener("keydown",key);document.body.appendChild(ov);ov.querySelector(".x").focus();
+});
+document.addEventListener("click",function(e){
+  var c=e.target.closest(".ss-copy");if(!c)return;var txt=brief(+c.dataset.i);
+  function done(){c.textContent="Copied ✓";setTimeout(function(){c.textContent="Copy brief for Claude";},1500);}
+  function fallback(){var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(err){}t.remove();}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,fallback);else fallback();
+});
+render();
 })();
 </script>
 </body>
