@@ -1,0 +1,5 @@
+cd "C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff"
+ID1="C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff/characterSheet/codex/outfit_sophie_black.png"; ID2="C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff/characterSheet/codex/Tiff_comfy_sheet_nosunglasses.png"; F="C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff/day_x7_swap/frames/ref"
+g(){ bash tools/gen_image.sh "C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff/characterSheet/codex/Tiff_outfit_$1.png" "C:/Users/Ajayy/OneDrive/Documents/WebCode/Claude/AIUGC/campaigns/Tiff/characterSheet/outfit_prompts/o${1%%_*}.txt" "$ID1" "$ID2" $2 > day_x7_swap/sheet_${1%%_*}.log 2>&1; }
+g 28_leopard_maxi "$F/v1_f0.png" & g 29_oversized_jacket "$F/v2_f0.png" & g 30_black_tank_night & g 31_black_tee_curl "$F/v4_f0.png" &
+g 32_grey_henley_tank "$F/v5_f0.png" & g 33_brown_longsleeve & g 34_rose_top & g 35_oversized_grey_tee "$F/v8_f0.png" & wait
